@@ -1,8 +1,12 @@
 import Service from '@/apis/AxiosInstance'
-import { Board } from '@/model/Board'
-import { Discussion } from '@/model/Discussion'
-import { HotBoardMore, HotDiscussionMore, HotThree } from '@/model/Home'
-import Worry from '@/model/Worry'
+import {
+  HotBoardI,
+  HotBoardMore,
+  HotDiscussionI,
+  HotDiscussionMore,
+  HotThreeI,
+} from '@/model/Home'
+import { WorryI } from '@/model/Worry'
 
 interface HotMoreProps {
   page: number
@@ -11,11 +15,11 @@ interface HotMoreProps {
 
 class HomeService extends Service {
   getHotThree() {
-    return this.http.get<HotThree>(`/three-hot`)
+    return this.http.get<HotThreeI>(`/three-hot`)
   }
 
   getHotBoard() {
-    return this.http.get<Board[]>(`/boards/home`)
+    return this.http.get<HotBoardI[]>(`/boards/home`)
   }
 
   getHotBoardMore({ page, size }: HotMoreProps) {
@@ -23,7 +27,7 @@ class HomeService extends Service {
   }
 
   getHotDiscussion() {
-    return this.http.get<Discussion[]>(`/discussions/home`)
+    return this.http.get<HotDiscussionI[]>(`/discussions/home`)
   }
 
   getHotDiscussionMore({ page, size }: HotMoreProps) {
@@ -33,7 +37,7 @@ class HomeService extends Service {
   }
 
   getWorry() {
-    return this.http.get<Worry[]>(`/worry-board/home`)
+    return this.http.get<WorryI[]>(`/worry-board/home`)
   }
 
   getPopularMssaem() {
