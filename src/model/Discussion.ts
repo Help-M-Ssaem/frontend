@@ -14,7 +14,7 @@ interface DiscussionBoardI {
 interface DiscussionOptionI {
   id: number
   content: string
-  imgUrl: string
+  imgUrl?: string
   selectedPercent: string
   selected: boolean
   disabled: boolean

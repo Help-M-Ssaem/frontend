@@ -18,34 +18,54 @@ const Template: StoryFn<DiscussionOptionProps> = (
 
 export const SmallPrimary = Template.bind({})
 SmallPrimary.args = {
-  content: '글쓰기',
-  onClick: () => {},
-  disabled: false,
+  discussionOption: {
+    id: 1,
+    content: '글쓰기',
+    selectedPercent: '0',
+    selected: false,
+    disabled: false,
+  },
   size: 'small',
+  onClick: () => {},
 }
 
 export const SmallImageButton = Template.bind({})
 SmallImageButton.args = {
-  content: '글쓰기',
-  imgUrl: '/images/common/thumbnail.svg',
-  onClick: () => {},
-  disabled: false,
+  discussionOption: {
+    id: 1,
+    content: '글쓰기',
+    imgUrl: '/images/common/thumbnail.svg',
+    selectedPercent: '0',
+    selected: false,
+    disabled: false,
+  },
   size: 'small',
+  onClick: () => {},
 }
 
 export const LargePrimary = Template.bind({})
 LargePrimary.args = {
-  content: '글쓰기',
-  onClick: () => {},
-  disabled: false,
+  discussionOption: {
+    id: 1,
+    content: '글쓰기',
+    selectedPercent: '0',
+    selected: false,
+    disabled: false,
+  },
   size: 'large',
+  onClick: () => {},
 }
 
 export const LargeImageButton = Template.bind({})
 LargeImageButton.args = {
-  content: '글쓰기',
-  imgUrl: '/images/common/thumbnail.svg',
-  onClick: () => {},
-  disabled: false,
+  discussionOption: {
+    id: 1,
+    content: '글쓰기',
+    imgUrl: '/images/common/thumbnail.svg',
+    selectedPercent: '0',
+    selected: false,
+    disabled: false,
+  },
   size: 'large',
+  onClick: () => {},
 }

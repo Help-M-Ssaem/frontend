@@ -1,21 +1,12 @@
 import { Meta, StoryFn } from '@storybook/react'
-import SearchInput, { SearchInputProps } from '@/components/search/SearchInput'
+import SearchInput from '@/components/search/SearchInput'
 
 export default {
   title: 'Search/SearchInput',
   component: SearchInput,
-} as Meta<SearchInputProps>
+} as Meta
 
-const Template: StoryFn<SearchInputProps> = (args: SearchInputProps) => (
-  <SearchInput {...args} />
-)
+const Template: StoryFn = () => <SearchInput />
 
 export const Primary = Template.bind({})
-Primary.args = {
-  boardId: 1,
-  boardTitle: '어제 강남 러쉬에서 만난 대문자 E 직원',
-  discussionId: null,
-  discussionTitle: null,
-  worryBoardId: null,
-  worryBoardTitle: null,
-}
+Primary.args = {}
