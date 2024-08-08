@@ -20,7 +20,7 @@ const HotBoardBox = () => {
         {data && (
           <>
             {data.map((board) => (
-              <HotBoard hotBoard={board} key={board.id} />
+              <HotBoard hotBoard={board} key={board.title} />
             ))}
           </>
         )}

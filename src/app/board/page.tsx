@@ -9,9 +9,9 @@ import { useState } from 'react'
 
 const BoardPage = () => {
   const [mbti, setMbti] = useState<string>('all')
-  const [page, setPage] = useState<number>(0)
+  // const [page, setPage] = useState<number>(0)
 
-  const { data } = useBoardList(mbti, page, 6)
+  const { data } = useBoardList(mbti, 0, 6)
 
   return (
     <>
