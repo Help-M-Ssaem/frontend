@@ -4,27 +4,39 @@ import Image from 'next/image'
 import { useState } from 'react'
 import Dropdown from '@/components/worry/Dropdown'
 
-const MbtiSelect = () => {
-  const [selectedLeftType, setSelectedLeftType] = useState('전체')
-  const [selectedRightType, setSelectedRightType] = useState('전체')
+export interface MbtiSelectProps {
+  strFromMbti: string
+  strToMbti: string
+  setStrFromMbti: (str: string) => void
+  setStrToMbti: (str: string) => void
+}
+
+const MbtiSelect = ({
+  strFromMbti,
+  strToMbti,
+  setStrFromMbti,
+  setStrToMbti,
+}: MbtiSelectProps) => {
   const [showLeftDropdown, setShowLeftDropdown] = useState(false)
   const [showRightDropdown, setShowRightDropdown] = useState(false)
 
   const handleLeftTypeClick = (type: string) => {
-    setSelectedLeftType(type)
+    setStrFromMbti(type === '전체' ? 'ALL' : type)
     setShowLeftDropdown(false)
   }
 
   const handleRightTypeClick = (type: string) => {
-    setSelectedRightType(type)
+    setStrToMbti(type === '전체' ? 'ALL' : type)
     setShowRightDropdown(false)
   }
+
+  const displayType = (type: string) => (type === 'ALL' ? '전체' : type)
 
   return (
     <div className="flex relative w-full">
       <div className="flex justify-between items-center gap-4 mb-4">
         <Dropdown
-          selectedType={selectedLeftType}
+          selectedType={displayType(strFromMbti)}
           showDropdown={showLeftDropdown}
           onToggleDropdown={() => setShowLeftDropdown(!showLeftDropdown)}
           onSelectType={handleLeftTypeClick}
@@ -36,7 +48,7 @@ const MbtiSelect = () => {
           height={7}
         />
         <Dropdown
-          selectedType={selectedRightType}
+          selectedType={displayType(strToMbti)}
           showDropdown={showRightDropdown}
           onToggleDropdown={() => setShowRightDropdown(!showRightDropdown)}
           onSelectType={handleRightTypeClick}

@@ -12,10 +12,13 @@ const Template: StoryFn<WorryBoardProps> = (args: WorryBoardProps) => (
 
 export const Primary = Template.bind({})
 Primary.args = {
-  title: '학생회장 선배 도와주세요ㅠㅠ',
-  content: '마음이 있는 것 같나요??',
-  memberMbti: 'ISTJ',
-  targetMbti: 'ESFP',
-  createdDate: '3분전',
-  imgUrl: '/images/common/thumbnail.svg',
+  worryBoard: {
+    id: 1,
+    title: '학생회장 선배 도와주세요ㅠㅠ',
+    content: '마음이 있는 것 같나요??',
+    memberMbti: 'ISTJ',
+    targetMbti: 'ESFP',
+    createdDate: '3분전',
+    imgUrl: '/images/common/thumbnail.svg',
+  },
 }

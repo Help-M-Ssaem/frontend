@@ -2,8 +2,8 @@
 
 import { BoardI } from '@/model/Board'
 import Image from 'next/image'
-import Profile from '../common/Profile'
 import { useRouter } from 'next/navigation'
+import Profile from '../common/Profile'
 
 export interface BoardProps {
   board: BoardI

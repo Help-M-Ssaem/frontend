@@ -8,7 +8,7 @@ import {
 } from '@/service/board/useBoardService'
 import { useState } from 'react'
 
-interface MbtiCategoriesProps {
+export interface MbtiCategoriesProps {
   selectedMbti: string
   setMbti: (mbti: string) => void
 }
