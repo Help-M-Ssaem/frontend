@@ -26,7 +26,6 @@ SmallPrimary.args = {
     disabled: false,
   },
   size: 'small',
-  onClick: () => {},
 }
 
 export const SmallImageButton = Template.bind({})
@@ -40,7 +39,6 @@ SmallImageButton.args = {
     disabled: false,
   },
   size: 'small',
-  onClick: () => {},
 }
 
 export const LargePrimary = Template.bind({})
@@ -53,7 +51,6 @@ LargePrimary.args = {
     disabled: false,
   },
   size: 'large',
-  onClick: () => {},
 }
 
 export const LargeImageButton = Template.bind({})
@@ -67,5 +64,4 @@ LargeImageButton.args = {
     disabled: false,
   },
   size: 'large',
-  onClick: () => {},
 }

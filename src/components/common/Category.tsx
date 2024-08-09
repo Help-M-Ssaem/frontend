@@ -1,14 +1,14 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 
 const categories = [
   { path: '/', label: 'HOME' },
-  { path: '/board', label: '게시판' },
-  { path: '/worry', label: 'M쌤 매칭' },
-  { path: '/discussion', label: 'MBTI 과몰입 토론' },
+  { path: '/board?mbti=all&page=1', label: '게시판' },
+  { path: '/worry?waitingPage=1&solvedPage=1', label: 'M쌤 매칭' },
+  { path: '/discussion?page=1', label: 'MBTI 과몰입 토론' },
 ]
 
 const extraCategories = [
@@ -19,14 +19,16 @@ const extraCategories = [
 
 const Category = () => {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const router = useRouter()
   const [selected, setSelected] = useState<string | null>(null)
 
   useEffect(() => {
     if (pathname) {
-      setSelected(pathname)
+      const fullPath = pathname + searchParams.toString()
+      setSelected(fullPath)
     }
-  }, [pathname])
+  }, [pathname, searchParams])
 
   const handleClick = (path: string) => {
     setSelected(path)
@@ -38,7 +40,7 @@ const Category = () => {
       return selected === '/'
         ? 'text-main1 font-bold after:content-[""] after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-[3px] after:bg-main1 after:opacity-100'
         : ''
-    } else if (selected?.startsWith(categoryPath)) {
+    } else if (selected?.startsWith(categoryPath.split('?')[0])) {
       return 'text-main1 font-bold after:content-[""] after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-[3px] after:bg-main1 after:opacity-100'
     } else {
       return ''

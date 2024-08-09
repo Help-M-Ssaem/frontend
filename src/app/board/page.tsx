@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams, useRouter } from 'next/navigation'
 import Board from '@/components/board/Board'
 import MbtiCategories from '@/components/board/MbtiCategories'
 import Button from '@/components/common/Button'
@@ -7,22 +8,36 @@ import Container from '@/components/common/Container'
 import Pagination from '@/components/common/Pagination'
 import SearchBar from '@/components/common/SearchBar'
 import { useBoardList } from '@/service/board/useBoardService'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const BoardPage = () => {
-  const [mbti, setMbti] = useState<string>('all')
-  const [page, setPage] = useState<number>(1)
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const mbtiQuery = searchParams.get('mbti') || 'all'
+  const pageQuery = searchParams.get('page') || '1'
+
+  const [mbti, setMbti] = useState<string>(mbtiQuery)
+  const [page, setPage] = useState<number>(Number(pageQuery))
   const pageSize = 6
 
   const { data: boardList } = useBoardList(mbti, page - 1, pageSize)
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
+    router.push(`/board?mbti=${mbti}&page=${newPage}`)
   }
+
+  useEffect(() => {
+    if (mbti !== mbtiQuery) {
+      setMbti(mbtiQuery)
+      setPage(1)
+      router.push(`/board?mbti=${mbtiQuery}&page=1`)
+    }
+  }, [mbtiQuery])
 
   return (
     <>
-      <MbtiCategories selectedMbti={mbti} setMbti={setMbti} />
+      <MbtiCategories selectedMbti={mbti} />
       <div className="text-title3 text-maindark font-semibold my-5">
         {mbti === 'all' ? '전체' : mbti} 게시판
       </div>

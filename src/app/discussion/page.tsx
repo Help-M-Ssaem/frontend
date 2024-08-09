@@ -3,17 +3,30 @@
 import DiscussionBoard from '@/components/discussion/DiscussionBoard'
 import Pagination from '@/components/common/Pagination'
 import { useDiscussionList } from '@/service/discussion/useDiscussionService'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SearchBar from '@/components/common/SearchBar'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const DiscussionPage = () => {
-  const [page, setPage] = useState<number>(1)
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const pageQuery = searchParams.get('page') || '1'
+
+  const [page, setPage] = useState<number>(Number(pageQuery))
   const pageSize = 6
 
   const { data: discussionList } = useDiscussionList(page - 1, pageSize)
+
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
+    router.push(`/discussion?page=${newPage}`)
   }
+
+  useEffect(() => {
+    if (page !== Number(pageQuery)) {
+      setPage(Number(pageQuery))
+    }
+  }, [pageQuery])
 
   return (
     <>

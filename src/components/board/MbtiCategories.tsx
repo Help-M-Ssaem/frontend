@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import mbtiList from '@/constants/mbtiList'
 import {
   useBoardListNumber,
@@ -10,15 +11,19 @@ import { useState } from 'react'
 
 export interface MbtiCategoriesProps {
   selectedMbti: string
-  setMbti: (mbti: string) => void
 }
 
-const MbtiCategories = ({ selectedMbti, setMbti }: MbtiCategoriesProps) => {
+const MbtiCategories = ({ selectedMbti }: MbtiCategoriesProps) => {
+  const router = useRouter()
   const { data } = useBoardListNumber()
   const totalBoardCount = data?.boardCount || 0
 
   const { mutate } = usePostCategoryBookmark()
   const [favorites, setFavorites] = useState<Record<string, boolean>>({})
+
+  const handleMbtiChange = (mbti: string) => {
+    router.push(`/board?mbti=${mbti}&page=1`)
+  }
 
   const toggleFavorite = (mbti: string) => {
     setFavorites((prevFavorites) => ({
@@ -39,7 +44,7 @@ const MbtiCategories = ({ selectedMbti, setMbti }: MbtiCategoriesProps) => {
         <div className="min-w-max grid grid-cols-5 gap-4">
           <div
             className={`col-span-1 flex items-start justify-center cursor-pointer ${selectedMbti === 'all' ? 'underline' : ''}`}
-            onClick={() => setMbti('all')}
+            onClick={() => handleMbtiChange('all')}
           >
             전체 ({totalBoardCount})
           </div>
@@ -51,7 +56,7 @@ const MbtiCategories = ({ selectedMbti, setMbti }: MbtiCategoriesProps) => {
                 <div
                   key={index}
                   className="flex gap-3 items-center cursor-pointer min-w-[150px]"
-                  onClick={() => setMbti(mbti)}
+                  onClick={() => handleMbtiChange(mbti)}
                 >
                   <p
                     className={`whitespace-nowrap text-gray2 min-w-20 ${selectedMbti === mbti ? 'underline' : ''}`}

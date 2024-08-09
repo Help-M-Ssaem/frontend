@@ -8,12 +8,21 @@ import {
   useSolvedWorryList,
   useWaitingWorryList,
 } from '@/service/worry/useWorryService'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SearchBar from '@/components/common/SearchBar'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const WorryPage = () => {
-  const [waitingPage, setWaitingPage] = useState<number>(1)
-  const [solvedPage, setSolvedPage] = useState<number>(1)
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const waitingPageQuery = searchParams.get('waitingPage') || '1'
+  const solvedPageQuery = searchParams.get('solvedPage') || '1'
+
+  const [waitingPage, setWaitingPage] = useState<number>(
+    Number(waitingPageQuery),
+  )
+  const [solvedPage, setSolvedPage] = useState<number>(Number(solvedPageQuery))
 
   const [waitingStrFromMbti, setWaitingStrFromMbti] = useState('ALL')
   const [waitingStrToMbti, setWaitingStrToMbti] = useState('ALL')
@@ -37,10 +46,25 @@ const WorryPage = () => {
 
   const handleWaitingPageChange = (newPage: number) => {
     setWaitingPage(newPage)
+    router.push(`/worry?waitingPage=${newPage}&solvedPage=${solvedPage}`)
   }
+
   const handleSolvedPageChange = (newPage: number) => {
     setSolvedPage(newPage)
+    router.push(`/worry?waitingPage=${waitingPage}&solvedPage=${newPage}`)
   }
+
+  useEffect(() => {
+    if (waitingPage !== Number(waitingPageQuery)) {
+      setWaitingPage(Number(waitingPageQuery))
+    }
+  }, [waitingPageQuery])
+
+  useEffect(() => {
+    if (solvedPage !== Number(solvedPageQuery)) {
+      setSolvedPage(Number(solvedPageQuery))
+    }
+  }, [solvedPageQuery])
 
   return (
     <div className="flex flex-col">
