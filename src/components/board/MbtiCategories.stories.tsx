@@ -13,5 +13,4 @@ const Template: StoryFn<MbtiCategoriesProps> = (args) => (
 export const Primary = Template.bind({})
 Primary.args = {
   selectedMbti: 'ISTJ',
-  setMbti: () => {},
 }

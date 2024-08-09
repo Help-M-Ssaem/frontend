@@ -15,6 +15,7 @@ const Template: StoryFn<HotDiscussionProps> = (args: HotDiscussionProps) => (
 export const Primary = Template.bind({})
 Primary.args = {
   hotDiscussion: {
+    id: 1,
     title: '머리가 더 꽃밭인 것 같은 MBTI는?',
     content: '머라고 생각하시나요?',
     participantCount: 51,
