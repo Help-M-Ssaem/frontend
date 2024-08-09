@@ -6,14 +6,18 @@ import Button from '../common/Button'
 
 export interface ChattingProfileProps {
   chattingProfile: ChattingProfileI
+  onClick: () => void
 }
 
-const ChattingProfile = ({ chattingProfile }: ChattingProfileProps) => {
+const ChattingProfile = ({
+  chattingProfile,
+  onClick,
+}: ChattingProfileProps) => {
   const { nickName, mbti, badge, profileImgUrl, recent, lastMessage } =
     chattingProfile
 
   return (
-    <div className="flex items-center gap-4.5">
+    <div className="flex items-center gap-4.5 cursor-pointer" onClick={onClick}>
       <div className="w-14 h-14 relative rounded-full overflow-hidden">
         <Image
           src={profileImgUrl}
