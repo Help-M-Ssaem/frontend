@@ -1,5 +1,16 @@
 import { User } from './User'
 
+interface DiscussionList {
+  page: number
+  totalSize: number
+  result: DiscussionBoardI[]
+}
+
+interface DiscussionDetail {
+  discussionSimpleInfo: DiscussionBoardI
+  isEditAllowed: boolean
+}
+
 interface DiscussionBoardI {
   id: number
   title: string
@@ -20,4 +31,9 @@ interface DiscussionOptionI {
   disabled: boolean
 }
 
-export type { DiscussionBoardI, DiscussionOptionI }
+export type {
+  DiscussionList,
+  DiscussionDetail,
+  DiscussionBoardI,
+  DiscussionOptionI,
+}

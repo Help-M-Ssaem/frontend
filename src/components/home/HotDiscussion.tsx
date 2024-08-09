@@ -13,6 +13,7 @@ export interface HotDiscussionProps {
 
 const HotDiscussion = ({ hotDiscussion }: HotDiscussionProps) => {
   const {
+    id,
     title,
     content,
     participantCount,
@@ -43,7 +44,7 @@ const HotDiscussion = ({ hotDiscussion }: HotDiscussionProps) => {
                 <DiscussionOption
                   discussionOption={option}
                   size="small"
-                  onClick={() => {}}
+                  boardId={id}
                 />
               ))}
           </div>

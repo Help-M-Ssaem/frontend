@@ -10,6 +10,8 @@ const WorryDetail = () => {
   const { id } = useParams()
   const { data: worryDetail } = useWorryDetail(Number(id))
 
+  const formattedCreatedAt = worryDetail?.createdAt.split(' ')[0]
+
   return (
     <>
       <div className="text-title3 text-maindark font-semibold my-5">
@@ -30,9 +32,9 @@ const WorryDetail = () => {
                 strFromMbti={worryDetail.memberSimpleInfo.mbti}
                 strToMbti={worryDetail.targetMbti}
               />
-              <div className="flex gap-3.5 text-caption text-gray2">
+              <div className="flex flex-col items-end gap-1 sm:flex-row sm:gap-3.5 sm:items-start text-caption text-gray2">
                 <p>조회수 {worryDetail.hits}회</p>
-                <p>{worryDetail.createdAt}</p>
+                <p>{formattedCreatedAt}</p>
               </div>
             </div>
 

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import './globals.css'
+import '../styles/globals.css'
 import Recoil from '@/recoil/Recoil'
 import localFont from 'next/font/local'
 import dynamic from 'next/dynamic'

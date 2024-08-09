@@ -2,6 +2,7 @@
 
 import { DiscussionBoardI, DiscussionOptionI } from '@/model/Discussion'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import Container from '../common/Container'
 import Profile from '../common/Profile'
 import DiscussionOption from './DiscussionOption'
@@ -12,6 +13,7 @@ export interface DiscussionBoardProps {
 
 const DiscussionBoard = ({ discussionBoard }: DiscussionBoardProps) => {
   const {
+    id,
     title,
     content,
     createdAt,
@@ -21,31 +23,40 @@ const DiscussionBoard = ({ discussionBoard }: DiscussionBoardProps) => {
     options,
   } = discussionBoard
 
-  // TODO: Discussion Button Click API 연동
-  const handleDiscussionOptionClick = () => {}
+  const router = useRouter()
+  const handleDiscussionBoardClick = () => {
+    router.push(`/discussion/${id}`)
+  }
+
+  const formattedCreatedAt = createdAt.split(' ')[0]
 
   return (
-    <Container color="purple">
+    <Container
+      color="purple"
+      onClick={handleDiscussionBoardClick}
+      className="cursor-pointer"
+    >
       <div className="flex flex-col gap-6">
         <div className="flex flex-col justify-between gap-5">
           <div className="flex justify-between">
             <Profile user={memberSimpleInfo} />
-            <div className="text-cpation text-gray2">{createdAt}</div>
+            <div className="text-caption text-gray2">{formattedCreatedAt}</div>
           </div>
-          <div className="flex flex-col gap -1">
+          <div className="flex flex-col gap-1">
             <p className="text-title3 font-bold">{title}</p>
             <p className="text-body text-mainblack">{content}</p>
           </div>
         </div>
 
         <div className="flex flex-col gap-4">
-          <div className="flex justify-between gap-8">
+          <div className="grid grid-cols-2 gap-4">
             {options &&
-              options.map((option: DiscussionOptionI) => (
+              options.map((option: DiscussionOptionI, index: number) => (
                 <DiscussionOption
+                  key={index}
                   discussionOption={option}
                   size="small"
-                  onClick={handleDiscussionOptionClick}
+                  boardId={id}
                 />
               ))}
           </div>

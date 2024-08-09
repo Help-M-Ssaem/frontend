@@ -7,8 +7,8 @@ import Image from 'next/image'
 const categories = [
   { path: '/', label: 'HOME' },
   { path: '/board', label: '게시판' },
-  { path: '/match/matching', label: 'M쌤 매칭' },
-  { path: '/debate/postlist', label: 'MBTI 과몰입 토론' },
+  { path: '/worry', label: 'M쌤 매칭' },
+  { path: '/discussion', label: 'MBTI 과몰입 토론' },
 ]
 
 const extraCategories = [
@@ -33,6 +33,18 @@ const Category = () => {
     router.push(path)
   }
 
+  const getButtonClass = (categoryPath: string) => {
+    if (categoryPath === '/') {
+      return selected === '/'
+        ? 'text-main1 font-bold after:content-[""] after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-[3px] after:bg-main1 after:opacity-100'
+        : ''
+    } else if (selected?.startsWith(categoryPath)) {
+      return 'text-main1 font-bold after:content-[""] after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-[3px] after:bg-main1 after:opacity-100'
+    } else {
+      return ''
+    }
+  }
+
   return (
     <div className="h-12 border-t border-t-gray5 whitespace-nowrap flex justify-between items-center overflow-x-scroll scrollbar-hide">
       <ul className="flex items-center text-title3 font-normal">
@@ -41,11 +53,7 @@ const Category = () => {
             <button
               type="button"
               onClick={() => handleClick(category.path)}
-              className={`mr-7 cursor-pointer relative hover:text-main1 transition-all ${
-                selected === category.path
-                  ? 'text-main1 font-bold after:content-[""] after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-[3px] after:bg-main1 after:opacity-100'
-                  : ''
-              }`}
+              className={`mr-7 cursor-pointer relative hover:text-main1 transition-all ${getButtonClass(category.path)}`}
             >
               {category.label}
             </button>
@@ -59,11 +67,7 @@ const Category = () => {
             <button
               type="button"
               onClick={() => handleClick(category.path)}
-              className={`ml-7 cursor-pointer relative hover:text-main1 transition-all ${
-                selected === category.path
-                  ? 'text-main1 font-bold after:content-[""] after:absolute after:bottom-[-10px] after:left-0 after:w-full after:h-[3px] after:bg-main1 after:opacity-100'
-                  : ''
-              }`}
+              className={`ml-7 cursor-pointer relative hover:text-main1 transition-all ${getButtonClass(category.path)}`}
             >
               {category.label}
             </button>

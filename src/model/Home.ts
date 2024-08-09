@@ -29,6 +29,7 @@ interface HotBoardMore {
 }
 
 interface HotDiscussionI {
+  id: number
   title: string
   content: string
   participantCount: number

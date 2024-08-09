@@ -2,45 +2,44 @@ import Service from '@/apis/AxiosInstance'
 import { CommentList } from '@/model/Comment'
 
 export interface CommentListProps {
-  boardId: number
+  id: number
   page: number
   size: number
 }
 
 export interface PostCommentProps {
-  boardId: number
+  id: number
   comment: FormData
   commentId?: number
 }
 
 export interface CommentDetailProps {
-  boardId: number
+  id: number
   commentId: number
 }
 
 class CommentService extends Service {
-  getCommentList({ boardId, page, size }: CommentListProps) {
+  // 게시판 댓글
+  getCommentList({ id, page, size }: CommentListProps) {
     return this.http.get<CommentList>(
-      `/boards/${boardId}/comments?page=${page}&size=${size}`,
+      `/boards/${id}/comments?page=${page}&size=${size}`,
     )
   }
 
-  getCommentBest({ boardId, page, size }: CommentListProps) {
+  getCommentBest({ id, page, size }: CommentListProps) {
     return this.http.get<Comment>(
-      `/boards/${boardId}/comments/best?page=${page}&size=${size}`,
+      `/boards/${id}/comments/best?page=${page}&size=${size}`,
     )
   }
 
-  postCommentLike({ boardId, commentId }: CommentDetailProps) {
-    return this.http.post(
-      `/member/boards/${boardId}/comments/${commentId}/like`,
-    )
+  postCommentLike({ id, commentId }: CommentDetailProps) {
+    return this.http.post(`/member/boards/${id}/comments/${commentId}/like`)
   }
 
-  postComment({ boardId, comment, commentId }: PostCommentProps) {
+  postComment({ id, comment, commentId }: PostCommentProps) {
     const url = commentId
-      ? `/member/boards/${boardId}/comments?commentId=${commentId}`
-      : `/member/boards/${boardId}/comments`
+      ? `/member/boards/${id}/comments?commentId=${commentId}`
+      : `/member/boards/${id}/comments`
 
     return this.http.post(url, comment, {
       headers: {
@@ -49,8 +48,41 @@ class CommentService extends Service {
     })
   }
 
-  deleteComment({ boardId, commentId }: CommentDetailProps) {
-    return this.http.delete(`/member/boards/${boardId}/comments/${commentId}`)
+  deleteComment({ id, commentId }: CommentDetailProps) {
+    return this.http.delete(`/member/boards/${id}/comments/${commentId}`)
+  }
+
+  // 토론 게시판 댓글
+  getDiscussionCommentList({ id, page, size }: CommentListProps) {
+    return this.http.get<CommentList>(
+      `/discussions/${id}/comments?page=${page}&size=${size}`,
+    )
+  }
+
+  getDiscussionCommentBest({ id, page, size }: CommentListProps) {
+    return this.http.get<Comment>(
+      `/discussions/${id}/comments/best?page=${page}&size=${size}`,
+    )
+  }
+
+  postDiscussionCommentLike({ id, commentId }: CommentDetailProps) {
+    return this.http.post(`/discussions/${id}/comments/${commentId}/like`)
+  }
+
+  postDiscussionComment({ id, comment, commentId }: PostCommentProps) {
+    const url = commentId
+      ? `/member/discussions/${id}/comments?commentId=${commentId}`
+      : `/member/discussions/${id}/comments`
+
+    return this.http.post(url, comment, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+  }
+
+  deleteDiscussionComment({ id, commentId }: CommentDetailProps) {
+    return this.http.delete(`/member/boards/${id}/comments/${commentId}`)
   }
 }
 

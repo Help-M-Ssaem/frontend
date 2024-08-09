@@ -68,7 +68,7 @@ const BoardDetail = () => {
           </>
         )}
 
-        <CommentList boardId={Number(id)} page={0} size={10} />
+        <CommentList id={Number(id)} page={0} size={10} />
       </Container>
     </>
   )

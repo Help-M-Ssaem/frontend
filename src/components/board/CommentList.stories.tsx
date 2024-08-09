@@ -13,7 +13,7 @@ const Template: StoryFn<CommentListProps> = (args: CommentListProps) => (
 
 export const Primary = Template.bind({})
 Primary.args = {
-  boardId: 1,
+  id: 1,
   page: 0,
   size: 10,
 }

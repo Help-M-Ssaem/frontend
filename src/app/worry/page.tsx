@@ -30,7 +30,7 @@ const WorryPage = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="text-title3 text-maindark font-semibold m-5">
+      <div className="text-title3 text-maindark font-semibold my-5">
         M쌤 매칭을 기다리는 고민
       </div>
       <Container color="purple">
@@ -50,7 +50,7 @@ const WorryPage = () => {
           ))}
       </Container>
 
-      <div className="text-title3 text-maindark font-semibold m-5">
+      <div className="text-title3 text-maindark font-semibold my-5">
         해결 완료된 고민
       </div>
       <Container color="purple">
