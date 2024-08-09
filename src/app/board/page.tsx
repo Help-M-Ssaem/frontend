@@ -4,14 +4,21 @@ import Board from '@/components/board/Board'
 import MbtiCategories from '@/components/board/MbtiCategories'
 import Button from '@/components/common/Button'
 import Container from '@/components/common/Container'
+import Pagination from '@/components/common/Pagination'
+import SearchBar from '@/components/common/SearchBar'
 import { useBoardList } from '@/service/board/useBoardService'
 import { useState } from 'react'
 
 const BoardPage = () => {
   const [mbti, setMbti] = useState<string>('all')
-  // const [page, setPage] = useState<number>(0)
+  const [page, setPage] = useState<number>(1)
+  const pageSize = 6
 
-  const { data } = useBoardList(mbti, 0, 6)
+  const { data: boardList } = useBoardList(mbti, page - 1, pageSize)
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage)
+  }
 
   return (
     <>
@@ -29,13 +36,26 @@ const BoardPage = () => {
           />
         </div>
         <div className="h-[1px] bg-main" />
-        {data &&
-          data.result.map((board) => (
-            <>
-              <Board key={board.id} board={board} />
+        {boardList &&
+          boardList.result.map((board) => (
+            <div key={board.id}>
+              <Board board={board} />
               <div className="h-[1px] bg-main" />
-            </>
+            </div>
           ))}
+
+        {boardList && (
+          <div className="mt-5">
+            <Pagination
+              pagesCount={boardList.totalSize}
+              currentPage={page}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        )}
+        <div className="my-7.5">
+          <SearchBar onSearch={() => {}} />
+        </div>
       </Container>
     </>
   )

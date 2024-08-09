@@ -1,7 +1,7 @@
 'use client'
 
-import ChattingProfileI from '@/model/Chatting'
 import Image from 'next/image'
+import { ChattingProfileI } from '@/model/Chatting'
 import Button from '../common/Button'
 
 export interface ChattingProfileProps {
