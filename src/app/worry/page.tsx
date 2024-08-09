@@ -8,7 +8,7 @@ import {
   useSolvedWorryList,
   useWaitingWorryList,
 } from '@/service/worry/useWorryService'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import SearchBar from '@/components/common/SearchBar'
 import { useRouter, useSearchParams } from 'next/navigation'
 
@@ -67,71 +67,73 @@ const WorryPage = () => {
   }, [solvedPageQuery])
 
   return (
-    <div className="flex flex-col">
-      <div className="text-title3 text-maindark font-semibold my-5">
-        M쌤 매칭을 기다리는 고민
-      </div>
-      <Container color="purple">
-        <MbtiSelect
-          strFromMbti={waitingStrFromMbti}
-          strToMbti={waitingStrToMbti}
-          setStrFromMbti={setWaitingStrFromMbti}
-          setStrToMbti={setWaitingStrToMbti}
-        />
-        <div className="h-[1px] bg-main" />
-        {waitingWorryList &&
-          waitingWorryList.result.map((worry) => (
-            <div key={worry.id}>
-              <WorryBoard worryBoard={worry} />
-              <div className="h-[1px] bg-main" />
-            </div>
-          ))}
-
-        {waitingWorryList && (
-          <div className="mt-5">
-            <Pagination
-              pagesCount={waitingWorryList.totalSize}
-              currentPage={waitingPage}
-              onPageChange={handleWaitingPageChange}
-            />
-          </div>
-        )}
-      </Container>
-
-      <div className="text-title3 text-maindark font-semibold my-5">
-        해결 완료된 고민
-      </div>
-      <Container color="purple">
-        <MbtiSelect
-          strFromMbti={solvedStrFromMbti}
-          strToMbti={solvedStrToMbti}
-          setStrFromMbti={setSolvedStrFromMbti}
-          setStrToMbti={setSolvedStrToMbti}
-        />
-        <div className="h-[1px] bg-main" />
-        {solvedWorryList &&
-          solvedWorryList.result.map((worry) => (
-            <div key={worry.id}>
-              <WorryBoard worryBoard={worry} />
-              <div className="h-[1px] bg-main" />
-            </div>
-          ))}
-
-        {solvedWorryList && (
-          <div className="mt-5">
-            <Pagination
-              pagesCount={solvedWorryList.totalSize}
-              currentPage={solvedPage}
-              onPageChange={handleSolvedPageChange}
-            />
-          </div>
-        )}
-
-        <div className="my-7.5">
-          <SearchBar onSearch={() => {}} />
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="flex flex-col">
+        <div className="text-title3 text-maindark font-semibold my-5">
+          M쌤 매칭을 기다리는 고민
         </div>
-      </Container>
-    </div>
+        <Container color="purple">
+          <MbtiSelect
+            strFromMbti={waitingStrFromMbti}
+            strToMbti={waitingStrToMbti}
+            setStrFromMbti={setWaitingStrFromMbti}
+            setStrToMbti={setWaitingStrToMbti}
+          />
+          <div className="h-[1px] bg-main" />
+          {waitingWorryList &&
+            waitingWorryList.result.map((worry) => (
+              <div key={worry.id}>
+                <WorryBoard worryBoard={worry} />
+                <div className="h-[1px] bg-main" />
+              </div>
+            ))}
+
+          {waitingWorryList && (
+            <div className="mt-5">
+              <Pagination
+                pagesCount={waitingWorryList.totalSize}
+                currentPage={waitingPage}
+                onPageChange={handleWaitingPageChange}
+              />
+            </div>
+          )}
+        </Container>
+
+        <div className="text-title3 text-maindark font-semibold my-5">
+          해결 완료된 고민
+        </div>
+        <Container color="purple">
+          <MbtiSelect
+            strFromMbti={solvedStrFromMbti}
+            strToMbti={solvedStrToMbti}
+            setStrFromMbti={setSolvedStrFromMbti}
+            setStrToMbti={setSolvedStrToMbti}
+          />
+          <div className="h-[1px] bg-main" />
+          {solvedWorryList &&
+            solvedWorryList.result.map((worry) => (
+              <div key={worry.id}>
+                <WorryBoard worryBoard={worry} />
+                <div className="h-[1px] bg-main" />
+              </div>
+            ))}
+
+          {solvedWorryList && (
+            <div className="mt-5">
+              <Pagination
+                pagesCount={solvedWorryList.totalSize}
+                currentPage={solvedPage}
+                onPageChange={handleSolvedPageChange}
+              />
+            </div>
+          )}
+
+          <div className="my-7.5">
+            <SearchBar onSearch={() => {}} />
+          </div>
+        </Container>
+      </div>
+    </Suspense>
   )
 }
 

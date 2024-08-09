@@ -8,7 +8,7 @@ import Container from '@/components/common/Container'
 import Pagination from '@/components/common/Pagination'
 import SearchBar from '@/components/common/SearchBar'
 import { useBoardList } from '@/service/board/useBoardService'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 
 const BoardPage = () => {
   const router = useRouter()
@@ -36,7 +36,7 @@ const BoardPage = () => {
   }, [mbtiQuery])
 
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <MbtiCategories selectedMbti={mbti} />
       <div className="text-title3 text-maindark font-semibold my-5">
         {mbti === 'all' ? '전체' : mbti} 게시판
@@ -72,7 +72,7 @@ const BoardPage = () => {
           <SearchBar onSearch={() => {}} />
         </div>
       </Container>
-    </>
+    </Suspense>
   )
 }
 

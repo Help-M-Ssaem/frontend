@@ -3,7 +3,7 @@
 import DiscussionBoard from '@/components/discussion/DiscussionBoard'
 import Pagination from '@/components/common/Pagination'
 import { useDiscussionList } from '@/service/discussion/useDiscussionService'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import SearchBar from '@/components/common/SearchBar'
 import { useRouter, useSearchParams } from 'next/navigation'
 
@@ -29,7 +29,7 @@ const DiscussionPage = () => {
   }, [pageQuery])
 
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <div className="text-title3 text-maindark font-semibold my-5">
         MBTI 과몰입 토론
       </div>
@@ -56,7 +56,7 @@ const DiscussionPage = () => {
       <div className="my-7.5">
         <SearchBar onSearch={() => {}} />
       </div>
-    </>
+    </Suspense>
   )
 }
 
