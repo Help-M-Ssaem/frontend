@@ -1,5 +1,5 @@
 import DiscussionService, {
-  DicussionParticipationProps,
+  DiscussionParticipationProps,
   DiscussionListProps,
 } from './DiscussionService'
 
@@ -59,7 +59,7 @@ const queryOptions = {
     mutationFn: async ({
       discussionId,
       discussionOptionId,
-    }: DicussionParticipationProps): Promise<void> => {
+    }: DiscussionParticipationProps): Promise<void> => {
       await DiscussionService.postDiscussionPraticipation({
         discussionId,
         discussionOptionId,

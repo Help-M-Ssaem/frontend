@@ -7,7 +7,7 @@ export interface DiscussionListProps {
   size: number
 }
 
-export interface DicussionParticipationProps {
+export interface DiscussionParticipationProps {
   discussionId: number
   discussionOptionId: number
 }
@@ -44,7 +44,7 @@ class DiscussionService extends Service {
   postDiscussionPraticipation({
     discussionId,
     discussionOptionId,
-  }: DicussionParticipationProps) {
+  }: DiscussionParticipationProps) {
     return this.http.post(
       `/member/discussions/${discussionId}/discussion-options/${discussionOptionId}`,
     )

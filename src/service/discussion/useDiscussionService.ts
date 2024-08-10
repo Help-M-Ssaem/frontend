@@ -4,7 +4,7 @@ import {
   UseMutationOptions,
 } from '@tanstack/react-query'
 import { queryOptions } from './DiscussionQueries'
-import { DicussionParticipationProps } from './DiscussionService'
+import { DiscussionParticipationProps } from './DiscussionService'
 
 const useDiscussionList = (page: number, size: number) =>
   useQuery({
@@ -52,7 +52,7 @@ const usePostDiscussionPraticipation = () => {
   const mutationFn = ({
     discussionId,
     discussionOptionId,
-  }: DicussionParticipationProps): Promise<void> =>
+  }: DiscussionParticipationProps): Promise<void> =>
     queryOptions.postDiscussionPraticipation.mutationFn({
       discussionId,
       discussionOptionId,
@@ -61,12 +61,12 @@ const usePostDiscussionPraticipation = () => {
   const options: UseMutationOptions<
     void,
     Error,
-    DicussionParticipationProps,
+    DiscussionParticipationProps,
     unknown
   > = {
     mutationFn,
   }
-  return useMutation<void, Error, DicussionParticipationProps>(options)
+  return useMutation<void, Error, DiscussionParticipationProps>(options)
 }
 
 export {
