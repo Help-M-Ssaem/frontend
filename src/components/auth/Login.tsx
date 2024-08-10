@@ -1,7 +1,7 @@
 'use client'
 
 import { User } from '@/model/User'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import Profile from '../common/Profile'
 
 const menuItems = [
