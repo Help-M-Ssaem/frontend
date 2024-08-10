@@ -7,7 +7,7 @@ class AuthService {
   private http: AxiosInstance
 
   constructor() {
-    this.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL as string // API 베이스 URL 환경변수
+    this.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL as string
     this.http = axios.create({
       baseURL: this.baseURL,
       headers: {
@@ -16,10 +16,10 @@ class AuthService {
     })
   }
 
-  postSignup({ email, nickname, mbti, caseSensitivity }: Signup) {
+  postSignup({ email, nickName, mbti, caseSensitivity }: Signup) {
     return this.http.post('/sign-up', {
       email,
-      nickname,
+      nickName,
       mbti,
       caseSensitivity,
     })

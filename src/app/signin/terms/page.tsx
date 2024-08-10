@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from '@/components/common/Button'
 import LabeledButton from '@/components/common/LabeledButton'
 import Textarea from '@/components/common/Textarea'
@@ -15,20 +15,40 @@ const TERMS = [
 
 const Terms = () => {
   const router = useRouter()
-  const [checkedTerms, setCheckedTerms] = useState([false, false, false])
+  const [checkedTerms, setCheckedTerms] = useState<boolean[]>([
+    false,
+    false,
+    false,
+  ])
   const [isAllChecked, setIsAllChecked] = useState(false)
+
+  useEffect(() => {
+    const savedTerms = localStorage.getItem('checkedTerms')
+    if (savedTerms) {
+      const parsedTerms = JSON.parse(savedTerms)
+      setCheckedTerms(parsedTerms)
+      setIsAllChecked(parsedTerms.every((term: boolean) => term))
+    }
+  }, [])
 
   const handleTermChange = (index: number) => {
     const updatedCheckedTerms = [...checkedTerms]
     updatedCheckedTerms[index] = !updatedCheckedTerms[index]
     setCheckedTerms(updatedCheckedTerms)
     setIsAllChecked(updatedCheckedTerms.every((term) => term))
+    localStorage.setItem('checkedTerms', JSON.stringify(updatedCheckedTerms))
   }
 
   const handleAllChange = () => {
     const newState = !isAllChecked
-    setCheckedTerms([newState, newState, newState])
+    const updatedCheckedTerms = [newState, newState, newState]
+    setCheckedTerms(updatedCheckedTerms)
     setIsAllChecked(newState)
+    localStorage.setItem('checkedTerms', JSON.stringify(updatedCheckedTerms))
+  }
+
+  const handleNextClick = () => {
+    router.push('/signin/info')
   }
 
   return (
@@ -68,7 +88,7 @@ const Terms = () => {
           text="다음"
           color="GRAY"
           size="login"
-          onClick={() => router.push('/signin/info')}
+          onClick={handleNextClick}
         />
       </div>
     </div>

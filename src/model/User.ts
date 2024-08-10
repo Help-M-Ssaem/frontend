@@ -45,8 +45,8 @@ interface PopularMssaemI {
 
 interface Signup {
   email: string
-  nickname: string
-  mbti: MBTI
+  nickName: string
+  mbti: string
   caseSensitivity: string
 }
 

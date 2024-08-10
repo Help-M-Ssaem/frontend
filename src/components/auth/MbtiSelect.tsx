@@ -5,21 +5,26 @@ import Image from 'next/image'
 
 export interface MbtiSelectProps {
   options: string[]
+  onSelect: (selectedOption: string) => void
 }
 
-const MbtiSelect = ({ options }: MbtiSelectProps) => {
+const MbtiSelect = ({ options, onSelect }: MbtiSelectProps) => {
   const [selectedOption, setSelectedOption] = useState(options[0])
 
   const handleNextOption = () => {
     const currentIndex = options.indexOf(selectedOption)
     const nextIndex = (currentIndex + 1) % options.length
-    setSelectedOption(options[nextIndex])
+    const nextOption = options[nextIndex]
+    setSelectedOption(nextOption)
+    onSelect(nextOption)
   }
 
   const handlePrevOption = () => {
     const currentIndex = options.indexOf(selectedOption)
     const prevIndex = (currentIndex - 1 + options.length) % options.length
-    setSelectedOption(options[prevIndex])
+    const prevOption = options[prevIndex]
+    setSelectedOption(prevOption)
+    onSelect(prevOption)
   }
 
   return (
