@@ -84,6 +84,30 @@ const queryOptions = {
       return res.data
     },
   },
+
+  realtimeKeywords: {
+    queryKey: 'realtimeKeywords',
+    queryFn: async () => {
+      const res = await SearchService.getRealtimeKeywords()
+      return res.data
+    },
+  },
+
+  recentKeywords: {
+    queryKey: 'recentKeywords',
+    queryFn: async () => {
+      const res = await SearchService.getRecentKeywords()
+      return res.data
+    },
+  },
+
+  keywordSearch: {
+    queryKey: queryKeys.boardSearch,
+    queryFn: async (keyword: string) => {
+      const res = await SearchService.postKeywordSearch(keyword)
+      return res.data
+    },
+  },
 }
 
 export { queryKeys, queryOptions }
