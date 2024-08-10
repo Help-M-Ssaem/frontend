@@ -15,7 +15,7 @@ const useProfile = (id: number) =>
 
 const useUserInfo = () => useQuery(queryOptions.userInfo)
 
-const usePatchBoard = () => {
+const usePatchProfile = () => {
   const mutationFn = (profile: Profile): Promise<void> =>
     queryOptions.patchProfile.mutationFn(profile)
 
@@ -48,7 +48,7 @@ const useDeleteProfileImg = () => {
 export {
   useProfile,
   useUserInfo,
-  usePatchBoard,
+  usePatchProfile,
   usePostProfileImg,
   useDeleteProfileImg,
 }

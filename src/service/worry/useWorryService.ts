@@ -24,6 +24,18 @@ const useWaitingWorryList = (
   })
 }
 
+const useWaitingWorryListMember = (
+  memberId: number,
+  page: number,
+  size: number,
+) => {
+  return useQuery({
+    queryKey: ['worryListMember', memberId, page, size],
+    queryFn: () =>
+      queryOptions.waitingWorryListMember.queryFn({ memberId, page, size }),
+  })
+}
+
 const useSolvedWorryList = (
   page: number,
   size: number,
@@ -39,6 +51,18 @@ const useSolvedWorryList = (
         strFromMbti,
         strToMbti,
       }),
+  })
+}
+
+const useSovledWorryListMember = (
+  memberId: number,
+  page: number,
+  size: number,
+) => {
+  return useQuery({
+    queryKey: ['worryListMember', memberId, page, size],
+    queryFn: () =>
+      queryOptions.solvedWorryListMember.queryFn({ memberId, page, size }),
   })
 }
 
@@ -91,7 +115,9 @@ const usePatchWorrySolved = () => {
 
 export {
   useWaitingWorryList,
+  useWaitingWorryListMember,
   useSolvedWorryList,
+  useSovledWorryListMember,
   useWorryDetail,
   usePostWorry,
   usePatchWorry,

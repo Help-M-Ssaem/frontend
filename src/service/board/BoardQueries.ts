@@ -1,4 +1,9 @@
-import BoardService from './BoardService'
+import BoardService, {
+  BoardListFilteredProps,
+  BoardListMemberProps,
+  BoardListProps,
+  BoardPatchProps,
+} from './BoardService'
 
 const queryKeys = {
   board: (boardId: number) => ['board', boardId] as const,
@@ -7,23 +12,36 @@ const queryKeys = {
   bookmarkList: ['bookmarkList'] as const,
 }
 
-interface BoardListProps {
-  mbti: string
-  page: number
-  size: number
-}
-
-interface BoardPatchProps {
-  id: number
-  board: FormData
-}
-
 const queryOptions = {
   boardList: {
     queryKey: queryKeys.boardList,
     queryFn: async ({ mbti, page, size }: BoardListProps) => {
       const res = await BoardService.getBoardList({
         mbti,
+        page,
+        size,
+      })
+      return res.data
+    },
+  },
+
+  boardListFiltered: {
+    queryKey: (boardId: number) => ['boardListFiltered', boardId] as const,
+    queryFn: async ({ boardId, page, size }: BoardListFilteredProps) => {
+      const res = await BoardService.getBoardListFiltered({
+        boardId,
+        page,
+        size,
+      })
+      return res.data
+    },
+  },
+
+  boardListMember: {
+    queryKey: (memberId: number) => ['boardListMember', memberId] as const,
+    queryFn: async ({ memberId, page, size }: BoardListMemberProps) => {
+      const res = await BoardService.getBoardListMember({
+        memberId,
         page,
         size,
       })
@@ -47,6 +65,14 @@ const queryOptions = {
     },
   },
 
+  categoryBookmark: {
+    queryKey: queryKeys.bookmarkList,
+    queryFn: async () => {
+      const res = await BoardService.getCategoryBookmark()
+      return res.data
+    },
+  },
+
   postCategoryBookmark: {
     queryKey: queryKeys.bookmarkList,
     mutationFn: async (mbti: string): Promise<void> => {
@@ -65,6 +91,13 @@ const queryOptions = {
     queryKey: queryKeys.boardList,
     mutationFn: async (board: FormData): Promise<void> => {
       await BoardService.postBoard(board)
+    },
+  },
+
+  postBoardImage: {
+    queryKey: queryKeys.boardList,
+    mutationFn: async (board: FormData): Promise<void> => {
+      await BoardService.postBoardImage(board)
     },
   },
 

@@ -100,9 +100,33 @@ const useDiscussionSearch = (
       }),
   })
 
+const useRealtimeKeywords = () =>
+  useQuery({
+    ...queryOptions.realtimeKeywords,
+    queryKey: ['realtimeKeywords'],
+    queryFn: queryOptions.realtimeKeywords.queryFn,
+  })
+
+const useRecentKeywords = () =>
+  useQuery({
+    ...queryOptions.recentKeywords,
+    queryKey: ['recentKeywords'],
+    queryFn: queryOptions.recentKeywords.queryFn,
+  })
+
+const useKeywordSearch = (keyword: string) =>
+  useQuery({
+    ...queryOptions.keywordSearch,
+    queryKey: ['keywordSearch', keyword],
+    queryFn: () => queryOptions.keywordSearch.queryFn(keyword),
+  })
+
 export {
   useBoardSearch,
   useSolvedWorrySearch,
   useWaitingWorrySearch,
   useDiscussionSearch,
+  useRealtimeKeywords,
+  useRecentKeywords,
+  useKeywordSearch,
 }

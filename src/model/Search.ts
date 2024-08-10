@@ -20,4 +20,21 @@ interface DiscussionSearch {
   result: DiscussionBoardI[]
 }
 
-export type { BoardSearch, WorrySearch, DiscussionSearch }
+interface RealtimeSearch {
+  keyword: string
+  score: number
+}
+
+interface KeywordSearch {
+  boardSimpleInfos: BoardSearch
+  getWorriesRes: WorrySearch
+  discussionSimpleInfo: DiscussionSearch
+}
+
+export type {
+  BoardSearch,
+  WorrySearch,
+  DiscussionSearch,
+  RealtimeSearch,
+  KeywordSearch,
+}

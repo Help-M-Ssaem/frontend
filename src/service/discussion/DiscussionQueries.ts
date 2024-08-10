@@ -1,5 +1,5 @@
 import DiscussionService, {
-  DicussionParticipationProps,
+  DiscussionParticipationProps,
   DiscussionListProps,
 } from './DiscussionService'
 
@@ -13,6 +13,18 @@ const queryOptions = {
     queryKey: queryKeys.discussionList,
     queryFn: async ({ page, size }: DiscussionListProps) => {
       const res = await DiscussionService.getDiscussionList({
+        page,
+        size,
+      })
+      return res.data
+    },
+  },
+
+  discussionListMember: {
+    queryKey: (id: number) => queryKeys.discussion(id),
+    queryFn: async ({ id, page, size }: DiscussionListProps) => {
+      const res = await DiscussionService.getDiscussionListMember({
+        id,
         page,
         size,
       })
@@ -47,7 +59,7 @@ const queryOptions = {
     mutationFn: async ({
       discussionId,
       discussionOptionId,
-    }: DicussionParticipationProps): Promise<void> => {
+    }: DiscussionParticipationProps): Promise<void> => {
       await DiscussionService.postDiscussionPraticipation({
         discussionId,
         discussionOptionId,

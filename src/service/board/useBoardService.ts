@@ -4,17 +4,29 @@ import {
   UseMutationOptions,
 } from '@tanstack/react-query'
 import { queryOptions } from './BoardQueries'
-
-interface BoardPatchProps {
-  id: number
-  board: FormData
-}
+import { BoardPatchProps } from './BoardService'
 
 const useBoardList = (mbti: string, page: number, size: number) =>
   useQuery({
     ...queryOptions.boardList,
     queryKey: ['boardList', mbti, page, size],
     queryFn: () => queryOptions.boardList.queryFn({ mbti, page, size }),
+  })
+
+const useBoardListFiltered = (boardId: number, page: number, size: number) =>
+  useQuery({
+    ...queryOptions.boardListFiltered,
+    queryKey: ['boardListFiltered', boardId, page, size],
+    queryFn: () =>
+      queryOptions.boardListFiltered.queryFn({ boardId, page, size }),
+  })
+
+const useBoardListMember = (memberId: number, page: number, size: number) =>
+  useQuery({
+    ...queryOptions.boardListMember,
+    queryKey: ['boardListMember', memberId, page, size],
+    queryFn: () =>
+      queryOptions.boardListMember.queryFn({ memberId, page, size }),
   })
 
 const useBoardListNumber = () => useQuery(queryOptions.boardListNumber)
@@ -25,6 +37,8 @@ const useBoardDetail = (boardId: number) =>
     queryKey: ['boardDetail', boardId],
     queryFn: () => queryOptions.boardDetail.queryFn(boardId),
   })
+
+const useCategoryBookmark = () => useQuery(queryOptions.categoryBookmark)
 
 const usePostCategoryBookmark = () => {
   const mutationFn = (mbti: string): Promise<void> =>
@@ -56,6 +70,16 @@ const usePostBoard = () => {
   return useMutation<void, Error, FormData>(options)
 }
 
+const usePostBoardImage = () => {
+  const mutationFn = (board: FormData): Promise<void> =>
+    queryOptions.postBoard.mutationFn(board)
+
+  const options: UseMutationOptions<void, Error, FormData, unknown> = {
+    mutationFn,
+  }
+  return useMutation<void, Error, FormData>(options)
+}
+
 const usePatchBoard = () => {
   const mutationFn = ({ id, board }: BoardPatchProps): Promise<void> =>
     queryOptions.patchBoard.mutationFn({ id, board })
@@ -78,11 +102,15 @@ const useDeleteBoard = () => {
 
 export {
   useBoardList,
+  useBoardListFiltered,
+  useBoardListMember,
   useBoardListNumber,
   useBoardDetail,
+  useCategoryBookmark,
   usePostCategoryBookmark,
   usePostBoardLike,
   usePostBoard,
+  usePostBoardImage,
   usePatchBoard,
   useDeleteBoard,
 }

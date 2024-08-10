@@ -4,13 +4,21 @@ import {
   UseMutationOptions,
 } from '@tanstack/react-query'
 import { queryOptions } from './DiscussionQueries'
-import { DicussionParticipationProps } from './DiscussionService'
+import { DiscussionParticipationProps } from './DiscussionService'
 
 const useDiscussionList = (page: number, size: number) =>
   useQuery({
     ...queryOptions.discussionList,
     queryKey: ['discussionList', page, size],
     queryFn: () => queryOptions.discussionList.queryFn({ page, size }),
+  })
+
+const useDiscussionListMember = (id: number, page: number, size: number) =>
+  useQuery({
+    ...queryOptions.discussionListMember,
+    queryKey: ['discussionListMember', id, page, size],
+    queryFn: () =>
+      queryOptions.discussionListMember.queryFn({ id, page, size }),
   })
 
 const useDiscussionDetail = (id: number) =>
@@ -44,7 +52,7 @@ const usePostDiscussionPraticipation = () => {
   const mutationFn = ({
     discussionId,
     discussionOptionId,
-  }: DicussionParticipationProps): Promise<void> =>
+  }: DiscussionParticipationProps): Promise<void> =>
     queryOptions.postDiscussionPraticipation.mutationFn({
       discussionId,
       discussionOptionId,
@@ -53,16 +61,17 @@ const usePostDiscussionPraticipation = () => {
   const options: UseMutationOptions<
     void,
     Error,
-    DicussionParticipationProps,
+    DiscussionParticipationProps,
     unknown
   > = {
     mutationFn,
   }
-  return useMutation<void, Error, DicussionParticipationProps>(options)
+  return useMutation<void, Error, DiscussionParticipationProps>(options)
 }
 
 export {
   useDiscussionList,
+  useDiscussionListMember,
   useDiscussionDetail,
   usePostDiscussion,
   useDeleteDiscussion,

@@ -19,10 +19,16 @@ export interface CommentDetailProps {
 }
 
 class CommentService extends Service {
-  // 게시판 댓글
+  // 게시판
   getCommentList({ id, page, size }: CommentListProps) {
     return this.http.get<CommentList>(
       `/boards/${id}/comments?page=${page}&size=${size}`,
+    )
+  }
+
+  getCommentListMember({ id, page, size }: CommentListProps) {
+    return this.http.get<CommentList>(
+      `/boards/comments?memberId=${id}&page=${page}&size=${size}`,
     )
   }
 
@@ -52,10 +58,16 @@ class CommentService extends Service {
     return this.http.delete(`/member/boards/${id}/comments/${commentId}`)
   }
 
-  // 토론 게시판 댓글
+  // 토론 게시판
   getDiscussionCommentList({ id, page, size }: CommentListProps) {
     return this.http.get<CommentList>(
       `/discussions/${id}/comments?page=${page}&size=${size}`,
+    )
+  }
+
+  getDiscussionCommentListMember({ id, page, size }: CommentListProps) {
+    return this.http.get<CommentList>(
+      `/discussions/comments?memberId=${id}&page=${page}&size=${size}`,
     )
   }
 
