@@ -43,4 +43,11 @@ interface PopularMssaemI {
   introduction: string
 }
 
-export type { User, Profile, PopularMssaemI }
+interface Signup {
+  email: string
+  nickname: string
+  mbti: MBTI
+  caseSensitivity: string
+}
+
+export type { User, Profile, PopularMssaemI, Signup }

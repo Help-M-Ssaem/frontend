@@ -1,8 +1,25 @@
 'use client'
 
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 const Signin = () => {
+  const router = useRouter()
+  const KAKAO_API_KEY = process.env.NEXT_PUBLIC_APP_KAKAO_API_KEY
+  const KAKAO_REDIRECT_URI = process.env.NEXT_PUBLIC_APP_KAKAO_REDIRECT_URI
+  const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_APP_GOOGLE_API_KEY
+  const GOOGLE_REDIRECT_URI = process.env.NEXT_PUBLIC_APP_GOOGLE_REDIRECT_URI
+
+  const KakaoSigninBtnClick = () => {
+    const URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code&prompt=login`
+    router.push(URL)
+  }
+
+  const GoogleSigninBtnClick = () => {
+    const URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_API_KEY}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`
+    router.push(URL)
+  }
+
   return (
     <div className="flex flex-col items-center my-18 w-full max-w-95 mx-auto gap-5">
       <Image
@@ -25,6 +42,7 @@ const Signin = () => {
           width={380}
           height={50}
           className="cursor-pointer"
+          onClick={GoogleSigninBtnClick}
         />
         <Image
           src="/images/auth/kakao_btn.svg"
@@ -32,6 +50,7 @@ const Signin = () => {
           width={380}
           height={50}
           className="cursor-pointer"
+          onClick={KakaoSigninBtnClick}
         />
       </div>
     </div>

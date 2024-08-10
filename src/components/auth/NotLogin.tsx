@@ -18,7 +18,14 @@ const NotLogin = () => {
       <p className="text-gray1 text-caption cursor-pointer">
         M쌤이 되어 더 자유롭게 이용하세요
       </p>
-      <Button text="로그인하고 이용하기" color="LIGHTPURPLE" size="small" />
+      <Button
+        text="로그인하고 이용하기"
+        color="LIGHTPURPLE"
+        size="small"
+        onClick={() => {
+          router.push('/signin')
+        }}
+      />
       <ul className="flex justify-center w-full text-gray2 text-caption">
         {menuItems.map((item, index) => (
           <li key={item.id} className="flex items-center">
