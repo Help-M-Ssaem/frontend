@@ -1,13 +1,25 @@
 import Service from '@/apis/AxiosInstance'
 import { BoardDetail, BoardList, BoardListNumber } from '@/model/Board'
 
-interface BoardListProps {
+export interface BoardListProps {
   mbti: string
   page: number
   size: number
 }
 
-interface BoardPatchProps {
+export interface BoardListFilteredProps {
+  boardId: number
+  page: number
+  size: number
+}
+
+export interface BoardListMemberProps {
+  memberId: number
+  page: number
+  size: number
+}
+
+export interface BoardPatchProps {
   id: number
   board: FormData
 }
@@ -22,12 +34,28 @@ class BoardService extends Service {
     return this.http.get<BoardList>(url)
   }
 
+  getBoardListFiltered({ boardId, page, size }: BoardListFilteredProps) {
+    return this.http.get<BoardList>(
+      `/boards?page=${page}&size=${size}&boardId=${boardId}`,
+    )
+  }
+
+  getBoardListMember({ memberId, page, size }: BoardListMemberProps) {
+    return this.http.get<BoardList>(
+      `/boards/member?memberId=${memberId}&page=${page}&size=${size}`,
+    )
+  }
+
   getBoardListNumber() {
     return this.http.get<BoardListNumber>('/boards/list')
   }
 
   getBoardDetail(boardId: number) {
     return this.http.get<BoardDetail>(`/boards/${boardId}`)
+  }
+
+  getCategoryBookmark() {
+    return this.http.get('/member/bookmark')
   }
 
   postCategoryBookmark(mbti: string) {
@@ -40,6 +68,14 @@ class BoardService extends Service {
 
   postBoard(board: FormData) {
     return this.http.post(`/member/boards`, board, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+  }
+
+  postBoardImage(board: FormData) {
+    return this.http.post(`/member/boards/files`, board, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

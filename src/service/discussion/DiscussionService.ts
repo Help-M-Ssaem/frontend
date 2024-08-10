@@ -2,6 +2,7 @@ import Service from '@/apis/AxiosInstance'
 import { DiscussionDetail, DiscussionList } from '@/model/Discussion'
 
 export interface DiscussionListProps {
+  id?: number
   page: number
   size: number
 }
@@ -15,6 +16,12 @@ class DiscussionService extends Service {
   getDiscussionList({ page, size }: DiscussionListProps) {
     return this.http.get<DiscussionList>(
       `/discussions?page=${page}&size=${size}`,
+    )
+  }
+
+  getDiscussionListMember({ id, page, size }: DiscussionListProps) {
+    return this.http.get<DiscussionList>(
+      `/boards/member?memberId=${id}&page=${page}&size=${size}`,
     )
   }
 

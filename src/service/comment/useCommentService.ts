@@ -18,6 +18,13 @@ const useCommentList = ({ id, page, size }: CommentListProps) =>
     queryFn: () => queryOptions.commentList.queryFn({ id, page, size }),
   })
 
+const useCommentListMember = ({ id, page, size }: CommentListProps) =>
+  useQuery({
+    ...queryOptions.commentListMember,
+    queryKey: ['commentListMember'],
+    queryFn: () => queryOptions.commentListMember.queryFn({ id, page, size }),
+  })
+
 const useCommentBest = ({ id, page, size }: CommentListProps) =>
   useQuery({
     ...queryOptions.commentBest,
@@ -70,6 +77,14 @@ const useDiscussionCommentList = ({ id, page, size }: CommentListProps) =>
       queryOptions.discussionCommentList.queryFn({ id, page, size }),
   })
 
+const useDiscussionCommentListMember = ({ id, page, size }: CommentListProps) =>
+  useQuery({
+    ...queryOptions.discussionCommentListMember,
+    queryKey: ['discussionCommentListMember'],
+    queryFn: () =>
+      queryOptions.discussionCommentListMember.queryFn({ id, page, size }),
+  })
+
 const useDiscussionCommentBest = ({ id, page, size }: CommentListProps) =>
   useQuery({
     ...queryOptions.discussionCommentBest,
@@ -116,11 +131,13 @@ const useDeleteDiscussionComment = () => {
 
 export {
   useCommentList,
+  useCommentListMember,
   useCommentBest,
   useCommentLike,
   usePostComment,
   useDeleteComment,
   useDiscussionCommentList,
+  useDiscussionCommentListMember,
   useDiscussionCommentBest,
   useDiscussionCommentLike,
   usePostDiscussionComment,

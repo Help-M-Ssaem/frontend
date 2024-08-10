@@ -13,6 +13,14 @@ const useDiscussionList = (page: number, size: number) =>
     queryFn: () => queryOptions.discussionList.queryFn({ page, size }),
   })
 
+const useDiscussionListMember = (id: number, page: number, size: number) =>
+  useQuery({
+    ...queryOptions.discussionListMember,
+    queryKey: ['discussionListMember', id, page, size],
+    queryFn: () =>
+      queryOptions.discussionListMember.queryFn({ id, page, size }),
+  })
+
 const useDiscussionDetail = (id: number) =>
   useQuery({
     ...queryOptions.discussionDetail,
@@ -63,6 +71,7 @@ const usePostDiscussionPraticipation = () => {
 
 export {
   useDiscussionList,
+  useDiscussionListMember,
   useDiscussionDetail,
   usePostDiscussion,
   useDeleteDiscussion,

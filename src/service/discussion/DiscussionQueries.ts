@@ -20,6 +20,18 @@ const queryOptions = {
     },
   },
 
+  discussionListMember: {
+    queryKey: (id: number) => queryKeys.discussion(id),
+    queryFn: async ({ id, page, size }: DiscussionListProps) => {
+      const res = await DiscussionService.getDiscussionListMember({
+        id,
+        page,
+        size,
+      })
+      return res.data
+    },
+  },
+
   discussionDetail: {
     queryKey: (id: number) => queryKeys.discussion(id),
     queryFn: async (id: number) => {

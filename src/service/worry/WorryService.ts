@@ -8,6 +8,12 @@ export interface WorryListProps {
   strToMbti: string
 }
 
+export interface WorryListMemberProps {
+  memberId: number
+  page: number
+  size: number
+}
+
 export interface WorryPatchProps {
   id: number
   worry: FormData
@@ -20,9 +26,21 @@ class WorryService extends Service {
     )
   }
 
+  getWaitingWorryListMember({ memberId, page, size }: WorryListMemberProps) {
+    return this.http.get<WorryList>(
+      `/worry-board/waiting-list?memberId=${memberId}&page=${page}&size=${size}`,
+    )
+  }
+
   getSolvedWorryList({ page, size, strFromMbti, strToMbti }: WorryListProps) {
     return this.http.get<WorryList>(
       `/worry-board/solved/filter?page=${page}&size=${size}&strFromMbti=${strFromMbti}&strToMbti=${strToMbti}`,
+    )
+  }
+
+  getSolvedWorryListMember({ memberId, page, size }: WorryListMemberProps) {
+    return this.http.get<WorryList>(
+      `/worry-board/solve-list?memberId=${memberId}&page=${page}&size=${size}`,
     )
   }
 

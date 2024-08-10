@@ -21,6 +21,14 @@ const queryOptions = {
     },
   },
 
+  commentListMember: {
+    queryKey: queryKeys.commentList,
+    queryFn: async ({ id, page, size }: CommentListProps) => {
+      const res = await CommentService.getCommentListMember({ id, page, size })
+      return res.data
+    },
+  },
+
   commentBest: {
     queryKey: queryKeys.commentBest,
     queryFn: async ({ id, page, size }: CommentListProps) => {
@@ -69,6 +77,18 @@ const queryOptions = {
     queryKey: queryKeys.discussionCommentList,
     queryFn: async ({ id, page, size }: CommentListProps) => {
       const res = await CommentService.getDiscussionCommentList({
+        id,
+        page,
+        size,
+      })
+      return res.data
+    },
+  },
+
+  discussionCommentListMember: {
+    queryKey: queryKeys.discussionCommentList,
+    queryFn: async ({ id, page, size }: CommentListProps) => {
+      const res = await CommentService.getDiscussionCommentListMember({
         id,
         page,
         size,
