@@ -1,4 +1,4 @@
-import AlarmService, { AlarmListProps } from './alarmService'
+import AlarmService, { AlarmListProps } from './AlarmService'
 
 const queryKeys = {
   alarmList: ['AlarmList'] as const,
