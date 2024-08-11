@@ -6,11 +6,11 @@ import {
 import { queryOptions } from './EvaluationQueries'
 import { EvaluationProps } from './EvaluationService'
 
-const useEvaluationCount = () =>
+const useEvaluationCount = (id: number) =>
   useQuery({
     ...queryOptions.evaluationCount,
     queryKey: ['evaluationCount'],
-    queryFn: () => queryOptions.evaluationCount.queryFn(),
+    queryFn: () => queryOptions.evaluationCount.queryFn(id),
   })
 
 const usePostEvaluation = () => {

@@ -1,11 +1,11 @@
 'use client'
 
 import Image from 'next/image'
-import { PopularMssaemI } from '@/model/User'
+import { UserProfileI } from '@/model/User'
 import Button from '../common/Button'
 
 export interface PopularMssaemProps {
-  popularMssaem: PopularMssaemI
+  popularMssaem: UserProfileI
 }
 
 const PopularMssaem = ({ popularMssaem }: PopularMssaemProps) => {

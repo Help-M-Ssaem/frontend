@@ -1,16 +1,25 @@
 import { Color, MBTI } from '@/components/common/Button'
 
 interface User {
+  id?: number
   nickName: string
   mbti: MBTI
-  badge: string
+  badge: Color
   profileImgUrl: string
+  introduction?: string
+}
+
+interface Badge {
+  id: number
+  name: Color
+  status: boolean
+  imgUrl: string
 }
 
 interface Profile {
   teacherInfo: User
-  badgeInfos: string[]
-  evaluaionCount: {
+  badgeInfos: Badge[]
+  evaluationCount: {
     likeCount: number
     usefulCount: number
     funCount: number
@@ -29,18 +38,9 @@ interface Profile {
   }
   worryBoardHistory: {
     worryBoardCount: number
-    sovledWorryBoardCount: number
+    solvedWorryBoardCount: number
     evaluationCount: number
   }
-}
-
-interface PopularMssaemI {
-  id: number
-  nickName: string
-  mbti: MBTI
-  badge: Color
-  profileImageurl: string
-  introduction: string
 }
 
 interface Signup {
@@ -50,4 +50,4 @@ interface Signup {
   caseSensitivity: string
 }
 
-export type { User, Profile, PopularMssaemI, Signup }
+export type { User, Profile, Signup }

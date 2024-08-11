@@ -7,8 +7,8 @@ const queryKeys = {
 const queryOptions = {
   evaluationCount: {
     queryKey: queryKeys.evaluation,
-    queryFn: async (): Promise<number> => {
-      const response = await EvaluationService.getEvaluationCount()
+    queryFn: async (id: number): Promise<number> => {
+      const response = await EvaluationService.getEvaluationCount(id)
       return response.data
     },
   },
