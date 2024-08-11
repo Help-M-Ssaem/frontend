@@ -3,10 +3,19 @@ import UserService from './UserService'
 
 const queryKeys = {
   user: ['user'] as const,
+  terms: ['terms'] as const,
   profile: (id: number) => ['profile', id] as const,
 }
 
 const queryOptions = {
+  terms: {
+    queryKey: queryKeys.terms,
+    queryFn: async () => {
+      const res = await UserService.getTerms()
+      return res.data
+    },
+  },
+
   profile: {
     queryKey: (id: number) => queryKeys.profile(id),
     queryFn: async (id: number) => {

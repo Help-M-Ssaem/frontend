@@ -2,7 +2,7 @@ import { Signup } from '@/model/User'
 import AuthService from './AuthService'
 
 const queryKeys = {
-  auth: 'auth',
+  auth: ['auth'] as const,
 }
 
 const queryOptions = {

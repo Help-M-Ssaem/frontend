@@ -6,6 +6,8 @@ import {
 import { Profile } from '@/model/User'
 import queryOptions from './UserQueries'
 
+const useTerms = () => useQuery(queryOptions.terms)
+
 const useProfile = (id: number) =>
   useQuery({
     ...queryOptions.profile,
@@ -47,6 +49,7 @@ const useDeleteProfileImg = () => {
 
 export {
   useProfile,
+  useTerms,
   useUserInfo,
   usePatchProfile,
   usePostProfileImg,
