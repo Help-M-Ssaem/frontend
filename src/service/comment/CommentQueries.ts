@@ -5,40 +5,39 @@ import CommentService, {
 } from './CommentService'
 
 const queryKeys = {
-  commentList: ['commentList'] as const,
-  commentBest: ['commentBest'] as const,
-  discussionCommentList: ['discussionCommentList'] as const,
-  discussionCommentBest: ['discussionCommentBest'] as const,
+  commentList: (id: number) => ['commentList', id] as const,
+  commentBest: (id: number) => ['commentBest', id] as const,
+  discussionCommentList: (id: number) => ['discussionCommentList', id] as const,
+  discussionCommentBest: (id: number) => ['discussionCommentBest', id] as const,
 }
 
 const queryOptions = {
   // 게시판 댓글
-  commentList: {
-    queryKey: queryKeys.commentList,
-    queryFn: async ({ id, page, size }: CommentListProps) => {
+  commentList: (id: number) => ({
+    queryKey: queryKeys.commentList(id),
+    queryFn: async ({ page, size }: Omit<CommentListProps, 'id'>) => {
       const res = await CommentService.getCommentList({ id, page, size })
       return res.data
     },
-  },
+  }),
 
-  commentListMember: {
-    queryKey: queryKeys.commentList,
-    queryFn: async ({ id, page, size }: CommentListProps) => {
+  commentListMember: (id: number) => ({
+    queryKey: queryKeys.commentList(id),
+    queryFn: async ({ page, size }: Omit<CommentListProps, 'id'>) => {
       const res = await CommentService.getCommentListMember({ id, page, size })
       return res.data
     },
-  },
+  }),
 
-  commentBest: {
-    queryKey: queryKeys.commentBest,
-    queryFn: async ({ id, page, size }: CommentListProps) => {
+  commentBest: (id: number) => ({
+    queryKey: queryKeys.commentBest(id),
+    queryFn: async ({ page, size }: Omit<CommentListProps, 'id'>) => {
       const res = await CommentService.getCommentBest({ id, page, size })
       return res.data
     },
-  },
+  }),
 
   postCommentLike: {
-    queryKey: queryKeys.commentList,
     mutationFn: async ({
       id,
       commentId,
@@ -48,7 +47,6 @@ const queryOptions = {
   },
 
   postComment: {
-    queryKey: queryKeys.commentList,
     mutationFn: async ({
       id,
       comment,
@@ -63,7 +61,6 @@ const queryOptions = {
   },
 
   deleteComment: {
-    queryKey: queryKeys.commentList,
     mutationFn: async ({
       id,
       commentId,
@@ -73,9 +70,9 @@ const queryOptions = {
   },
 
   // 토론 게시판 댓글
-  discussionCommentList: {
-    queryKey: queryKeys.discussionCommentList,
-    queryFn: async ({ id, page, size }: CommentListProps) => {
+  discussionCommentList: (id: number) => ({
+    queryKey: queryKeys.discussionCommentList(id),
+    queryFn: async ({ page, size }: Omit<CommentListProps, 'id'>) => {
       const res = await CommentService.getDiscussionCommentList({
         id,
         page,
@@ -83,11 +80,11 @@ const queryOptions = {
       })
       return res.data
     },
-  },
+  }),
 
-  discussionCommentListMember: {
-    queryKey: queryKeys.discussionCommentList,
-    queryFn: async ({ id, page, size }: CommentListProps) => {
+  discussionCommentListMember: (id: number) => ({
+    queryKey: queryKeys.discussionCommentList(id),
+    queryFn: async ({ page, size }: Omit<CommentListProps, 'id'>) => {
       const res = await CommentService.getDiscussionCommentListMember({
         id,
         page,
@@ -95,11 +92,11 @@ const queryOptions = {
       })
       return res.data
     },
-  },
+  }),
 
-  discussionCommentBest: {
-    queryKey: queryKeys.discussionCommentBest,
-    queryFn: async ({ id, page, size }: CommentListProps) => {
+  discussionCommentBest: (id: number) => ({
+    queryKey: queryKeys.discussionCommentBest(id),
+    queryFn: async ({ page, size }: Omit<CommentListProps, 'id'>) => {
       const res = await CommentService.getDiscussionCommentBest({
         id,
         page,
@@ -107,7 +104,7 @@ const queryOptions = {
       })
       return res.data
     },
-  },
+  }),
 
   postDiscussionCommentLike: {
     queryKey: queryKeys.discussionCommentList,

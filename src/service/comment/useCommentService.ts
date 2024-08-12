@@ -13,23 +13,20 @@ import {
 // 게시판 댓글
 const useCommentList = ({ id, page, size }: CommentListProps) =>
   useQuery({
-    ...queryOptions.commentList,
-    queryKey: ['commentList'],
-    queryFn: () => queryOptions.commentList.queryFn({ id, page, size }),
+    ...queryOptions.commentList(id),
+    queryFn: () => queryOptions.commentList(id).queryFn({ page, size }),
   })
 
 const useCommentListMember = (id: number, page: number, size: number) =>
   useQuery({
-    ...queryOptions.commentListMember,
-    queryKey: ['commentListMember'],
-    queryFn: () => queryOptions.commentListMember.queryFn({ id, page, size }),
+    ...queryOptions.commentListMember(id),
+    queryFn: () => queryOptions.commentListMember(id).queryFn({ page, size }),
   })
 
 const useCommentBest = ({ id, page, size }: CommentListProps) =>
   useQuery({
-    ...queryOptions.commentBest,
-    queryKey: ['commentBest'],
-    queryFn: () => queryOptions.commentBest.queryFn({ id, page, size }),
+    ...queryOptions.commentBest(id),
+    queryFn: () => queryOptions.commentBest(id).queryFn({ page, size }),
   })
 
 const useCommentLike = () => {
@@ -71,26 +68,23 @@ const useDeleteComment = () => {
 // 토론 게시판 댓글
 const useDiscussionCommentList = ({ id, page, size }: CommentListProps) =>
   useQuery({
-    ...queryOptions.discussionCommentList,
-    queryKey: ['discussionCommentList'],
+    ...queryOptions.discussionCommentList(id),
     queryFn: () =>
-      queryOptions.discussionCommentList.queryFn({ id, page, size }),
+      queryOptions.discussionCommentList(id).queryFn({ page, size }),
   })
 
 const useDiscussionCommentListMember = ({ id, page, size }: CommentListProps) =>
   useQuery({
-    ...queryOptions.discussionCommentListMember,
-    queryKey: ['discussionCommentListMember'],
+    ...queryOptions.discussionCommentListMember(id),
     queryFn: () =>
-      queryOptions.discussionCommentListMember.queryFn({ id, page, size }),
+      queryOptions.discussionCommentListMember(id).queryFn({ page, size }),
   })
 
 const useDiscussionCommentBest = ({ id, page, size }: CommentListProps) =>
   useQuery({
-    ...queryOptions.discussionCommentBest,
-    queryKey: ['discussionCommentBest'],
+    ...queryOptions.discussionCommentBest(id),
     queryFn: () =>
-      queryOptions.discussionCommentBest.queryFn({ id, page, size }),
+      queryOptions.discussionCommentBest(id).queryFn({ page, size }),
   })
 
 const useDiscussionCommentLike = () => {
