@@ -52,6 +52,8 @@ const DiscussionDetail = () => {
                       discussionOption={option}
                       size="small"
                       boardId={Number(id)}
+                      onSelect={() => {}}
+                      disabled={false}
                     />
                   ))}
               </div>

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { DiscussionBoardI, DiscussionOptionI } from '@/model/Discussion'
 import Image from 'next/image'
 import Profile from '../common/Profile'
@@ -21,7 +22,13 @@ const DiscussionBoard = ({ discussionBoard }: DiscussionBoardProps) => {
     options,
   } = discussionBoard
 
+  const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null)
+
   const formattedCreatedAt = createdAt.split(' ')[0]
+
+  const handleOptionSelect = (optionId: number) => {
+    setSelectedOptionId(optionId)
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -39,12 +46,16 @@ const DiscussionBoard = ({ discussionBoard }: DiscussionBoardProps) => {
       <div className="flex flex-col gap-4">
         <div className="grid grid-cols-2 gap-4">
           {options &&
-            options.map((option: DiscussionOptionI, index: number) => (
+            options.map((option: DiscussionOptionI) => (
               <DiscussionOption
-                key={index}
+                key={option.id}
                 discussionOption={option}
                 size="small"
                 boardId={id}
+                onSelect={handleOptionSelect}
+                disabled={
+                  selectedOptionId !== null && selectedOptionId !== option.id
+                }
               />
             ))}
         </div>

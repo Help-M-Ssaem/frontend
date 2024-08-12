@@ -45,6 +45,8 @@ const HotDiscussion = ({ hotDiscussion }: HotDiscussionProps) => {
                   discussionOption={option}
                   size="small"
                   boardId={id}
+                  onSelect={() => {}}
+                  disabled={false}
                 />
               ))}
           </div>

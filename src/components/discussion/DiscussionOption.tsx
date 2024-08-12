@@ -17,15 +17,18 @@ export interface DiscussionOptionProps {
   discussionOption: DiscussionOptionI
   size: keyof typeof DiscussionOptionTheme.size
   boardId: number
+  onSelect: (optionId: number) => void
+  disabled: boolean
 }
 
 const DiscussionOption = ({
   discussionOption,
   size,
   boardId,
+  onSelect,
+  disabled,
 }: DiscussionOptionProps) => {
-  const { content, imgUrl, disabled, selectedPercent, selected } =
-    discussionOption
+  const { content, imgUrl, selectedPercent, selected } = discussionOption
 
   const { mutate } = usePostDiscussionPraticipation()
 
@@ -34,21 +37,27 @@ const DiscussionOption = ({
   ) => {
     event.stopPropagation()
 
-    mutate({
-      discussionId: boardId,
-      discussionOptionId: discussionOption.id,
-    })
+    if (!disabled && !selected) {
+      mutate({
+        discussionId: boardId,
+        discussionOptionId: discussionOption.id,
+      })
+
+      onSelect(discussionOption.id)
+    }
   }
 
   return (
     <button
-      type="submit"
+      type="button"
       className={clsx(
         'flex flex-col justify-center items-center border-gray4 border-1 rounded-7.5 gap-2.5 p-4 text-center w-full min-h-30 sm:min-h-54',
         DiscussionOptionTheme.size[size],
         {
           'bg-main2 text-white': selected,
           'bg-white text-black': !selected,
+          'cursor-not-allowed opacity-50': disabled,
+          'cursor-pointer': !disabled,
         },
       )}
       onClick={handleClick}
@@ -65,7 +74,7 @@ const DiscussionOption = ({
         >
           {content}
         </p>
-        {selected && <p className="text-title2">{selectedPercent}%</p>}
+        {selected && <p className="text-title2">{selectedPercent}</p>}
       </div>
     </button>
   )
