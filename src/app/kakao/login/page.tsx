@@ -14,7 +14,7 @@ const KakaoLogin = () => {
         'code',
       )
       if (!AUTHORIZATION_CODE) {
-        Error('Authorization Code is missing')
+        console.error('Authorization Code is missing')
         return
       }
 
@@ -23,8 +23,9 @@ const KakaoLogin = () => {
           idToken: AUTHORIZATION_CODE,
         })
 
-        if (res.data.code === 'AUTH_005') {
-          // 에러 코드가 AUTH_005일 경우 회원가입
+        if (res.data.code === 'MEMBER_002') {
+          // 에러 코드가 MEMBER_002일 경우 이메일을 localStorage에 저장하고 회원가입 페이지로 이동
+          localStorage.setItem('email', res.data.message)
           router.push('/signin/terms')
         } else if (res.data.accessToken) {
           // 정상적으로 토큰을 받은 경우 /로 리다이렉트
@@ -35,6 +36,7 @@ const KakaoLogin = () => {
           router.push('/signin/terms')
         }
       } catch (error) {
+        console.error('Error during Kakao login:', error)
         router.push('/signin/terms')
       }
     }

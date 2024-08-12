@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import MbtiSelect from '@/components/auth/MbtiSelect'
 import Button from '@/components/common/Button'
 import Input from '@/components/common/Input'
@@ -9,7 +9,16 @@ import { usePostSignup } from '@/service/auth/useAuthService'
 const Info = () => {
   const [nickName, setNickName] = useState('')
   const [mbti, setMbti] = useState<string[]>(['E', 'S', 'T', 'J'])
+  const [email, setEmail] = useState('')
+
   const { mutate } = usePostSignup()
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('email')
+    if (storedEmail) {
+      setEmail(storedEmail)
+    }
+  }, [])
 
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickName(e.target.value)
@@ -26,7 +35,7 @@ const Info = () => {
     const caseSensitivity = mbti
       .map((char) => (char === char.toLowerCase() ? '0' : '1'))
       .join('')
-    mutate({ email: '', nickName, mbti: upperMbti, caseSensitivity })
+    mutate({ email, nickName, mbti: upperMbti, caseSensitivity })
   }
 
   return (
@@ -48,6 +57,12 @@ const Info = () => {
           color="gray"
           size="medium"
         />
+      </div>
+
+      <div className="flex flex-col gap-5 w-full">
+        <div className="text-gray2 text-headline font-semibold">
+          당신의 이메일은 {email}입니다.
+        </div>
       </div>
 
       <div className="flex flex-col gap-5 w-full">
@@ -79,6 +94,8 @@ const Info = () => {
         color="GRAY"
         size="login"
         onClick={handleSignupClick}
+        disabled={nickName === ''}
+        className={`${nickName !== '' ? 'bg-main2' : ''}`}
       />
     </div>
   )

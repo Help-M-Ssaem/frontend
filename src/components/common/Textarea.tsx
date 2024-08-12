@@ -20,7 +20,7 @@ export interface TextareaProps {
 
 const Textarea = ({ value, color, size }: TextareaProps) => (
   <textarea
-    className={`bg-white border-gray6 border-2 rounded-3.75 w-full h-58 ${TextareaTheme.color[color]} ${TextareaTheme.size[size]} scrollbar-hide resize-none`}
+    className={`bg-white border-gray6 border-2 rounded-3.75 w-full h-44 ${TextareaTheme.color[color]} ${TextareaTheme.size[size]} scrollbar-hide resize-none`}
     value={value}
     readOnly
     onFocus={(e) => e.target.blur()}

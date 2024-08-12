@@ -45,16 +45,17 @@ const Terms = () => {
   return (
     <div className="flex flex-col justify-center gap-10 my-18 w-full max-w-95 mx-auto text-center">
       <div className="text-maindark text-title1 font-bold">이용약관</div>
-      {terms.map((term: Term, index: number) => (
-        <div key={index} className="flex flex-col gap-5">
-          <LabeledButton
-            label="[필수] 회원가입"
-            isClicked={checkedTerms[index]}
-            onClick={() => handleTermChange(index)}
-          />
-          <Textarea value={term.content} color="gray" size="large" />
-        </div>
-      ))}
+      {terms &&
+        terms.map((term: Term, index: number) => (
+          <div key={index} className="flex flex-col gap-5">
+            <LabeledButton
+              label="[필수] 회원가입"
+              isClicked={checkedTerms[index]}
+              onClick={() => handleTermChange(index)}
+            />
+            <Textarea value={term.content} color="gray" size="large" />
+          </div>
+        ))}
       <div className="flex flex-col gap-5">
         <LabeledButton
           label="전체동의"
@@ -67,6 +68,7 @@ const Terms = () => {
           size="login"
           onClick={handleNextClick}
           disabled={!checkedTerms.every((term) => term)}
+          className={`${checkedTerms.every((term) => term) ? 'bg-main2' : ''}`}
         />
       </div>
     </div>
