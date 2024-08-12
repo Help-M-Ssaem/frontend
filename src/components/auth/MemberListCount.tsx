@@ -14,6 +14,7 @@ import Comment from '../board/Comment'
 import Board from '../board/Board'
 import DiscussionBoard from '../discussion/DiscussionBoard'
 import WorryBoard from '../worry/WorryBoard'
+import Container from '../common/Container'
 
 const TABS = [
   '내가 쓴 게시글',
@@ -42,35 +43,50 @@ const MemberListCount = ({ id }: MemberListCountProps) => {
         return (
           boardList &&
           boardList.result.map((item: BoardI, index: number) => (
-            <Board key={index} board={item} />
+            <div>
+              <Board key={index} board={item} />
+              <div className="h-[1px] bg-main my-7.5" />
+            </div>
           ))
         )
       case '내가 쓴 토론글':
         return (
           discussionList &&
           discussionList.result.map((item: DiscussionBoardI, index: number) => (
-            <DiscussionBoard key={index} discussionBoard={item} />
+            <div>
+              <DiscussionBoard key={index} discussionBoard={item} />
+              <div className="h-[1px] bg-main my-7.5" />
+            </div>
           ))
         )
       case '내가 쓴 고민글':
         return (
           waitingWorryList &&
           waitingWorryList.result.map((item: WorryI, index: number) => (
-            <WorryBoard key={index} worryBoard={item} />
+            <div>
+              <WorryBoard key={index} worryBoard={item} />
+              <div className="h-[1px] bg-main my-7.5" />
+            </div>
           ))
         )
       case '내가 해결한 고민':
         return (
           solvedWorryList &&
           solvedWorryList.result.map((item: WorryI, index: number) => (
-            <WorryBoard key={index} worryBoard={item} />
+            <div>
+              <WorryBoard key={index} worryBoard={item} />
+              <div className="h-[1px] bg-main my-7.5" />
+            </div>
           ))
         )
       case '내가 쓴 댓글':
         return (
           commentList &&
           commentList.result.map((item: CommentI, index: number) => (
-            <Comment key={index} comment={item} />
+            <div>
+              <Comment key={index} comment={item} />
+              <div className="h-[1px] bg-main my-7.5" />
+            </div>
           ))
         )
       default:
@@ -97,7 +113,7 @@ const MemberListCount = ({ id }: MemberListCountProps) => {
         ))}
       </div>
 
-      <div className="px-7.5 pb-7.5 rounded-7.5">{renderList()}</div>
+      <Container color="purple">{renderList()}</Container>
     </div>
   )
 }

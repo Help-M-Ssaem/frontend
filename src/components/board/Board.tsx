@@ -36,7 +36,7 @@ const Board = ({ board }: BoardProps) => {
 
   return (
     <div
-      className="flex justify-between items-center my-7.5 cursor-pointer"
+      className="flex justify-between items-center cursor-pointer"
       onClick={() => handleBoardClick(id)}
     >
       <div className="flex flex-col justify-between gap-5">

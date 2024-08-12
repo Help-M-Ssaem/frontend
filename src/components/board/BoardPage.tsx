@@ -51,12 +51,12 @@ const BoardPage = () => {
             onClick={() => {}}
           />
         </div>
-        <div className="h-[1px] bg-main" />
+        <div className="h-[1px] bg-main mb-7.5" />
         {boardList &&
           boardList.result.map((board: BoardI) => (
             <div key={board.id}>
               <Board board={board} />
-              <div className="h-[1px] bg-main" />
+              <div className="h-[1px] bg-main my-7.5" />
             </div>
           ))}
 
