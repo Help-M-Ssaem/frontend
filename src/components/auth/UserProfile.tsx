@@ -28,10 +28,8 @@ const UserProfile = ({ profile }: UserProfileProps) => {
           <Button text={badge} color={badge} size="badge" />
         </div>
       </div>
-      <div className="flex flex-col gap-2">
-        <div className="text-title3 text-gray1 items-start font-semibold">
-          한 줄 소개
-        </div>
+      <div className="flex flex-col gap-2 self-start">
+        <div className="text-title3 text-gray1 font-semibold">한 줄 소개</div>
         <div className="text-body text-gray1 font-regular">{introduction}</div>
       </div>
     </div>

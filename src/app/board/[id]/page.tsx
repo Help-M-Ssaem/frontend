@@ -1,5 +1,6 @@
 'use client'
 
+import React, { useState } from 'react'
 import Image from 'next/image'
 import MbtiCategories from '@/components/board/MbtiCategories'
 import Button from '@/components/common/Button'
@@ -11,23 +12,32 @@ import {
 } from '@/service/board/useBoardService'
 import { useParams } from 'next/navigation'
 import CommentList from '@/components/board/CommentList'
+import Pagination from '@/components/common/Pagination' // Pagination 컴포넌트 import
 
 const BoardDetail = () => {
   const { id } = useParams()
   const { data: boardDetail } = useBoardDetail(Number(id))
   const { mutate } = usePostBoardLike()
 
+  // 페이지 상태 관리
+  const [currentPage, setCurrentPage] = useState(1)
+  const pageSize = 5
+
   const handleLikeToggle = () => {
     mutate(Number(id))
   }
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
   return (
-    <>
+    <div>
       {boardDetail && (
         <>
           <MbtiCategories selectedMbti={boardDetail.boardMbti} />
           <div className="text-title3 text-maindark font-semibold my-5">
-            {boardDetail.boardMbti === 'all' ? '전체' : boardDetail.boardMbti}{' '}
+            {boardDetail.boardMbti === 'all' ? '전체' : boardDetail.boardMbti}
             게시판
           </div>
           <Container color="purple">
@@ -76,14 +86,20 @@ const BoardDetail = () => {
                 onClick={handleLikeToggle}
               />
             </div>
+            <CommentList
+              id={Number(id)}
+              page={currentPage - 1}
+              size={pageSize}
+            />
+            <Pagination
+              pagesCount={Math.ceil(boardDetail.commentCount / pageSize)}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
           </Container>
         </>
       )}
-
-      <Container color="purple">
-        <CommentList id={Number(id)} page={0} size={10} />
-      </Container>
-    </>
+    </div>
   )
 }
 

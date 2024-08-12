@@ -5,7 +5,8 @@ import {
 } from '@/service/worry/useWorryService'
 import { useDiscussionListMember } from '@/service/discussion/useDiscussionService'
 import { useCommentListMember } from '@/service/comment/useCommentService'
-import { useState } from 'react'
+import { useProfile } from '@/service/user/useUserService'
+import { useState, useEffect } from 'react'
 import { DiscussionBoardI } from '@/model/Discussion'
 import { WorryI } from '@/model/Worry'
 import { BoardI } from '@/model/Board'
@@ -16,20 +17,15 @@ import DiscussionBoard from '../discussion/DiscussionBoard'
 import WorryBoard from '../worry/WorryBoard'
 import Container from '../common/Container'
 
-const TABS = [
-  '내가 쓴 게시글',
-  '내가 쓴 토론글',
-  '내가 쓴 고민글',
-  '내가 쓴 댓글',
-  '내가 해결한 고민',
-]
-
 interface MemberListCountProps {
   id: number
 }
 
 const MemberListCount = ({ id }: MemberListCountProps) => {
-  const [activeTab, setActiveTab] = useState(TABS[0])
+  const [activeTab, setActiveTab] = useState('')
+  const [tabs, setTabs] = useState<string[]>([])
+
+  const { data: profile } = useProfile(id)
 
   const { data: boardList } = useBoardListMember(id, 0, 5)
   const { data: discussionList } = useDiscussionListMember(id, 0, 5)
@@ -37,54 +33,67 @@ const MemberListCount = ({ id }: MemberListCountProps) => {
   const { data: waitingWorryList } = useWaitingWorryListMember(id, 0, 5)
   const { data: commentList } = useCommentListMember(id, 0, 4)
 
+  useEffect(() => {
+    const nickName = profile && profile.teacherInfo.nickName
+    const newTabs = [
+      `${nickName} 쓴 게시글`,
+      `${nickName} 쓴 토론글`,
+      `${nickName} 쓴 고민글`,
+      `${nickName} 쓴 댓글`,
+      `${nickName} 해결한 고민`,
+    ]
+    setTabs(newTabs)
+    setActiveTab(newTabs[0])
+  }, [profile])
+
   const renderList = () => {
     switch (activeTab) {
-      case '내가 쓴 게시글':
+      case `${profile?.teacherInfo.nickName} 쓴 게시글`:
         return (
           boardList &&
           boardList.result.map((item: BoardI, index: number) => (
-            <div>
-              <Board key={index} board={item} />
+            <div key={index}>
+              <Board board={item} />
               <div className="h-[1px] bg-main my-7.5" />
             </div>
           ))
         )
-      case '내가 쓴 토론글':
+      case `${profile?.teacherInfo.nickName} 쓴 토론글`:
         return (
           discussionList &&
           discussionList.result.map((item: DiscussionBoardI, index: number) => (
-            <div>
-              <DiscussionBoard key={index} discussionBoard={item} />
+            <div key={index}>
+              <DiscussionBoard discussionBoard={item} />
               <div className="h-[1px] bg-main my-7.5" />
             </div>
           ))
         )
-      case '내가 쓴 고민글':
+      case `${profile?.teacherInfo.nickName} 쓴 고민글`:
         return (
           waitingWorryList &&
           waitingWorryList.result.map((item: WorryI, index: number) => (
-            <div>
-              <WorryBoard key={index} worryBoard={item} />
+            <div key={index}>
+              <WorryBoard worryBoard={item} />
               <div className="h-[1px] bg-main my-7.5" />
             </div>
           ))
         )
-      case '내가 해결한 고민':
+      case `${profile?.teacherInfo.nickName} 해결한 고민`:
         return (
           solvedWorryList &&
           solvedWorryList.result.map((item: WorryI, index: number) => (
-            <div>
-              <WorryBoard key={index} worryBoard={item} />
+            <div key={index}>
+              <WorryBoard worryBoard={item} />
               <div className="h-[1px] bg-main my-7.5" />
             </div>
           ))
         )
-      case '내가 쓴 댓글':
+      case `${profile?.teacherInfo.nickName} 쓴 댓글`:
         return (
           commentList &&
           commentList.result.map((item: CommentI, index: number) => (
-            <div>
-              <Comment key={index} comment={item} />
+            <div key={index}>
+              <Comment comment={item} />
               <div className="h-[1px] bg-main my-7.5" />
             </div>
           ))
@@ -97,7 +106,7 @@ const MemberListCount = ({ id }: MemberListCountProps) => {
   return (
     <div className="w-full bg-main3 rounded-t-7.5">
       <div className="flex overflow-x-auto border-b mb-4 scrollbar-hide">
-        {TABS.map((tab) => (
+        {tabs.map((tab) => (
           <button
             type="button"
             key={tab}
