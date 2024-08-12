@@ -1,19 +1,19 @@
 'use client'
 
 import Image from 'next/image'
-import { UserProfileI } from '@/model/User'
+import { User } from '@/model/User'
 import Button from '../common/Button'
 
 export interface PopularMssaemProps {
-  popularMssaem: UserProfileI
+  popularMssaem: User
 }
 
 const PopularMssaem = ({ popularMssaem }: PopularMssaemProps) => {
-  const { nickName, mbti, badge, profileImageurl, introduction } = popularMssaem
+  const { nickName, mbti, badge, profileImgUrl, introduction } = popularMssaem
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <Image src={profileImageurl} alt="profile" width={194} height={194} />
+      <Image src={profileImgUrl} alt="profile" width={194} height={194} />
       <div className="flex flex-col items-center gap-2.5">
         <div className="text-title1 text-maindark font-bold">{nickName} 님</div>
         <div className="flex gap-2.5">

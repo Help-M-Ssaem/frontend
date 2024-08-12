@@ -17,7 +17,7 @@ Primary.args = {
     nickName: '유보라',
     mbti: 'ESFP',
     badge: '엠비티라노',
-    profileImageurl: '/images/common/default.svg',
+    profileImgUrl: '/images/common/default.svg',
     introduction: '진짜 어른이 되고 싶은 어른이에요',
   },
 }
