@@ -6,6 +6,7 @@ import {
   HotDiscussionMore,
   HotThreeI,
 } from '@/model/Home'
+import { User } from '@/model/User'
 import { WorryI } from '@/model/Worry'
 
 interface HotMoreProps {
@@ -41,7 +42,7 @@ class HomeService extends Service {
   }
 
   getPopularMssaem() {
-    return this.http.get(`/teacher`)
+    return this.http.get<User[]>(`/teacher`)
   }
 }
 
