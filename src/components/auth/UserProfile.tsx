@@ -13,7 +13,13 @@ const UserProfile = ({ profile }: UserProfileProps) => {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <Image src={profileImgUrl} alt="profile" width={194} height={194} />
+      <Image
+        src={profileImgUrl}
+        alt="profile"
+        width={194}
+        height={194}
+        className="rounded-full object-cover"
+      />
       <div className="flex flex-col items-center gap-2.5">
         <div className="text-title1 text-maindark font-bold">{nickName} 님</div>
         <div className="flex gap-2.5">

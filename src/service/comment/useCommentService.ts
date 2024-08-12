@@ -18,7 +18,7 @@ const useCommentList = ({ id, page, size }: CommentListProps) =>
     queryFn: () => queryOptions.commentList.queryFn({ id, page, size }),
   })
 
-const useCommentListMember = ({ id, page, size }: CommentListProps) =>
+const useCommentListMember = (id: number, page: number, size: number) =>
   useQuery({
     ...queryOptions.commentListMember,
     queryKey: ['commentListMember'],

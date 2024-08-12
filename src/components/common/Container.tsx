@@ -20,7 +20,7 @@ export interface ContainerProps {
 
 const Container = ({ children, color, onClick, className }: ContainerProps) => (
   <div
-    className={`w-full h-full px-7.5 py-5 rounded-7.5 ${ContainerTheme.color[color]} ${className} flex flex-col`}
+    className={`w-full h-full px-7.5 py-5 rounded-7.5 ${ContainerTheme.color[color]} flex flex-col ${className}`}
     onClick={onClick}
   >
     {children}

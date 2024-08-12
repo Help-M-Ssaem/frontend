@@ -26,8 +26,6 @@ const config: Config = {
         alarm: '#FF5C5C',
         green: '#5BE1A9',
 
-        pointcolor1: '#AD71EA',
-
         gray1: '#4E4F4E',
         gray2: '#7A7A7B',
         gray3: '#A7A7A7',
