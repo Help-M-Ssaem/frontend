@@ -1,7 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { useCommentList } from '@/service/comment/useCommentService'
+import {
+  useCommentList,
+  useDiscussionCommentList,
+} from '@/service/comment/useCommentService'
 import { CommentI } from '@/model/Comment'
 import Comment from './Comment'
 import ChattingInput from '../chatting/ChattingInput'
@@ -10,11 +13,22 @@ interface CommentListProps {
   id: number
   page: number
   size: number
+  board: string
 }
 
-const CommentList = ({ id, page, size }: CommentListProps) => {
+const CommentList = ({ id, page, size, board }: CommentListProps) => {
   const [newComment, setNewComment] = useState<FormData>(new FormData())
-  const { data: commentList } = useCommentList({ id, page, size })
+  const commentListResult = useCommentList({ id, page, size })
+  const discussionCommentListResult = useDiscussionCommentList({
+    id,
+    page,
+    size,
+  })
+
+  const commentList =
+    board === 'board'
+      ? commentListResult.data
+      : discussionCommentListResult.data
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formData = new FormData()

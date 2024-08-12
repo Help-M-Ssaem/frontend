@@ -90,6 +90,7 @@ const BoardDetail = () => {
               id={Number(id)}
               page={currentPage - 1}
               size={pageSize}
+              board="board"
             />
             <Pagination
               pagesCount={Math.ceil(boardDetail.commentCount / pageSize)}

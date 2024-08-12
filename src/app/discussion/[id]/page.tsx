@@ -56,7 +56,7 @@ const DiscussionDetail = () => {
                   ))}
               </div>
 
-              <div className="flex justify-between">
+              <div className="flex justify-between mb-7.5">
                 <div className="flex gap-1">
                   <Image
                     src="/images/discussion/red_circle.svg"
@@ -75,7 +75,7 @@ const DiscussionDetail = () => {
             </div>
           </>
         )}
-        <CommentList id={Number(id)} page={0} size={10} />
+        <CommentList id={Number(id)} page={0} size={10} board="discussion" />
       </Container>
     </>
   )
