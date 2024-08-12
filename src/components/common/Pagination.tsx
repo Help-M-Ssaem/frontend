@@ -69,7 +69,7 @@ const Pagination = ({
               type="button"
               className={`text-headline text-gray2 font-semibold w-8 h-8 border rounded-[3px] ${
                 page === currentPage
-                  ? 'border-pointcolor1 bg-main4 text-maindark'
+                  ? 'border-main2 bg-main4 text-maindark'
                   : 'border-transparent'
               }`}
               onClick={() => handlePageChange(page)}
