@@ -5,14 +5,6 @@ const queryKeys = {
 }
 
 const queryOptions = {
-  evaluationCount: {
-    queryKey: queryKeys.evaluation,
-    queryFn: async (): Promise<number> => {
-      const response = await EvaluationService.getEvaluationCount()
-      return response.data
-    },
-  },
-
   postEvaluation: {
     queryKey: queryKeys.evaluation,
     mutationFn: async (Evaluation: EvaluationProps): Promise<void> => {

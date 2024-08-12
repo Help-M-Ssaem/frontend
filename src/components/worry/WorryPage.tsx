@@ -80,12 +80,12 @@ const WorryPage = () => {
             setStrFromMbti={setWaitingStrFromMbti}
             setStrToMbti={setWaitingStrToMbti}
           />
-          <div className="h-[1px] bg-main" />
+          <div className="h-[1px] bg-main mb-7.5" />
           {waitingWorryList &&
             waitingWorryList.result.map((worry: WorryI) => (
               <div key={worry.id}>
                 <WorryBoard worryBoard={worry} />
-                <div className="h-[1px] bg-main" />
+                <div className="h-[1px] bg-main my-7.5" />
               </div>
             ))}
 
@@ -110,12 +110,12 @@ const WorryPage = () => {
             setStrFromMbti={setSolvedStrFromMbti}
             setStrToMbti={setSolvedStrToMbti}
           />
-          <div className="h-[1px] bg-main" />
+          <div className="h-[1px] bg-main mb-7.5" />
           {solvedWorryList &&
             solvedWorryList.result.map((worry: WorryI) => (
               <div key={worry.id}>
                 <WorryBoard worryBoard={worry} />
-                <div className="h-[1px] bg-main" />
+                <div className="h-[1px] bg-main my-7.5" />
               </div>
             ))}
 

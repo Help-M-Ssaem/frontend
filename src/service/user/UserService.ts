@@ -2,6 +2,10 @@ import Service from '@/apis/AxiosInstance'
 import { Profile } from '@/model/User'
 
 class UserService extends Service {
+  getTerms() {
+    return this.http.get('/common/terms')
+  }
+
   getProfile(id: number) {
     return this.http.get<Profile>(`/profile/${id}`)
   }

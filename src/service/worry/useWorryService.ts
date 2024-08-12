@@ -54,7 +54,7 @@ const useSolvedWorryList = (
   })
 }
 
-const useSovledWorryListMember = (
+const useSolvedWorryListMember = (
   memberId: number,
   page: number,
   size: number,
@@ -117,7 +117,7 @@ export {
   useWaitingWorryList,
   useWaitingWorryListMember,
   useSolvedWorryList,
-  useSovledWorryListMember,
+  useSolvedWorryListMember,
   useWorryDetail,
   usePostWorry,
   usePatchWorry,

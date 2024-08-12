@@ -6,10 +6,6 @@ export interface EvaluationProps {
 }
 
 class EvaluationService extends Service {
-  getEvaluationCount() {
-    return this.http.get(`/member/evaluations/count`)
-  }
-
   postEvaluation(Evaluation: EvaluationProps) {
     return this.http.post(`/member/evaluations`, Evaluation)
   }

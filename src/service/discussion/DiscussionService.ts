@@ -21,7 +21,7 @@ class DiscussionService extends Service {
 
   getDiscussionListMember({ id, page, size }: DiscussionListProps) {
     return this.http.get<DiscussionList>(
-      `/boards/member?memberId=${id}&page=${page}&size=${size}`,
+      `/discussion/post-list?memberId=${id}&page=${page}&size=${size}`,
     )
   }
 

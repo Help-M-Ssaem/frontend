@@ -24,7 +24,7 @@ const WorryBoard = ({ worryBoard }: WorryBoardProps) => {
 
   return (
     <div
-      className="flex justify-between items-center my-7.5 cursor-pointer"
+      className="flex justify-between items-center cursor-pointer"
       onClick={() => {
         router.push(`/worry/${id}`)
       }}

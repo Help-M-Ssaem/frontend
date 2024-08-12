@@ -20,19 +20,29 @@ export interface InputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   color: Color
   size: Size
+  type?: string
 }
 
-const Input = ({ value, placeholder, onChange, color, size }: InputProps) => (
+const Input = ({
+  value,
+  placeholder,
+  onChange,
+  color,
+  size,
+  type,
+}: InputProps) => (
   <input
     className={`bg-white w-full ${InputTheme.color[color]} ${InputTheme.size[size]} focus:outline-none`}
     value={value}
     placeholder={placeholder}
     onChange={onChange}
+    type={type}
   />
 )
 
 Input.defaultProps = {
   placeholder: '',
+  type: 'text',
 }
 
 export default Input

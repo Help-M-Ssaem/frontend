@@ -7,6 +7,7 @@ import { useState, useEffect, Suspense } from 'react'
 import SearchBar from '@/components/common/SearchBar'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { DiscussionBoardI } from '@/model/Discussion'
+import Container from '../common/Container'
 
 const DiscussionPage = () => {
   const router = useRouter()
@@ -17,6 +18,10 @@ const DiscussionPage = () => {
   const pageSize = 6
 
   const { data: discussionList } = useDiscussionList(page - 1, pageSize)
+
+  const handleDiscussionBoardClick = (id: number) => {
+    router.push(`/discussion/${id}`)
+  }
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
@@ -38,7 +43,13 @@ const DiscussionPage = () => {
         {discussionList &&
           discussionList.result.map((discussion: DiscussionBoardI) => (
             <div key={discussion.id} className="flex flex-col">
-              <DiscussionBoard discussionBoard={discussion} />
+              <Container
+                color="purple"
+                onClick={() => handleDiscussionBoardClick(discussion.id)}
+                className="cursor-pointer"
+              >
+                <DiscussionBoard discussionBoard={discussion} />
+              </Container>
               <div className="h-[1px] bg-gray4 my-2.5 sm:my-12.5" />
             </div>
           ))}

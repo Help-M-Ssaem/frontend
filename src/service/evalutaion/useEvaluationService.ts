@@ -1,17 +1,6 @@
-import {
-  useMutation,
-  useQuery,
-  UseMutationOptions,
-} from '@tanstack/react-query'
+import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 import { queryOptions } from './EvaluationQueries'
 import { EvaluationProps } from './EvaluationService'
-
-const useEvaluationCount = () =>
-  useQuery({
-    ...queryOptions.evaluationCount,
-    queryKey: ['evaluationCount'],
-    queryFn: () => queryOptions.evaluationCount.queryFn(),
-  })
 
 const usePostEvaluation = () => {
   const mutationFn = (evaluation: EvaluationProps): Promise<void> =>
@@ -23,4 +12,4 @@ const usePostEvaluation = () => {
   return useMutation<void, Error, EvaluationProps>(options)
 }
 
-export { useEvaluationCount, usePostEvaluation }
+export { usePostEvaluation }
