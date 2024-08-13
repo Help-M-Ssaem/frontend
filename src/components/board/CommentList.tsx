@@ -13,7 +13,7 @@ interface CommentListProps {
 }
 
 const CommentList = ({ id, page, size }: CommentListProps) => {
-  const { data: commentList } = useCommentList({ id, page, size })
+  const { data: commentList, refetch } = useCommentList({ id, page, size })
   const [replyId, setReplyId] = useState<number | undefined>(undefined)
   const [isReply, setIsReply] = useState(false)
 
@@ -56,16 +56,17 @@ const CommentList = ({ id, page, size }: CommentListProps) => {
             <Comment
               comment={comment}
               onClick={() => handleCommentClick(comment.commentId)}
+              refetchComments={refetch}
             />
             <div className="h-[1px] bg-main my-4" />
             {isReply && comment.commentId === replyId && (
-              <CommentInput replyId={replyId} />
+              <CommentInput replyId={replyId} refetchComments={refetch} />
             )}
           </div>
         ))}
 
       <div className="mb-4">
-        <CommentInput />
+        <CommentInput refetchComments={refetch} />
       </div>
     </div>
   )

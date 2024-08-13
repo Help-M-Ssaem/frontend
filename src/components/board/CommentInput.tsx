@@ -8,9 +8,10 @@ import Button from '../common/Button'
 
 export interface CommentInputProps {
   replyId?: number
+  refetchComments?: () => void
 }
 
-const CommentInput = ({ replyId }: CommentInputProps) => {
+const CommentInput = ({ replyId, refetchComments }: CommentInputProps) => {
   const { id } = useParams()
   const [value, setValue] = useState('')
 
@@ -20,25 +21,40 @@ const CommentInput = ({ replyId }: CommentInputProps) => {
     new Blob([JSON.stringify(value)], { type: 'application/json' }),
   )
 
-  const handleCommentChagne = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
   }
 
   const { mutate: postComment } = usePostComment()
   const handleCommentSubmit = () => {
     if (replyId) {
-      postComment({
-        id: Number(id),
-        comment: formData,
-        replyId,
-      })
+      postComment(
+        {
+          id: Number(id),
+          comment: formData,
+          replyId,
+        },
+        {
+          onSuccess: () => {
+            setValue('')
+            if (refetchComments) refetchComments()
+          },
+        },
+      )
     } else {
-      postComment({
-        id: Number(id),
-        comment: formData,
-      })
+      postComment(
+        {
+          id: Number(id),
+          comment: formData,
+        },
+        {
+          onSuccess: () => {
+            setValue('')
+            if (refetchComments) refetchComments()
+          },
+        },
+      )
     }
-    setValue('')
   }
 
   return (
@@ -55,7 +71,7 @@ const CommentInput = ({ replyId }: CommentInputProps) => {
         type="text"
         className="w-full text-gray2 text-headline font-semibold px-4 py-3 border border-main rounded-7.5 focus:outline-none focus:border-main"
         value={value}
-        onChange={handleCommentChagne}
+        onChange={handleCommentChange}
       />
       <Button
         text="등록"
@@ -69,6 +85,7 @@ const CommentInput = ({ replyId }: CommentInputProps) => {
 
 CommentInput.defaultProps = {
   replyId: undefined,
+  refetchComments: undefined,
 }
 
 export default CommentInput
