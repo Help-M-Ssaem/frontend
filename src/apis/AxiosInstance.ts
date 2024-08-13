@@ -10,6 +10,7 @@ class Service {
       baseURL,
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `${localStorage.getItem('access_token')}`,
       },
     })
   }

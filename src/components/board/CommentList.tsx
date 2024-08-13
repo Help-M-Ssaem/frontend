@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useCommentList } from '@/service/comment/useCommentService'
 import { CommentI } from '@/model/Comment'
 import Comment from './Comment'
-import ChattingInput from '../chatting/ChattingInput'
+import CommentInput from './CommentInput'
 
 interface CommentListProps {
   id: number
@@ -13,23 +13,17 @@ interface CommentListProps {
 }
 
 const CommentList = ({ id, page, size }: CommentListProps) => {
-  const [newComment, setNewComment] = useState<FormData>(new FormData())
   const { data: commentList } = useCommentList({ id, page, size })
+  const [replyId, setReplyId] = useState<number | undefined>(undefined)
+  const [isReply, setIsReply] = useState(false)
 
-  const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formData = new FormData()
-    formData.append('comment', e.target.value)
-    setNewComment(formData)
-  }
+  const handleShareBtnClick = () => {}
 
-  const handleShareBtnClick = () => {
-    console.log('share')
-  }
-  const handleReportBtnClick = () => {
-    console.log('report')
-  }
-  const handleCommentSubmit = () => {
-    console.log('submit')
+  const handleReportBtnClick = () => {}
+
+  const handleCommentClick = (commentId: number) => {
+    setReplyId(commentId)
+    setIsReply(true)
   }
 
   return (
@@ -58,18 +52,20 @@ const CommentList = ({ id, page, size }: CommentListProps) => {
       <div className="h-[1px] bg-main my-4" />
       {commentList &&
         commentList.result.map((comment: CommentI) => (
-          <>
-            <Comment key={comment.commentId} comment={comment} />
+          <div key={comment.commentId}>
+            <Comment
+              comment={comment}
+              onClick={() => handleCommentClick(comment.commentId)}
+            />
             <div className="h-[1px] bg-main my-4" />
-          </>
+            {isReply && comment.commentId === replyId && (
+              <CommentInput replyId={replyId} />
+            )}
+          </div>
         ))}
 
       <div className="mb-4">
-        <ChattingInput
-          value={newComment.get('comment')?.toString() || ''}
-          onChange={handleCommentChange}
-          onClick={handleCommentSubmit}
-        />
+        <CommentInput replyId={replyId} />
       </div>
     </div>
   )

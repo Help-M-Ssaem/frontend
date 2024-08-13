@@ -10,7 +10,7 @@ export interface CommentListProps {
 export interface PostCommentProps {
   id: number
   comment: FormData
-  commentId?: number
+  replyId?: number
 }
 
 export interface CommentDetailProps {
@@ -42,9 +42,9 @@ class CommentService extends Service {
     return this.http.post(`/member/boards/${id}/comments/${commentId}/like`)
   }
 
-  postComment({ id, comment, commentId }: PostCommentProps) {
-    const url = commentId
-      ? `/member/boards/${id}/comments?commentId=${commentId}`
+  postComment({ id, comment, replyId }: PostCommentProps) {
+    const url = replyId
+      ? `/member/boards/${id}/comments?commentId=${replyId}`
       : `/member/boards/${id}/comments`
 
     return this.http.post(url, comment, {
@@ -81,9 +81,9 @@ class CommentService extends Service {
     return this.http.post(`/discussions/${id}/comments/${commentId}/like`)
   }
 
-  postDiscussionComment({ id, comment, commentId }: PostCommentProps) {
-    const url = commentId
-      ? `/member/discussions/${id}/comments?commentId=${commentId}`
+  postDiscussionComment({ id, comment, replyId }: PostCommentProps) {
+    const url = replyId
+      ? `/member/discussions/${id}/comments?commentId=${replyId}`
       : `/member/discussions/${id}/comments`
 
     return this.http.post(url, comment, {

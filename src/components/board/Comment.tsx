@@ -7,9 +7,10 @@ import Profile from '../common/Profile'
 
 export interface CommentProps {
   comment: CommentI
+  onClick?: () => void
 }
 
-const Comment = ({ comment }: CommentProps) => {
+const Comment = ({ comment, onClick }: CommentProps) => {
   const {
     likeCount,
     createdAt,
@@ -25,7 +26,7 @@ const Comment = ({ comment }: CommentProps) => {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5" onClick={onClick}>
       <div className="flex justify-between items-start">
         <Profile user={memberSimpleInfo} createdAt={createdAt} />
         <div className="flex gap-1.25 items-center">
@@ -55,6 +56,10 @@ const Comment = ({ comment }: CommentProps) => {
       <div className="text-maindark text-headline">{content}</div>
     </div>
   )
+}
+
+Comment.defaultProps = {
+  onClick: undefined,
 }
 
 export default Comment
