@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { usePostComment } from '@/service/comment/useCommentService'
 import { useParams } from 'next/navigation'
 import Button from '../common/Button'
@@ -41,7 +42,15 @@ const CommentInput = ({ replyId }: CommentInputProps) => {
   }
 
   return (
-    <div className="flex w-full gap-3.75">
+    <div className="flex w-full gap-3.75 mb-7.5">
+      {replyId && (
+        <Image
+          src="/images/board/reply.svg"
+          alt="reply"
+          width={20}
+          height={20}
+        />
+      )}
       <input
         type="text"
         className="w-full text-gray2 text-headline font-semibold px-4 py-3 border border-main rounded-7.5 focus:outline-none focus:border-main"

@@ -23,7 +23,7 @@ const CommentList = ({ id, page, size }: CommentListProps) => {
 
   const handleCommentClick = (commentId: number) => {
     setReplyId(commentId)
-    setIsReply(true)
+    setIsReply(!isReply)
   }
 
   return (
@@ -65,7 +65,7 @@ const CommentList = ({ id, page, size }: CommentListProps) => {
         ))}
 
       <div className="mb-4">
-        <CommentInput replyId={replyId} />
+        <CommentInput />
       </div>
     </div>
   )
