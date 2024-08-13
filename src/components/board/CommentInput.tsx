@@ -9,9 +9,14 @@ import Button from '../common/Button'
 export interface CommentInputProps {
   replyId?: number
   refetchComments?: () => void
+  onSuccess?: () => void
 }
 
-const CommentInput = ({ replyId, refetchComments }: CommentInputProps) => {
+const CommentInput = ({
+  replyId,
+  refetchComments,
+  onSuccess,
+}: CommentInputProps) => {
   const { id } = useParams()
   const [value, setValue] = useState('')
 
@@ -27,34 +32,19 @@ const CommentInput = ({ replyId, refetchComments }: CommentInputProps) => {
 
   const { mutate: postComment } = usePostComment()
   const handleCommentSubmit = () => {
-    if (replyId) {
-      postComment(
-        {
-          id: Number(id),
-          comment: formData,
-          replyId,
-        },
-        {
-          onSuccess: () => {
-            setValue('')
-            if (refetchComments) refetchComments()
-          },
-        },
-      )
-    } else {
-      postComment(
-        {
-          id: Number(id),
-          comment: formData,
-        },
-        {
-          onSuccess: () => {
-            setValue('')
-            if (refetchComments) refetchComments()
-          },
-        },
-      )
+    const postCommentOptions = {
+      id: Number(id),
+      comment: formData,
+      replyId,
     }
+
+    postComment(postCommentOptions, {
+      onSuccess: () => {
+        setValue('')
+        if (refetchComments) refetchComments()
+        if (onSuccess) onSuccess()
+      },
+    })
   }
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -93,6 +83,7 @@ const CommentInput = ({ replyId, refetchComments }: CommentInputProps) => {
 CommentInput.defaultProps = {
   replyId: undefined,
   refetchComments: undefined,
+  onSuccess: undefined,
 }
 
 export default CommentInput

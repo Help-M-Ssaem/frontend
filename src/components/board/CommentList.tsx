@@ -26,6 +26,11 @@ const CommentList = ({ id, page, size }: CommentListProps) => {
     setIsReply(!isReply)
   }
 
+  const handleReplySubmitSuccess = () => {
+    setIsReply(false)
+    setReplyId(undefined)
+  }
+
   return (
     <div className="flex flex-col">
       <div className="flex justify-between">
@@ -78,7 +83,11 @@ const CommentList = ({ id, page, size }: CommentListProps) => {
                     ),
                 )}
                 {isReply && comment.commentId === replyId && (
-                  <CommentInput replyId={replyId} refetchComments={refetch} />
+                  <CommentInput
+                    replyId={replyId}
+                    refetchComments={refetch}
+                    onSuccess={handleReplySubmitSuccess}
+                  />
                 )}
               </div>
             ),
