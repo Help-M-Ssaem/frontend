@@ -12,17 +12,15 @@ import {
 } from '@/service/board/useBoardService'
 import { useParams } from 'next/navigation'
 import CommentList from '@/components/board/CommentList'
-import Pagination from '@/components/common/Pagination'
 
 const BoardDetail = () => {
   const { id } = useParams()
   const { data: boardDetail } = useBoardDetail(Number(id))
   const { mutate } = usePostBoardLike()
 
-  const [currentPage, setCurrentPage] = useState(1)
-  const pageSize = 5
+  const [currentPage] = useState(1)
+  const pageSize = 50
 
-  // 좋아요 상태와 카운트를 로컬 상태로 관리
   const [likeCount, setLikeCount] = useState(boardDetail?.likeCount || 0)
   const [isLiked, setIsLiked] = useState(boardDetail?.isLiked || false)
 
@@ -40,10 +38,6 @@ const BoardDetail = () => {
         setLikeCount((prevCount) => (isLiked ? prevCount - 1 : prevCount + 1))
       },
     })
-  }
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
   }
 
   return (
@@ -105,11 +99,6 @@ const BoardDetail = () => {
               id={Number(id)}
               page={currentPage - 1}
               size={pageSize}
-            />
-            <Pagination
-              pagesCount={Math.ceil(boardDetail.commentCount / pageSize)}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
             />
           </Container>
         </>
