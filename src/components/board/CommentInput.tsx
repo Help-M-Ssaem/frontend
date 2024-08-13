@@ -59,7 +59,7 @@ const CommentInput = ({ replyId }: CommentInputProps) => {
 }
 
 CommentInput.defaultProps = {
-  replyId: false,
+  replyId: undefined,
 }
 
 export default CommentInput

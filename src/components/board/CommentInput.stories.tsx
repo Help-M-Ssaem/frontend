@@ -1,6 +1,5 @@
-import { CommentInputProps } from '@/service/comment/CommentService'
 import { Meta, StoryFn } from '@storybook/react'
-import CommentInput from './CommentInput'
+import CommentInput, { CommentInputProps } from './CommentInput'
 
 export default {
   title: 'Board/CommentInput',
@@ -12,8 +11,4 @@ const Template: StoryFn<CommentInputProps> = (args: CommentInputProps) => (
 )
 
 export const Primary = Template.bind({})
-Primary.args = {
-  id: 1,
-  page: 0,
-  size: 10,
-}
+Primary.args = {}
