@@ -50,20 +50,39 @@ const CommentList = ({ id, page, size }: CommentListProps) => {
         </div>
       </div>
       <div className="h-[1px] bg-main my-4" />
+
       {commentList &&
-        commentList.result.map((comment: CommentI) => (
-          <div key={comment.commentId}>
-            <Comment
-              comment={comment}
-              onClick={() => handleCommentClick(comment.commentId)}
-              refetchComments={refetch}
-            />
-            <div className="h-[1px] bg-main my-4" />
-            {isReply && comment.commentId === replyId && (
-              <CommentInput replyId={replyId} refetchComments={refetch} />
-            )}
-          </div>
-        ))}
+        commentList.result.map(
+          (comment: CommentI) =>
+            !comment.parentId && (
+              <div key={comment.commentId}>
+                <Comment
+                  comment={comment}
+                  onClick={() => handleCommentClick(comment.commentId)}
+                  refetchComments={refetch}
+                />
+                <div className="h-[1px] bg-main my-4" />
+
+                {/* 대댓글 */}
+                {commentList.result.map(
+                  (reply: CommentI) =>
+                    reply.parentId === comment.commentId && (
+                      <div key={reply.commentId} className="ml-8">
+                        <Comment
+                          comment={reply}
+                          onClick={() => handleCommentClick(reply.parentId)}
+                          refetchComments={refetch}
+                        />
+                        <div className="h-[1px] bg-main my-4" />
+                      </div>
+                    ),
+                )}
+                {isReply && comment.commentId === replyId && (
+                  <CommentInput replyId={replyId} refetchComments={refetch} />
+                )}
+              </div>
+            ),
+        )}
 
       <div className="mb-4">
         <CommentInput refetchComments={refetch} />

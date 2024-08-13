@@ -57,6 +57,12 @@ const CommentInput = ({ replyId, refetchComments }: CommentInputProps) => {
     }
   }
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleCommentSubmit()
+    }
+  }
+
   return (
     <div className="flex w-full gap-3.75 mb-7.5">
       {replyId && (
@@ -72,6 +78,7 @@ const CommentInput = ({ replyId, refetchComments }: CommentInputProps) => {
         className="w-full text-gray2 text-headline font-semibold px-4 py-3 border border-main rounded-7.5 focus:outline-none focus:border-main"
         value={value}
         onChange={handleCommentChange}
+        onKeyDown={handleKeyPress}
       />
       <Button
         text="등록"

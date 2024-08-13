@@ -13,7 +13,7 @@ import Profile from '../common/Profile'
 export interface CommentProps {
   comment: CommentI
   onClick?: () => void
-  refetchComments?: () => void // refetch 함수를 받아서 삭제 후 호출할 수 있도록 함
+  refetchComments?: () => void
 }
 
 const Comment = ({ comment, onClick, refetchComments }: CommentProps) => {
