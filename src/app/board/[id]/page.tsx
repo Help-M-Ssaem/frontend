@@ -18,9 +18,6 @@ const BoardDetail = () => {
   const { data: boardDetail } = useBoardDetail(Number(id))
   const { mutate } = usePostBoardLike()
 
-  const [currentPage] = useState(1)
-  const pageSize = 50
-
   const [likeCount, setLikeCount] = useState(boardDetail?.likeCount || 0)
   const [isLiked, setIsLiked] = useState(boardDetail?.isLiked || false)
   const [commentCount, setCommentCount] = useState(
@@ -105,8 +102,8 @@ const BoardDetail = () => {
             </div>
             <CommentList
               id={Number(id)}
-              page={currentPage - 1}
-              size={pageSize}
+              page={0}
+              size={50}
               commentCount={commentCount}
               onCommentCountUpdate={handleCommentCountUpdate}
             />

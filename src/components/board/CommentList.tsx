@@ -1,8 +1,11 @@
 'use client'
 
-import { useState } from 'react'
-import { useCommentList } from '@/service/comment/useCommentService'
+import { useState, useEffect } from 'react'
 import { CommentI } from '@/model/Comment'
+import {
+  useCommentList,
+  useDiscussionCommentList,
+} from '@/service/comment/useCommentService'
 import Comment from './Comment'
 import CommentInput from './CommentInput'
 
@@ -12,6 +15,7 @@ interface CommentListProps {
   size: number
   commentCount: number
   onCommentCountUpdate: (newCount: number) => void
+  boardType?: string
 }
 
 const CommentList = ({
@@ -20,8 +24,34 @@ const CommentList = ({
   size,
   commentCount,
   onCommentCountUpdate,
+  boardType,
 }: CommentListProps) => {
-  const { data: commentList, refetch } = useCommentList({ id, page, size })
+  const { data: generalCommentListData, refetch: refetchGeneralComments } =
+    useCommentList({ id, page, size })
+
+  const {
+    data: discussionCommentListData,
+    refetch: refetchDiscussionComments,
+  } = useDiscussionCommentList({ id, page, size })
+
+  const commentListData =
+    boardType === 'discussion'
+      ? discussionCommentListData
+      : generalCommentListData
+
+  const refetch =
+    boardType === 'discussion'
+      ? refetchDiscussionComments
+      : refetchGeneralComments
+
+  const [commentList, setCommentList] = useState<CommentI[]>([])
+
+  useEffect(() => {
+    if (commentListData) {
+      setCommentList(commentListData.result)
+    }
+  }, [commentListData])
+
   const [replyId, setReplyId] = useState<number | undefined>(undefined)
   const [isReply, setIsReply] = useState(false)
 
@@ -67,7 +97,7 @@ const CommentList = ({
       <div className="h-[1px] bg-main my-4" />
 
       {commentList &&
-        commentList.result.map(
+        commentList.map(
           (comment: CommentI) =>
             !comment.parentId && (
               <div key={comment.commentId}>
@@ -79,7 +109,7 @@ const CommentList = ({
                 <div className="h-[1px] bg-main my-4" />
 
                 {/* 대댓글 */}
-                {commentList.result.map(
+                {commentList.map(
                   (reply: CommentI) =>
                     reply.parentId === comment.commentId && (
                       <div key={reply.commentId}>
@@ -111,6 +141,10 @@ const CommentList = ({
       </div>
     </div>
   )
+}
+
+CommentList.defaultProps = {
+  boardType: 'board',
 }
 
 export default CommentList
