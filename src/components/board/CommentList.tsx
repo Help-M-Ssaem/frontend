@@ -9,7 +9,7 @@ import {
 import Comment from './Comment'
 import CommentInput from './CommentInput'
 
-interface CommentListProps {
+export interface CommentListProps {
   id: number
   page: number
   size: number

@@ -17,7 +17,7 @@ Primary.args = {
     likeCount: 1,
     createdAt: '10분전',
     isLiked: false,
-    isAllowed: false,
+    isEditAllowed: false,
     parentId: 1,
     content:
       '말을 너무 많이 들으면 머리가 너무 아파요;; 말을 너무 많이 들으면 머리가 너무 아파요;; 말을 너무 많이 들으면 머리가 너무 아파요;; 말을 너무 많이 들으면 머리가 너무 아파요;; 말을 너무 많이 들으면 머리가 너무 아파요;; 말을 너무 많이 들으면 머리가 너무 아파요;;',
