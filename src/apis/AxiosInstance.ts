@@ -10,15 +10,14 @@ class Service {
       baseURL: API_BASE_URL,
       headers: {
         'Content-Type': 'application/json',
-        Authorization:
-          typeof window !== 'undefined'
-            ? `${localStorage.getItem('access_token')}`
-            : '',
       },
     })
 
     if (typeof window !== 'undefined') {
-      this.http.defaults.headers.common.Authorization = `${localStorage.getItem('access_token')}`
+      const token = localStorage.getItem('access_token')
+      if (token) {
+        this.http.defaults.headers.common.Authorization = `${token}`
+      }
     }
   }
 }
