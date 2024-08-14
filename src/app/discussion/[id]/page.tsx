@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Button from '@/components/common/Button'
 import Container from '@/components/common/Container'
@@ -16,6 +17,20 @@ const DiscussionDetail = () => {
 
   const discussion = discussionDetail && discussionDetail.discussionSimpleInfo
   const formattedCreatedAt = discussion && discussion.createdAt.split(' ')[0]
+
+  const [commentCount, setCommentCount] = useState(
+    discussion?.commentCount || 0,
+  )
+
+  useEffect(() => {
+    if (discussion) {
+      setCommentCount(discussion.commentCount)
+    }
+  }, [discussion])
+
+  const handleCommentCountUpdate = (newCount: number) => {
+    setCommentCount(newCount)
+  }
 
   return (
     <>
@@ -49,6 +64,7 @@ const DiscussionDetail = () => {
                 {discussion.options &&
                   discussion.options.map((option: DiscussionOptionI) => (
                     <DiscussionOption
+                      key={option.id}
                       discussionOption={option}
                       size="small"
                       boardId={Number(id)}
@@ -56,7 +72,7 @@ const DiscussionDetail = () => {
                   ))}
               </div>
 
-              <div className="flex justify-between">
+              <div className="flex justify-between mb-10">
                 <div className="flex gap-1">
                   <Image
                     src="/images/discussion/red_circle.svg"
@@ -68,14 +84,19 @@ const DiscussionDetail = () => {
                     {discussion.participantCount}명이 참여 중!
                   </p>
                 </div>
-                <p className="text-caption text-gray2">
-                  댓글 {discussion.commentCount}
-                </p>
+                <p className="text-caption text-gray2">댓글 {commentCount}</p>
               </div>
             </div>
           </>
         )}
-        <CommentList id={Number(id)} page={0} size={10} />
+        <CommentList
+          id={Number(id)}
+          page={0}
+          size={50}
+          commentCount={commentCount}
+          onCommentCountUpdate={handleCommentCountUpdate}
+          boardType="discussion"
+        />
       </Container>
     </>
   )

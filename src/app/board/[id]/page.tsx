@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import MbtiCategories from '@/components/board/MbtiCategories'
 import Button from '@/components/common/Button'
@@ -12,23 +12,37 @@ import {
 } from '@/service/board/useBoardService'
 import { useParams } from 'next/navigation'
 import CommentList from '@/components/board/CommentList'
-import Pagination from '@/components/common/Pagination' // Pagination 컴포넌트 import
 
 const BoardDetail = () => {
   const { id } = useParams()
   const { data: boardDetail } = useBoardDetail(Number(id))
   const { mutate } = usePostBoardLike()
 
-  // 페이지 상태 관리
-  const [currentPage, setCurrentPage] = useState(1)
-  const pageSize = 5
+  const [likeCount, setLikeCount] = useState(boardDetail?.likeCount || 0)
+  const [isLiked, setIsLiked] = useState(boardDetail?.isLiked || false)
+  const [commentCount, setCommentCount] = useState(
+    boardDetail?.commentCount || 0,
+  )
+
+  useEffect(() => {
+    if (boardDetail) {
+      setLikeCount(boardDetail.likeCount)
+      setIsLiked(boardDetail.isLiked)
+      setCommentCount(boardDetail.commentCount)
+    }
+  }, [boardDetail])
 
   const handleLikeToggle = () => {
-    mutate(Number(id))
+    mutate(Number(id), {
+      onSuccess: () => {
+        setIsLiked(!isLiked)
+        setLikeCount((prevCount) => (isLiked ? prevCount - 1 : prevCount + 1))
+      },
+    })
   }
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
+  const handleCommentCountUpdate = (newCount: number) => {
+    setCommentCount(newCount)
   }
 
   return (
@@ -37,7 +51,7 @@ const BoardDetail = () => {
         <>
           <MbtiCategories selectedMbti={boardDetail.boardMbti} />
           <div className="text-title3 text-maindark font-semibold my-5">
-            {boardDetail.boardMbti === 'all' ? '전체' : boardDetail.boardMbti}
+            {boardDetail.boardMbti === 'all' ? '전체' : boardDetail.boardMbti}{' '}
             게시판
           </div>
           <Container color="purple">
@@ -73,14 +87,14 @@ const BoardDetail = () => {
               />
             </div>
 
-            <div className="flex justify-center items-center gap-7.5">
-              <div className="text-main2 text-title1 font-semibold">
-                {boardDetail.likeCount}
+            <div className="flex justify-center items-center gap-6">
+              <div className="text-main2 text-title2 font-semibold">
+                {likeCount}
               </div>
               <Image
-                src={`/images/board/${boardDetail.isLiked ? 'like_fill' : 'like_empty'}.svg`}
-                width={90}
-                height={90}
+                src={`/images/board/${isLiked ? 'like_fill' : 'like_empty'}.svg`}
+                width={80}
+                height={80}
                 alt="like_btn"
                 className="cursor-pointer my-10"
                 onClick={handleLikeToggle}
@@ -88,13 +102,10 @@ const BoardDetail = () => {
             </div>
             <CommentList
               id={Number(id)}
-              page={currentPage - 1}
-              size={pageSize}
-            />
-            <Pagination
-              pagesCount={Math.ceil(boardDetail.commentCount / pageSize)}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
+              page={0}
+              size={50}
+              commentCount={commentCount}
+              onCommentCountUpdate={handleCommentCountUpdate}
             />
           </Container>
         </>
