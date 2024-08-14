@@ -72,7 +72,7 @@ const CommentList = ({ id, page, size }: CommentListProps) => {
                 {commentList.result.map(
                   (reply: CommentI) =>
                     reply.parentId === comment.commentId && (
-                      <div key={reply.commentId} className="ml-8">
+                      <div key={reply.commentId}>
                         <Comment
                           comment={reply}
                           onClick={() => handleCommentClick(reply.parentId)}

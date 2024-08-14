@@ -19,8 +19,14 @@ export interface CommentProps {
 const Comment = ({ comment, onClick, refetchComments }: CommentProps) => {
   const { id } = useParams()
   const boardId = Number(id)
-  const { commentId, createdAt, isEditAllowed, memberSimpleInfo, content } =
-    comment
+  const {
+    commentId,
+    createdAt,
+    isEditAllowed,
+    memberSimpleInfo,
+    content,
+    parentId,
+  } = comment
   const { mutate: likeComment } = useCommentLike()
   const { mutate: deleteComment } = useDeleteComment()
 
@@ -43,7 +49,7 @@ const Comment = ({ comment, onClick, refetchComments }: CommentProps) => {
       {
         onSuccess: () => {
           if (refetchComments) {
-            refetchComments() // 삭제 후 refetch 호출
+            refetchComments()
           }
         },
       },
@@ -53,9 +59,19 @@ const Comment = ({ comment, onClick, refetchComments }: CommentProps) => {
   return (
     <div className="flex flex-col gap-5 ">
       <div className="flex justify-between items-start">
-        <Profile user={memberSimpleInfo} createdAt={createdAt} />
+        <div className="flex items-center gap-4">
+          {parentId !== 0 && (
+            <Image
+              src="/images/board/reply.svg"
+              alt="reply"
+              width={16}
+              height={16}
+            />
+          )}
+          <Profile user={memberSimpleInfo} createdAt={createdAt} />
+        </div>
         {!isDeleted && (
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-4 items-center">
             {isEditAllowed && (
               <div className="flex items-center text-footnote text-gray2 gap-2">
                 <div onClick={handleCommentDelete} className="cursor-pointer">
@@ -72,8 +88,8 @@ const Comment = ({ comment, onClick, refetchComments }: CommentProps) => {
               <Image
                 src={`/images/board/${liked ? 'heart_fill' : 'heart_empty'}.svg`}
                 alt={liked ? 'like' : 'unlike'}
-                width={20}
-                height={20}
+                width={19}
+                height={19}
               />
               <span className="text-gray2 text-title3 font-bold ">
                 {likeCount}
@@ -83,7 +99,7 @@ const Comment = ({ comment, onClick, refetchComments }: CommentProps) => {
         )}
       </div>
       <div
-        className={`text-maindark text-headline ${!isDeleted ? 'cursor-pointer' : 'cursor-default'}`}
+        className={`text-maindark text-headline ${parentId !== 0 && 'ml-8'} ${!isDeleted ? 'cursor-pointer' : 'cursor-default'}`}
         onClick={isDeleted ? undefined : onClick}
       >
         {content}
