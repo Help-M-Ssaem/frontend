@@ -23,11 +23,15 @@ const BoardDetail = () => {
 
   const [likeCount, setLikeCount] = useState(boardDetail?.likeCount || 0)
   const [isLiked, setIsLiked] = useState(boardDetail?.isLiked || false)
+  const [commentCount, setCommentCount] = useState(
+    boardDetail?.commentCount || 0,
+  )
 
   useEffect(() => {
     if (boardDetail) {
       setLikeCount(boardDetail.likeCount)
       setIsLiked(boardDetail.isLiked)
+      setCommentCount(boardDetail.commentCount)
     }
   }, [boardDetail])
 
@@ -40,13 +44,17 @@ const BoardDetail = () => {
     })
   }
 
+  const handleCommentCountUpdate = (newCount: number) => {
+    setCommentCount(newCount)
+  }
+
   return (
     <div>
       {boardDetail && (
         <>
           <MbtiCategories selectedMbti={boardDetail.boardMbti} />
           <div className="text-title3 text-maindark font-semibold my-5">
-            {boardDetail.boardMbti === 'all' ? '전체' : boardDetail.boardMbti}
+            {boardDetail.boardMbti === 'all' ? '전체' : boardDetail.boardMbti}{' '}
             게시판
           </div>
           <Container color="purple">
@@ -99,6 +107,8 @@ const BoardDetail = () => {
               id={Number(id)}
               page={currentPage - 1}
               size={pageSize}
+              commentCount={commentCount}
+              onCommentCountUpdate={handleCommentCountUpdate}
             />
           </Container>
         </>

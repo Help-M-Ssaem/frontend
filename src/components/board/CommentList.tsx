@@ -10,9 +10,17 @@ interface CommentListProps {
   id: number
   page: number
   size: number
+  commentCount: number
+  onCommentCountUpdate: (newCount: number) => void
 }
 
-const CommentList = ({ id, page, size }: CommentListProps) => {
+const CommentList = ({
+  id,
+  page,
+  size,
+  commentCount,
+  onCommentCountUpdate,
+}: CommentListProps) => {
   const { data: commentList, refetch } = useCommentList({ id, page, size })
   const [replyId, setReplyId] = useState<number | undefined>(undefined)
   const [isReply, setIsReply] = useState(false)
@@ -29,13 +37,15 @@ const CommentList = ({ id, page, size }: CommentListProps) => {
   const handleReplySubmitSuccess = () => {
     setIsReply(false)
     setReplyId(undefined)
+    onCommentCountUpdate(commentCount + 1)
+    refetch()
   }
 
   return (
     <div className="flex flex-col">
       <div className="flex justify-between">
         <div className="text-maindark text-title3 font-semibold">
-          전체 댓글 {commentList && commentList.totalSize}개
+          전체 댓글 {commentCount}개
         </div>
         <div className="flex gap-4 text-gray2 text-title3 font-semibold">
           <button
@@ -94,7 +104,10 @@ const CommentList = ({ id, page, size }: CommentListProps) => {
         )}
 
       <div className="mb-4">
-        <CommentInput refetchComments={refetch} />
+        <CommentInput
+          refetchComments={refetch}
+          onSuccess={handleReplySubmitSuccess}
+        />
       </div>
     </div>
   )
