@@ -64,7 +64,7 @@ const config: Config = {
       fontSize: {
         herotitle: '38px',
         bigtitle: '32px',
-        title1: '28px',
+        title1: '26px',
         title2: '22px',
         title3: '18px',
         headline: '16px',

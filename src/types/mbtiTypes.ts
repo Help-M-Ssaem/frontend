@@ -1,40 +1,41 @@
-const AllMbtiTypes = [
-  '전체',
-  'ISTJ',
-  'ISTP',
-  'ESTP',
-  'ESTJ',
-  'ISFJ',
-  'ISFP',
-  'ESFP',
-  'ESFJ',
-  'INFJ',
-  'INFP',
+type MBTI =
+  | 'ENFP'
+  | 'ENFJ'
+  | 'INFP'
+  | 'INFJ'
+  | 'INTJ'
+  | 'INTP'
+  | 'ENTJ'
+  | 'ENTP'
+  | 'ISTP'
+  | 'ISFP'
+  | 'ESTP'
+  | 'ESFP'
+  | 'ISTJ'
+  | 'ISFJ'
+  | 'ESTJ'
+  | 'ESFJ'
+
+const mbtiTypes: MBTI[] = [
   'ENFP',
   'ENFJ',
-  'INTJ',
-  'INTP',
-  'ENTP',
-  'ENTJ',
-]
-
-const mbtiTypes = [
-  'ISTJ',
-  'ISTP',
-  'ESTP',
-  'ESTJ',
-  'ISFJ',
-  'ISFP',
-  'ESFP',
-  'ESFJ',
-  'INFJ',
   'INFP',
-  'ENFP',
-  'ENFJ',
+  'INFJ',
   'INTJ',
   'INTP',
-  'ENTP',
   'ENTJ',
+  'ENTP',
+  'ISTP',
+  'ISFP',
+  'ESTP',
+  'ESFP',
+  'ISTJ',
+  'ISFJ',
+  'ESTJ',
+  'ESFJ',
 ]
 
-export { AllMbtiTypes, mbtiTypes }
+// "전체"를 포함한 모든 MBTI 타입 배열
+const AllMbtiTypes: (MBTI | '전체')[] = ['전체', ...mbtiTypes]
+
+export { AllMbtiTypes, mbtiTypes, MBTI }

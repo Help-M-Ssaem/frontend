@@ -11,7 +11,7 @@ import {
 import { useRouter } from 'next/navigation'
 import Button, { MBTI } from '@/components/common/Button'
 import Container from '@/components/common/Container'
-import { mbtiTypes } from '@/types/mbtiTypes'
+import MbtiSelect from '@/components/board/MbtiSelect'
 
 const BoardCreatePage = () => {
   const router = useRouter()
@@ -19,17 +19,12 @@ const BoardCreatePage = () => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [mbti, setMbti] = useState<MBTI>('ISTJ')
-  const [showDropdown, setShowDropdown] = useState(false)
 
   const [image, setImage] = useState<string[]>([]) // 업로드된 모든 이미지 리스트
   const [uploadImage, setUploadImage] = useState<string[]>([]) // 최종 업로드 이미지 리스트
 
   const { mutate: postBoard } = usePostBoard()
   const { mutate: postImage } = usePostBoardImage()
-
-  const handleMbtiClick = () => {
-    setShowDropdown(false)
-  }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value)
@@ -118,36 +113,7 @@ const BoardCreatePage = () => {
   return (
     <div className="w-full-vw ml-half-vw px-4% py-8 sm:px-8% md:px-13% bg-main3">
       <Container color="white" className="bg-white p-10">
-        <div className="flex items-center gap-3 mb-4 relative ">
-          <div
-            className="text-title1 font-bold text-maindark mr-2 cursor-pointer"
-            onClick={handleMbtiClick}
-          >
-            {mbti} 게시판
-          </div>
-          {showDropdown && (
-            <div className="absolute bg-white border border-gray4 rounded-3.75 p-5 mt-2 z-10 min-w-max">
-              <div className="grid grid-cols-5 gap-4">
-                {mbtiTypes.map((type) => (
-                  <button
-                    key={type}
-                    type="button"
-                    className="text-gray2 text-footnote px-2"
-                    onClick={() => setMbti(type)}
-                  >
-                    {type}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-          <Image
-            src="/images/common/arrow_down.svg"
-            width={12}
-            height={9}
-            alt="arrow_down"
-          />
-        </div>
+        <MbtiSelect mbti={mbti} setMbti={setMbti} />
         <div className="text-headline font-normal text-gray2 mb-5">
           제목을 입력해주세요.
         </div>
