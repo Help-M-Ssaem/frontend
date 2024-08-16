@@ -3,7 +3,6 @@
 import '@toast-ui/editor/dist/toastui-editor.css'
 import { Editor } from '@toast-ui/react-editor'
 import { useRef, useState } from 'react'
-import Image from 'next/image'
 import {
   usePostBoardImage,
   usePostBoard,
@@ -12,9 +11,12 @@ import { useRouter } from 'next/navigation'
 import Button, { MBTI } from '@/components/common/Button'
 import Container from '@/components/common/Container'
 import MbtiSelect from '@/components/board/MbtiSelect'
+import { useQueryClient } from '@tanstack/react-query'
+import { queryKeys } from '@/service/board/BoardQueries'
 
 const BoardCreatePage = () => {
   const router = useRouter()
+  const queryClient = useQueryClient()
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -29,18 +31,7 @@ const BoardCreatePage = () => {
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value)
   }
-  const editorRef = useRef<any>(null)
-  const handleContentChange = () => {
-    const contentHTML = editorRef.current.getInstance().getHTML()
-    setContent(contentHTML)
-    const extractedImageUrls = extractImageUrls(contentHTML)
-    const filteredImageUrls = extractedImageUrls.filter(
-      (url) => url !== null,
-    ) as string[]
-    setUploadImage(filteredImageUrls)
-  }
 
-  // 현재 글에 있는 이미지 url 추출
   const extractImageUrls = (text: string) => {
     const imgTagRegex = /<img[^>]*src="([^"]+)"[^>]*>/g
     const matches = text.match(imgTagRegex)
@@ -54,6 +45,17 @@ const BoardCreatePage = () => {
     return imageUrls.filter((url) => url !== null)
   }
 
+  const editorRef = useRef<any>(null)
+  const handleContentChange = () => {
+    const contentHTML = editorRef.current.getInstance().getHTML()
+    setContent(contentHTML)
+    const extractedImageUrls = extractImageUrls(contentHTML)
+    const filteredImageUrls = extractedImageUrls.filter(
+      (url) => url !== null,
+    ) as string[]
+    setUploadImage(filteredImageUrls)
+  }
+
   const formData = new FormData()
   const data = {
     title,
@@ -64,12 +66,10 @@ const BoardCreatePage = () => {
     'postBoardReq',
     new Blob([JSON.stringify(data)], { type: 'application/json' }),
   )
-  // 업로드된 모든 이미지 리스트
   formData.append(
     'image',
     new Blob([JSON.stringify(image)], { type: 'application/json' }),
   )
-  // 최종 업로드 이미지 리스트
   formData.append(
     'uploadImage',
     new Blob([JSON.stringify(uploadImage)], { type: 'application/json' }),
@@ -106,8 +106,12 @@ const BoardCreatePage = () => {
       alert('내용을 입력해주세요.')
       return
     }
-    postBoard(formData)
-    router.back()
+    postBoard(formData, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.boardList })
+        router.push(`/board?mbti=${mbti}&page=1`)
+      },
+    })
   }
 
   return (

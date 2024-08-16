@@ -14,11 +14,15 @@ import {
 import { useParams, useRouter } from 'next/navigation'
 import CommentList from '@/components/board/CommentList'
 import { useUserInfo } from '@/service/user/useUserService'
+import { useQueryClient } from '@tanstack/react-query'
+import { queryKeys } from '@/service/board/BoardQueries'
 
 const BoardDetail = () => {
   const { id } = useParams()
   const boardId = Number(id)
   const router = useRouter()
+
+  const queryClient = useQueryClient()
 
   const { data: userInfo } = useUserInfo()
   const { data: boardDetail } = useBoardDetail(boardId)
@@ -51,7 +55,12 @@ const BoardDetail = () => {
     setCommentCount(newCount)
   }
   const handleDelete = () => {
-    deleteBoard(boardId)
+    deleteBoard(boardId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.boardList })
+        router.back()
+      },
+    })
   }
 
   return (
