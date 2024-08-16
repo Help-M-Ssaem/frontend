@@ -1,4 +1,4 @@
-const mbtiTypes = [
+const AllMbtiTypes = [
   '전체',
   'ISTJ',
   'ISTP',
@@ -18,4 +18,23 @@ const mbtiTypes = [
   'ENTJ',
 ]
 
-export default mbtiTypes
+const mbtiTypes = [
+  'ISTJ',
+  'ISTP',
+  'ESTP',
+  'ESTJ',
+  'ISFJ',
+  'ISFP',
+  'ESFP',
+  'ESFJ',
+  'INFJ',
+  'INFP',
+  'ENFP',
+  'ENFJ',
+  'INTJ',
+  'INTP',
+  'ENTP',
+  'ENTJ',
+]
+
+export { AllMbtiTypes, mbtiTypes }

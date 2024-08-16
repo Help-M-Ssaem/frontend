@@ -48,7 +48,9 @@ const BoardPage = () => {
             text="글 쓰기"
             color="PURPLE"
             size="small"
-            onClick={() => {}}
+            onClick={() => {
+              router.push('/board/create')
+            }}
           />
         </div>
         <div className="h-[1px] bg-main mb-7.5" />

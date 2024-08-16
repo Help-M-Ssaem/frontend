@@ -15,7 +15,15 @@
     // storybook 개발 의존성에 포함된 패키지 import 에러 x
     "import/no-extraneous-dependencies": [
       "error",
-      { "devDependencies": ["**/*.stories.tsx"] }
+      {
+        "devDependencies": [
+          "**/*.stories.tsx",
+          "**/test/**", // 테스트 폴더
+          "**/scripts/**", // 스크립트 폴더
+          "**/*.test.js", // 테스트 파일
+          "**/*.spec.js" // 테스트 파일
+        ]
+      }
     ],
     "react/function-component-definition": [
       "off",
