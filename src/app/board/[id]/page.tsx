@@ -44,6 +44,9 @@ const BoardDetail = () => {
   }, [boardDetail])
 
   const handleLikeToggle = () => {
+    if (userInfo && userInfo.id === boardDetail?.memberSimpleInfo.id) {
+      return
+    }
     postBoardLike(boardId, {
       onSuccess: () => {
         setIsLiked(!isLiked)
@@ -51,9 +54,11 @@ const BoardDetail = () => {
       },
     })
   }
+
   const handleCommentCountUpdate = (newCount: number) => {
     setCommentCount(newCount)
   }
+
   const handleDelete = () => {
     deleteBoard(boardId, {
       onSuccess: () => {
@@ -120,7 +125,11 @@ const BoardDetail = () => {
                 width={80}
                 height={80}
                 alt="like_btn"
-                className="cursor-pointer my-10"
+                className={`my-10 ${
+                  userInfo && userInfo.id === boardDetail.memberSimpleInfo.id
+                    ? 'cursor-default'
+                    : 'cursor-pointer'
+                }`}
                 onClick={handleLikeToggle}
               />
             </div>
