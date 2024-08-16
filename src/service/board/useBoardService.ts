@@ -71,8 +71,8 @@ const usePostBoard = () => {
 }
 
 const usePostBoardImage = () => {
-  const mutationFn = (board: FormData): Promise<void> =>
-    queryOptions.postBoard.mutationFn(board)
+  const mutationFn = (boardImage: FormData): Promise<void> =>
+    queryOptions.postBoardImage.mutationFn(boardImage)
 
   const options: UseMutationOptions<void, Error, FormData, unknown> = {
     mutationFn,

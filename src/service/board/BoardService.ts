@@ -74,8 +74,8 @@ class BoardService extends Service {
     })
   }
 
-  postBoardImage(board: FormData) {
-    return this.http.post(`/member/boards/files`, board, {
+  postBoardImage(boardImage: FormData) {
+    return this.http.post(`/member/boards/files`, boardImage, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

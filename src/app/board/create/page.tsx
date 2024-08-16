@@ -1,5 +1,6 @@
 'use client'
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import '@toast-ui/editor/dist/toastui-editor.css'
 import { Editor } from '@toast-ui/react-editor'
 import { useRef, useState } from 'react'
@@ -26,7 +27,7 @@ const BoardCreatePage = () => {
   const [uploadImage, setUploadImage] = useState<string[]>([]) // 최종 업로드 이미지 리스트
 
   const { mutate: postBoard } = usePostBoard()
-  const { mutate: postImage } = usePostBoardImage()
+  const { mutate: postBoardImage } = usePostBoardImage()
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value)
@@ -56,6 +57,13 @@ const BoardCreatePage = () => {
     setUploadImage(filteredImageUrls)
   }
 
+  const handleUploadImage = async (blob: Blob) => {
+    const formImage = new FormData()
+    formImage.append('image', blob)
+    const imgUrl = postBoardImage(formImage)
+    return imgUrl
+  }
+
   const formData = new FormData()
   const data = {
     title,
@@ -75,30 +83,8 @@ const BoardCreatePage = () => {
     new Blob([JSON.stringify(uploadImage)], { type: 'application/json' }),
   )
 
-  const handleUploadImage = async (blob: Blob) => {
-    const formImage = new FormData()
-    formImage.append('image', blob)
-
-    return new Promise<string>((resolve, reject) => {
-      postImage(formImage, {
-        onSuccess: (imgUrl) => {
-          if (typeof imgUrl === 'string') {
-            setImage((prev) => [...prev, imgUrl])
-            resolve(imgUrl)
-          } else {
-            console.error('이미지 URL이 문자열이 아닙니다:', imgUrl)
-            reject(new Error('이미지 URL이 문자열이 아닙니다.'))
-          }
-        },
-        onError: (error) => {
-          console.error('이미지 업로드 실패:', error)
-          reject(error)
-        },
-      })
-    })
-  }
-
   const handleSubmit = () => {
+    // TODO: 제목, 내용 입력 여부 확인 UI 바꾸기
     if (!title) {
       alert('제목을 입력해주세요.')
       return

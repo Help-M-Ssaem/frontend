@@ -8,6 +8,7 @@ import BoardService, {
 const queryKeys = {
   board: (boardId: number) => ['board', boardId] as const,
   boardList: ['boardList'] as const,
+  boardListImage: ['boardListImage'] as const,
   boardListNumber: ['boardListNumber'] as const,
   bookmarkList: ['bookmarkList'] as const,
 }
@@ -95,9 +96,9 @@ const queryOptions = {
   },
 
   postBoardImage: {
-    queryKey: queryKeys.boardList,
-    mutationFn: async (board: FormData): Promise<void> => {
-      await BoardService.postBoardImage(board)
+    queryKey: queryKeys.boardListImage,
+    mutationFn: async (boardImage: FormData): Promise<void> => {
+      await BoardService.postBoardImage(boardImage)
     },
   },
 
