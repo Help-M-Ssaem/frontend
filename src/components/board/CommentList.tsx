@@ -55,15 +55,14 @@ const CommentList = ({
   const [replyId, setReplyId] = useState<number | undefined>(undefined)
   const [isReply, setIsReply] = useState(false)
 
+  // TODO: 공유, 신고 기능 추가
   const handleShareBtnClick = () => {}
-
   const handleReportBtnClick = () => {}
 
   const handleCommentClick = (commentId: number) => {
     setReplyId(commentId)
     setIsReply(!isReply)
   }
-
   const handleReplySubmitSuccess = () => {
     setIsReply(false)
     setReplyId(undefined)
@@ -77,7 +76,7 @@ const CommentList = ({
         <div className="text-maindark text-title3 font-semibold">
           전체 댓글 {commentCount}개
         </div>
-        <div className="flex gap-4 text-gray2 text-title3 font-semibold">
+        <div className="flex gap-4 text-gray2 text-headline font-semibold">
           <button
             type="button"
             className="cursor-pointer"
