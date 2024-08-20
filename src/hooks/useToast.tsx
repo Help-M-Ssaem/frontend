@@ -1,35 +1,74 @@
 'use client'
 
-import {
-  ToastManagerHandle,
-  ToastOptions,
-} from '@/components/common/ToastManager'
-import { useContext, createContext, useRef } from 'react'
+import { useEffect, useState } from 'react'
 
-const ToastContext = createContext<React.RefObject<ToastManagerHandle> | null>(
-  null,
-)
+const TOAST_REMOVE_DELAY = 2000
 
-export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
-  const toastManagerRef = useRef<ToastManagerHandle>(null)
+interface Toast {
+  id: string
+  message: string
+  show: boolean
+}
 
-  return (
-    <ToastContext.Provider value={toastManagerRef}>
-      {children}
-    </ToastContext.Provider>
-  )
+let toasts: Toast[] = []
+let count = 0
+
+const genId = (): string => {
+  count = (count + 1) % Number.MAX_SAFE_INTEGER
+  return count.toString()
+}
+
+const timeouts = new Map<string, ReturnType<typeof setTimeout>>()
+const listeners: Array<(toasts: Toast[]) => void> = []
+
+const showToast = (message: string) => {
+  const id = genId()
+
+  if (!toasts.find((toast) => toast.id === id)) {
+    toasts = [...toasts, { id, message, show: true }]
+  }
+
+  listeners.forEach((listener) => {
+    listener(toasts)
+  })
+
+  const timeout = setTimeout(() => {
+    toasts = toasts.map((toast) =>
+      toast.id === id ? { ...toast, show: false } : toast,
+    )
+
+    listeners.forEach((listener) => {
+      listener(toasts)
+    })
+
+    const maxTimeoutId = Array.from(timeouts.entries()).reduce((a, b) =>
+      b[1] > a[1] ? b : a,
+    )[0]
+
+    if (maxTimeoutId === id) {
+      toasts = []
+      timeouts.clear()
+    }
+  }, TOAST_REMOVE_DELAY)
+
+  timeouts.set(id, timeout)
 }
 
 export const useToast = () => {
-  const context = useContext(ToastContext)
+  const [state, setState] = useState<Toast[]>([...toasts])
 
-  if (!context) {
-    throw new Error('useToast must be used within a ToastProvider')
+  useEffect(() => {
+    listeners.push(setState)
+    return () => {
+      const index = listeners.indexOf(setState)
+      if (index > -1) {
+        listeners.splice(index, 1)
+      }
+    }
+  }, [])
+
+  return {
+    showToast,
+    toasts: state,
   }
-
-  const showToast = (options: ToastOptions) => {
-    context.current?.addToast(options)
-  }
-
-  return { showToast }
 }
