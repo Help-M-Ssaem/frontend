@@ -3,6 +3,8 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { Suspense, useEffect, useState } from 'react'
 import Image from 'next/image'
+import { useUserInfo } from '@/service/user/useUserService'
+import { useToast } from '@/hooks/useToast'
 
 const categories = [
   { path: '/', label: 'HOME' },
@@ -21,7 +23,10 @@ const Category = () => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
+  const { data: userInfo } = useUserInfo()
   const [selected, setSelected] = useState<string | null>(null)
+
+  const { showToast } = useToast()
 
   useEffect(() => {
     if (pathname) {
@@ -33,6 +38,14 @@ const Category = () => {
   const handleClick = (path: string) => {
     setSelected(path)
     router.push(path)
+  }
+
+  const handleProtectedClick = (path: string) => {
+    if (!userInfo) {
+      showToast('로그인이 필요한 서비스입니다')
+      return
+    }
+    handleClick(path)
   }
 
   const getButtonClass = (categoryPath: string) => {
@@ -69,7 +82,7 @@ const Category = () => {
             <li key={category.path} className="list-none">
               <button
                 type="button"
-                onClick={() => handleClick(category.path)}
+                onClick={() => handleProtectedClick(category.path)}
                 className={`ml-7 cursor-pointer relative hover:text-main1 transition-all ${getButtonClass(category.path)}`}
               >
                 {category.label}

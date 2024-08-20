@@ -3,6 +3,8 @@
 import dynamic from 'next/dynamic'
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { useToast } from '@/hooks/useToast'
+import { useUserInfo } from '@/service/user/useUserService'
 import { useRouter, usePathname } from 'next/navigation'
 import Button from './Button'
 
@@ -18,7 +20,9 @@ const Header = () => {
   const pathname = usePathname()
   const router = useRouter()
   const [selected, setSelected] = useState<string | null>(null)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const { data: userInfo } = useUserInfo()
+
+  const { showToast } = useToast()
 
   useEffect(() => {
     if (pathname) {
@@ -26,14 +30,11 @@ const Header = () => {
     }
   }, [pathname])
 
-  useEffect(() => {
-    const token = localStorage.getItem('access_token')
-    if (token) {
-      setIsLoggedIn(true)
+  const handleCategoryClick = (path: string) => {
+    if (!userInfo) {
+      showToast('로그인이 필요한 서비스입니다')
+      return
     }
-  }, [])
-
-  const handleClick = (path: string) => {
     setSelected(path)
     router.push(path)
   }
@@ -55,7 +56,7 @@ const Header = () => {
             onClick={() => router.push('/')}
             className="cursor-pointer"
           />
-          {!isLoggedIn && (
+          {!userInfo && (
             <Button
               text="로그인하고 이용하기"
               color="PURPLE"
@@ -80,7 +81,7 @@ const Header = () => {
               <li key={category.path}>
                 <button
                   type="button"
-                  onClick={() => handleClick(category.path)}
+                  onClick={() => handleCategoryClick(category.path)}
                   className={`cursor-pointer relative hover:text-main1 transition-all ${
                     selected === category.path
                       ? 'text-main1 font-bold after:content-[""] after:absolute after:bottom-[-10px] after:left-0 after:w-full after:h-[2px] after:bg-main1 after:opacity-100'
