@@ -16,6 +16,7 @@ import CommentList from '@/components/board/CommentList'
 import { useUserInfo } from '@/service/user/useUserService'
 import { useQueryClient } from '@tanstack/react-query'
 import { queryKeys } from '@/service/board/BoardQueries'
+import { useToast } from '@/hooks/useToast'
 
 const BoardDetail = () => {
   const { id } = useParams()
@@ -23,6 +24,8 @@ const BoardDetail = () => {
   const router = useRouter()
 
   const queryClient = useQueryClient()
+
+  const { showToast } = useToast()
 
   const { data: userInfo } = useUserInfo()
   const { data: boardDetail } = useBoardDetail(boardId)
@@ -44,7 +47,12 @@ const BoardDetail = () => {
   }, [boardDetail])
 
   const handleLikeToggle = () => {
+    if (!userInfo) {
+      showToast('로그인이 필요한 서비스입니다')
+      return
+    }
     if (userInfo && userInfo.id === boardDetail?.memberSimpleInfo.id) {
+      showToast('본인 게시글에는 좋아요를 누를 수 없습니다')
       return
     }
     postBoardLike(boardId, {
