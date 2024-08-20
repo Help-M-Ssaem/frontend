@@ -1,9 +1,16 @@
 'use client'
 
-import BoardCreatePage from '@/components/board/BoardCreatePage'
+import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
 
 const Page = () => {
+  const BoardCreatePage = dynamic(
+    () => import('@/components/board/BoardCreatePage'),
+    {
+      ssr: false,
+    },
+  )
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <BoardCreatePage />
