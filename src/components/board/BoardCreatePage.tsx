@@ -27,10 +27,10 @@ const BoardCreatePage = () => {
   const [content, setContent] = useState('')
 
   const { data: userInfo } = useUserInfo()
-  const [mbti, setMbti] = useState<MBTI | null>(null)
+  const [mbti, setMbti] = useState<MBTI | ''>('')
 
   useEffect(() => {
-    if (userInfo) {
+    if (userInfo && userInfo.mbti) {
       setMbti(userInfo.mbti.toUpperCase() as MBTI)
     }
   }, [userInfo])
@@ -55,15 +55,16 @@ const BoardCreatePage = () => {
   }
 
   const handleContentChange = () => {
-    const contentHTML = editorRef.current.getInstance().getHTML()
-    setContent(contentHTML)
-    const extractedImageUrls = extractImageUrls(contentHTML)
-    const filteredImageUrls = extractedImageUrls.filter(
-      (url) => url !== null,
-    ) as string[]
-    setUploadImage(filteredImageUrls)
+    if (editorRef.current) {
+      const contentHTML = editorRef.current.getInstance().getHTML()
+      setContent(contentHTML)
+      const extractedImageUrls = extractImageUrls(contentHTML)
+      const filteredImageUrls = extractedImageUrls.filter(
+        (url) => url !== null,
+      ) as string[]
+      setUploadImage(filteredImageUrls)
+    }
   }
-
   const handleUploadImage = async (blob: Blob) => {
     const formImage = new FormData()
     formImage.append('image', blob)
