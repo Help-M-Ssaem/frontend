@@ -8,20 +8,31 @@ import Container from '@/components/common/Container'
 import Profile from '@/components/common/Profile'
 import {
   useBoardDetail,
+  useDeleteBoard,
   usePostBoardLike,
 } from '@/service/board/useBoardService'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import CommentList from '@/components/board/CommentList'
+import { useUserInfo } from '@/service/user/useUserService'
+import { useQueryClient } from '@tanstack/react-query'
+import { queryKeys } from '@/service/board/BoardQueries'
 
 const BoardDetail = () => {
   const { id } = useParams()
-  const { data: boardDetail } = useBoardDetail(Number(id))
-  const { mutate } = usePostBoardLike()
+  const boardId = Number(id)
+  const router = useRouter()
+
+  const queryClient = useQueryClient()
+
+  const { data: userInfo } = useUserInfo()
+  const { data: boardDetail } = useBoardDetail(boardId)
+  const { mutate: postBoardLike } = usePostBoardLike()
+  const { mutate: deleteBoard } = useDeleteBoard()
 
   const [likeCount, setLikeCount] = useState(boardDetail?.likeCount || 0)
   const [isLiked, setIsLiked] = useState(boardDetail?.isLiked || false)
   const [commentCount, setCommentCount] = useState(
-    boardDetail?.commentCount || 0,
+    (boardDetail && boardDetail.commentCount) || 0,
   )
 
   useEffect(() => {
@@ -33,7 +44,10 @@ const BoardDetail = () => {
   }, [boardDetail])
 
   const handleLikeToggle = () => {
-    mutate(Number(id), {
+    if (userInfo && userInfo.id === boardDetail?.memberSimpleInfo.id) {
+      return
+    }
+    postBoardLike(boardId, {
       onSuccess: () => {
         setIsLiked(!isLiked)
         setLikeCount((prevCount) => (isLiked ? prevCount - 1 : prevCount + 1))
@@ -43,6 +57,15 @@ const BoardDetail = () => {
 
   const handleCommentCountUpdate = (newCount: number) => {
     setCommentCount(newCount)
+  }
+
+  const handleDelete = () => {
+    deleteBoard(boardId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.boardList })
+        router.back()
+      },
+    })
   }
 
   return (
@@ -55,26 +78,32 @@ const BoardDetail = () => {
             게시판
           </div>
           <Container color="purple">
-            <div className="flex justify-end gap-2.5 mb-5">
-              <Button
-                text="수정"
-                color="PURPLE"
-                size="small"
-                onClick={() => {}}
-              />
-              <Button
-                text="삭제"
-                color="PURPLE"
-                size="small"
-                onClick={() => {}}
-              />
-            </div>
-            <div className="h-[1px] bg-main" />
+            {userInfo && userInfo.id === boardDetail.memberSimpleInfo.id && (
+              <>
+                <div className="flex justify-end gap-2.5 mb-5">
+                  <Button
+                    text="수정"
+                    color="PURPLE"
+                    size="small"
+                    onClick={() => {
+                      router.push(`/board/${id}/update`)
+                    }}
+                  />
+                  <Button
+                    text="삭제"
+                    color="PURPLE"
+                    size="small"
+                    onClick={handleDelete}
+                  />
+                </div>
+                <div className="h-[1px] bg-main" />
+              </>
+            )}
 
             <div className="flex justify-between my-7.5">
               <Profile user={boardDetail.memberSimpleInfo} />
               <div className="flex gap-3.5 text-caption text-gray2">
-                <p>조회수 {boardDetail.hits}회</p> |{' '}
+                <p>조회수 {boardDetail.hits}회</p> |
                 <p>{boardDetail.createdAt}</p>
               </div>
             </div>
@@ -96,12 +125,16 @@ const BoardDetail = () => {
                 width={80}
                 height={80}
                 alt="like_btn"
-                className="cursor-pointer my-10"
+                className={`my-10 ${
+                  userInfo && userInfo.id === boardDetail.memberSimpleInfo.id
+                    ? 'cursor-default'
+                    : 'cursor-pointer'
+                }`}
                 onClick={handleLikeToggle}
               />
             </div>
             <CommentList
-              id={Number(id)}
+              id={boardId}
               page={0}
               size={50}
               commentCount={commentCount}

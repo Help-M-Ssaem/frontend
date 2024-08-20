@@ -1,5 +1,5 @@
 import Service from '@/apis/AxiosInstance'
-import { Profile } from '@/model/User'
+import { Profile, User } from '@/model/User'
 
 class UserService extends Service {
   getTerms() {
@@ -11,7 +11,7 @@ class UserService extends Service {
   }
 
   getUserInfo() {
-    return this.http.get<Profile>('/member/info')
+    return this.http.get<User>('/member/info')
   }
 
   patchProfile(profile: Profile) {
