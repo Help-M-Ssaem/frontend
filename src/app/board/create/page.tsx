@@ -71,11 +71,9 @@ const BoardCreatePage = () => {
     return new Promise<string>((resolve, reject) => {
       postBoardImage(formImage, {
         onSuccess: (imgUrl) => {
-          console.log('서버에서 받은 이미지 URL:', imgUrl)
           resolve(imgUrl)
         },
         onError: (error) => {
-          console.error('이미지 업로드 실패:', error)
           reject(error)
         },
       })

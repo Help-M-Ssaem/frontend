@@ -72,9 +72,7 @@ const usePostBoard = () => {
 
 const usePostBoardImage = () => {
   const mutationFn = async (boardImage: FormData): Promise<string> => {
-    console.log('mutationFn 실행됨')
     const response = await queryOptions.postBoardImage.mutationFn(boardImage)
-    console.log('서버에서 받은 응답 데이터:', response) // response 전체를 출력
     return response
   }
 
