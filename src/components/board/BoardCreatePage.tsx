@@ -16,12 +16,13 @@ import { useQueryClient } from '@tanstack/react-query'
 import { queryKeys } from '@/service/board/BoardQueries'
 import { useUserInfo } from '@/service/user/useUserService'
 import { MBTI } from '@/types/mbtiTypes'
+import { useToast } from '@/hooks/useToast'
 
 const BoardCreatePage = () => {
   const router = useRouter()
   const queryClient = useQueryClient()
-
   const editorRef = useRef<any>(null)
+  const { showToast } = useToast()
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -101,10 +102,10 @@ const BoardCreatePage = () => {
 
   const handleSubmit = () => {
     if (!title) {
-      alert('제목을 입력해주세요.')
+      showToast('제목을 입력해주세요.')
       return
     } else if (!content) {
-      alert('내용을 입력해주세요.')
+      showToast('내용을 입력해주세요.')
       return
     }
     postBoard(formData, {
