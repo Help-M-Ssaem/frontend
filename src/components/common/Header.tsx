@@ -18,12 +18,20 @@ const Header = () => {
   const pathname = usePathname()
   const router = useRouter()
   const [selected, setSelected] = useState<string | null>(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
     if (pathname) {
       setSelected(pathname)
     }
   }, [pathname])
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token')
+    if (token) {
+      setIsLoggedIn(true)
+    }
+  }, [])
 
   const handleClick = (path: string) => {
     setSelected(path)
@@ -47,12 +55,14 @@ const Header = () => {
             onClick={() => router.push('/')}
             className="cursor-pointer"
           />
-          <Button
-            text="로그인하고 이용하기"
-            color="PURPLE"
-            size="medium"
-            onClick={() => router.push('/signin')}
-          />
+          {!isLoggedIn && (
+            <Button
+              text="로그인하고 이용하기"
+              color="PURPLE"
+              size="medium"
+              onClick={() => router.push('/signin')}
+            />
+          )}
         </div>
 
         {/* mobile */}
