@@ -1,14 +1,17 @@
 'use client'
 
 import { useHotThree } from '@/service/home/useHomeService'
-import { useUserInfo } from '@/service/user/useUserService'
+import { User } from '@/model/User'
 import HotThree from './HotThree'
 import NotLogin from '../auth/NotLogin'
 import Login from '../auth/Login'
 
-const HotThreeBox = () => {
+interface HotThreeBoxProps {
+  userInfo: User | null
+}
+
+const HotThreeBox = ({ userInfo }: HotThreeBoxProps) => {
   const { data: hotThree } = useHotThree()
-  const { data: userInfo } = useUserInfo()
 
   return (
     <>
@@ -53,6 +56,7 @@ const HotThreeBox = () => {
           </>
         ) : (
           <>
+            <NotLogin />
             {hotThree && (
               <>
                 <HotThree hotThree={hotThree} board="board" />
@@ -60,7 +64,6 @@ const HotThreeBox = () => {
                 <HotThree hotThree={hotThree} board="worry" />
               </>
             )}
-            <NotLogin />
           </>
         )}
       </div>
