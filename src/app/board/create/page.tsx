@@ -3,35 +3,43 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import '@toast-ui/editor/dist/toastui-editor.css'
 import { Editor } from '@toast-ui/react-editor'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   usePostBoardImage,
   usePostBoard,
 } from '@/service/board/useBoardService'
 import { useRouter } from 'next/navigation'
-import Button, { MBTI } from '@/components/common/Button'
+import Button from '@/components/common/Button'
 import Container from '@/components/common/Container'
 import MbtiSelect from '@/components/board/MbtiSelect'
 import { useQueryClient } from '@tanstack/react-query'
 import { queryKeys } from '@/service/board/BoardQueries'
+import { useUserInfo } from '@/service/user/useUserService'
+import { MBTI } from '@/types/mbtiTypes'
 
 const BoardCreatePage = () => {
   const router = useRouter()
   const queryClient = useQueryClient()
 
+  const editorRef = useRef<any>(null)
+
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
-  const [mbti, setMbti] = useState<MBTI>('ISTJ')
+
+  const { data: userInfo } = useUserInfo()
+  const [mbti, setMbti] = useState<MBTI | null>(null)
+
+  useEffect(() => {
+    if (userInfo) {
+      setMbti(userInfo.mbti.toUpperCase() as MBTI)
+    }
+  }, [userInfo])
 
   const [image, setImage] = useState<string[]>([]) // 업로드된 모든 이미지 리스트
   const [uploadImage, setUploadImage] = useState<string[]>([]) // 최종 업로드 이미지 리스트
 
   const { mutate: postBoard } = usePostBoard()
   const { mutate: postBoardImage } = usePostBoardImage()
-
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value)
-  }
 
   const extractImageUrls = (text: string) => {
     const imgTagRegex = /<img[^>]*src="([^"]+)"[^>]*>/g
@@ -46,7 +54,6 @@ const BoardCreatePage = () => {
     return imageUrls.filter((url) => url !== null)
   }
 
-  const editorRef = useRef<any>(null)
   const handleContentChange = () => {
     const contentHTML = editorRef.current.getInstance().getHTML()
     setContent(contentHTML)
@@ -60,10 +67,20 @@ const BoardCreatePage = () => {
   const handleUploadImage = async (blob: Blob) => {
     const formImage = new FormData()
     formImage.append('image', blob)
-    const imgUrl = postBoardImage(formImage)
-    return imgUrl
-  }
 
+    return new Promise<string>((resolve, reject) => {
+      postBoardImage(formImage, {
+        onSuccess: (imgUrl) => {
+          console.log('서버에서 받은 이미지 URL:', imgUrl)
+          resolve(imgUrl)
+        },
+        onError: (error) => {
+          console.error('이미지 업로드 실패:', error)
+          reject(error)
+        },
+      })
+    })
+  }
   const formData = new FormData()
   const data = {
     title,
@@ -84,7 +101,6 @@ const BoardCreatePage = () => {
   )
 
   const handleSubmit = () => {
-    // TODO: 제목, 내용 입력 여부 확인 UI 바꾸기
     if (!title) {
       alert('제목을 입력해주세요.')
       return
@@ -103,14 +119,14 @@ const BoardCreatePage = () => {
   return (
     <div className="w-full-vw ml-half-vw px-4% py-8 sm:px-8% md:px-13% bg-main3">
       <Container color="white" className="bg-white p-10">
-        <MbtiSelect mbti={mbti} setMbti={setMbti} />
+        <MbtiSelect mbti={mbti && mbti.toUpperCase()} setMbti={setMbti} />
         <div className="text-headline font-normal text-gray2 mb-5">
           제목을 입력해주세요.
         </div>
         <input
           type="text"
           value={title}
-          onChange={handleTitleChange}
+          onChange={(e) => setTitle(e.target.value)}
           className="w-full h-10 border border-gray-300 rounded-md p-2 mb-4"
         />
         <div className="text-headline font-normal text-gray2 mb-5">
@@ -124,11 +140,9 @@ const BoardCreatePage = () => {
           initialEditType="wysiwyg"
           onChange={handleContentChange}
           hooks={{
-            addImageBlobHook: async (
-              blob: Blob,
-              callback: (url: string, alt: string) => void,
-            ) => {
+            addImageBlobHook: async (blob: Blob, callback: any) => {
               const imgUrl = await handleUploadImage(blob)
+              setImage((prev: any) => [...prev, imgUrl])
               callback(imgUrl, 'image')
             },
           }}

@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { MBTI, mbtiTypes } from '@/types/mbtiTypes'
 
 export interface MbtiSelectProps {
-  mbti: MBTI
+  mbti: string | null
   setMbti: (mbti: MBTI) => void
 }
 

@@ -71,13 +71,18 @@ const usePostBoard = () => {
 }
 
 const usePostBoardImage = () => {
-  const mutationFn = (boardImage: FormData): Promise<void> =>
-    queryOptions.postBoardImage.mutationFn(boardImage)
+  const mutationFn = async (boardImage: FormData): Promise<string> => {
+    console.log('mutationFn 실행됨')
+    const response = await queryOptions.postBoardImage.mutationFn(boardImage)
+    console.log('서버에서 받은 응답 데이터:', response) // response 전체를 출력
+    return response
+  }
 
-  const options: UseMutationOptions<void, Error, FormData, unknown> = {
+  const options: UseMutationOptions<string, Error, FormData, unknown> = {
     mutationFn,
   }
-  return useMutation<void, Error, FormData>(options)
+
+  return useMutation<string, Error, FormData>(options)
 }
 
 const usePatchBoard = () => {

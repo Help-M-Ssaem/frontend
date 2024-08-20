@@ -75,11 +75,15 @@ class BoardService extends Service {
   }
 
   postBoardImage(boardImage: FormData) {
-    return this.http.post(`/member/boards/files`, boardImage, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
+    return this.http
+      .post(`/member/boards/files`, boardImage, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        return response.data
+      })
   }
 
   patchBoard({ id, board }: BoardPatchProps) {

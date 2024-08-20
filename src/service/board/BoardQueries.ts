@@ -97,8 +97,9 @@ const queryOptions = {
 
   postBoardImage: {
     queryKey: queryKeys.boardListImage,
-    mutationFn: async (boardImage: FormData): Promise<void> => {
-      await BoardService.postBoardImage(boardImage)
+    mutationFn: async (boardImage: FormData): Promise<any> => {
+      const response = await BoardService.postBoardImage(boardImage)
+      return response
     },
   },
 
