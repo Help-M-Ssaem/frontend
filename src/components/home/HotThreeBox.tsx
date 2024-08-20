@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { fetchUserInfo } from '@/service/user/fetchUserInfo'
 import { useHotThree } from '@/service/home/useHomeService'
 import { User } from '@/model/User'
 import { HotThreeI } from '@/model/Home'
@@ -19,21 +21,32 @@ const renderHotThree = (hotThree: HotThreeI) => (
   </>
 )
 
-const HotThreeBox = ({ userInfo }: HotThreeBoxProps) => {
+const HotThreeBox = ({ userInfo: initialUserInfo }: HotThreeBoxProps) => {
   const { data: hotThree } = useHotThree()
+  const [userInfo, setUserInfo] = useState<User | null>(initialUserInfo || null)
+
+  useEffect(() => {
+    if (!initialUserInfo) {
+      const fetchData = async () => {
+        const fetchedUserInfo = await fetchUserInfo()
+        setUserInfo(fetchedUserInfo)
+      }
+      fetchData()
+    }
+  }, [initialUserInfo])
 
   return (
     <>
       {/* mobile */}
       <div className="bg-main4 flex items-center w-full-vw ml-half-vw gap-5 px-6% py-5 overflow-x-scroll scrollbar-hide sm:hidden">
-        {userInfo ? <Login user={userInfo} /> : <NotLogin />}
+        {!userInfo ? <NotLogin /> : <Login user={userInfo} />}
         {hotThree && renderHotThree(hotThree)}
       </div>
 
       {/* desktop */}
       <div className="hidden bg-main4 w-full-vw ml-half-vw gap-7.5 px-6% py-7.5 sm:px-8% sm:grid sm:grid-cols-2 md:px-13% lg:py-12.5 lg:grid lg:grid-cols-4">
         {hotThree && renderHotThree(hotThree)}
-        {userInfo ? <Login user={userInfo} /> : <NotLogin />}
+        {!userInfo ? <NotLogin /> : <Login user={userInfo} />}
       </div>
     </>
   )
