@@ -11,6 +11,7 @@ import { useBoardList } from '@/service/board/useBoardService'
 import { useEffect, useState } from 'react'
 import { BoardI } from '@/model/Board'
 import { useToast } from '@/hooks/useToast'
+import { useUserInfo } from '@/service/user/useUserService'
 
 const BoardPage = () => {
   const router = useRouter()
@@ -23,6 +24,7 @@ const BoardPage = () => {
   const pageSize = 6
 
   const { data: boardList } = useBoardList(mbti, page - 1, pageSize)
+  const { data: userInfo } = useUserInfo()
 
   const { showToast } = useToast()
 
@@ -40,8 +42,7 @@ const BoardPage = () => {
   }, [mbtiQuery])
 
   const handleWriteClick = () => {
-    const accessToken = localStorage.getItem('access_token')
-    if (!accessToken) {
+    if (!userInfo) {
       showToast('로그인이 필요한 서비스입니다')
       return
     }

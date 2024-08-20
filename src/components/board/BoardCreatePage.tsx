@@ -117,7 +117,7 @@ const BoardCreatePage = () => {
   }
 
   return (
-    <div className="w-full-vw ml-half-vw px-4% py-8 sm:px-8% md:px-13% bg-main3">
+    <div className="w-full-vw ml-half-vw p-5% sm:px-8% sm:py-8 md:px-13% bg-main3">
       <Container color="white" className="bg-white p-10">
         <MbtiSelect mbti={mbti && mbti.toUpperCase()} setMbti={setMbti} />
         <div className="text-headline font-normal text-gray2 mb-5">
