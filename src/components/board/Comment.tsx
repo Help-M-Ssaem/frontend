@@ -8,6 +8,8 @@ import {
 } from '@/service/comment/useCommentService'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
+import { useToast } from '@/hooks/useToast'
+import { useUserInfo } from '@/service/user/useUserService'
 import Profile from '../common/Profile'
 
 export interface CommentProps {
@@ -32,10 +34,20 @@ const Comment = ({ comment, onClick, refetchComments }: CommentProps) => {
 
   const [liked, setLiked] = useState(comment.isLiked)
   const [likeCount, setLikeCount] = useState(comment.likeCount)
+  const { data: userInfo } = useUserInfo()
+  const { showToast } = useToast()
 
   const isDeleted = content === '삭제된 댓글입니다.'
 
   const handleToggleLike = () => {
+    if (!userInfo) {
+      showToast('로그인이 필요한 서비스입니다')
+      return
+    }
+    if (userInfo && userInfo.id === memberSimpleInfo.id) {
+      showToast('본인 댓글에는 좋아요를 누를 수 없습니다')
+      return
+    }
     if (!isEditAllowed) {
       setLiked(!liked)
       setLikeCount((prevCount) => (liked ? prevCount - 1 : prevCount + 1))
@@ -82,8 +94,7 @@ const Comment = ({ comment, onClick, refetchComments }: CommentProps) => {
             <button
               onClick={handleToggleLike}
               type="button"
-              className={`flex items-center gap-1.5 ${isEditAllowed ? 'cursor-default' : 'cursor-pointer'}`}
-              disabled={isEditAllowed}
+              className="flex items-center gap-1.5 cursor-pointer"
             >
               <Image
                 src={`/images/board/${liked ? 'heart_fill' : 'heart_empty'}.svg`}

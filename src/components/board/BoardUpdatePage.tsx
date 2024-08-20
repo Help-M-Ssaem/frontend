@@ -16,6 +16,7 @@ import MbtiSelect from '@/components/board/MbtiSelect'
 import { useQueryClient } from '@tanstack/react-query'
 import { queryKeys } from '@/service/board/BoardQueries'
 import { MBTI } from '@/types/mbtiTypes'
+import { useToast } from '@/hooks/useToast'
 
 const BoardUpdatePage = () => {
   const router = useRouter()
@@ -24,6 +25,7 @@ const BoardUpdatePage = () => {
   const boardId = Number(id)
 
   const editorRef = useRef<any>(null)
+  const { showToast } = useToast()
 
   const [mbti, setMbti] = useState<MBTI | null>(null)
   const [title, setTitle] = useState('')
@@ -114,10 +116,10 @@ const BoardUpdatePage = () => {
 
   const handleSubmit = () => {
     if (!title) {
-      alert('제목을 입력해주세요.')
+      showToast('제목을 입력해주세요.')
       return
     } else if (!content) {
-      alert('내용을 입력해주세요.')
+      showToast('내용을 입력해주세요.')
       return
     }
     updateBoard(

@@ -1,9 +1,10 @@
+import dynamic from 'next/dynamic'
 import type { Metadata } from 'next'
 import '../styles/globals.css'
 import Recoil from '@/recoil/Recoil'
 import localFont from 'next/font/local'
-import dynamic from 'next/dynamic'
 import ReactQueryProviders from '@/hooks/useReactQuery'
+import Toaster from '@/components/common/Toaster'
 
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
@@ -42,6 +43,7 @@ export default function RootLayout({
               <Header />
               {children}
               <Footer />
+              <Toaster />
             </main>
           </ReactQueryProviders>
         </Recoil>

@@ -6,6 +6,7 @@ import {
   useCommentList,
   useDiscussionCommentList,
 } from '@/service/comment/useCommentService'
+import { useToast } from '@/hooks/useToast'
 import Comment from './Comment'
 import CommentInput from './CommentInput'
 
@@ -55,9 +56,15 @@ const CommentList = ({
   const [replyId, setReplyId] = useState<number | undefined>(undefined)
   const [isReply, setIsReply] = useState(false)
 
+  const { showToast } = useToast()
+
   // TODO: 공유, 신고 기능 추가
-  const handleShareBtnClick = () => {}
-  const handleReportBtnClick = () => {}
+  const handleShareBtnClick = () => {
+    showToast('공유 기능은 준비 중입니다')
+  }
+  const handleReportBtnClick = () => {
+    showToast('신고 기능은 준비 중입니다')
+  }
 
   const handleCommentClick = (commentId: number) => {
     setReplyId(commentId)
