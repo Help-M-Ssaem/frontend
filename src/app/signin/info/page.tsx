@@ -61,12 +61,6 @@ const Info = () => {
 
       <div className="flex flex-col gap-5 w-full">
         <div className="text-gray2 text-headline font-semibold">
-          당신의 이메일은 {email}입니다.
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-5 w-full">
-        <div className="text-gray2 text-headline font-semibold">
           당신의 MBTI는 무엇인가요?
         </div>
         <div className="flex justify-between align-center gap-2">
