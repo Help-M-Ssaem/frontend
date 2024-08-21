@@ -3,7 +3,6 @@ import {
   UseMutationOptions,
   useQuery,
 } from '@tanstack/react-query'
-import { Profile } from '@/model/User'
 import queryOptions from './UserQueries'
 
 const useTerms = () => useQuery(queryOptions.terms)
@@ -30,7 +29,6 @@ const usePatchProfile = () => {
 const usePostProfileImg = () => {
   const mutationFn = async (profileImg: FormData): Promise<string> => {
     const response = await queryOptions.postProfileImg.mutationFn(profileImg)
-    console.log(response)
     return response
   }
 

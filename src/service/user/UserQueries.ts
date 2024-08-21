@@ -1,4 +1,3 @@
-import { Profile } from '@/model/User'
 import UserService from './UserService'
 
 const queryKeys = {

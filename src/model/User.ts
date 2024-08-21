@@ -7,6 +7,7 @@ interface User {
   badge: Color
   profileImgUrl: string
   introduction?: string
+  badgeId: number
 }
 
 interface Badge {

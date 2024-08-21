@@ -2,10 +2,14 @@
 
 import Container from '@/components/common/Container'
 import { useParams, useRouter } from 'next/navigation'
-import { useProfile, usePatchProfile } from '@/service/user/useUserService'
+import {
+  useProfile,
+  usePatchProfile,
+  useUserInfo,
+} from '@/service/user/useUserService'
 import Button from '@/components/common/Button'
 import UserUpdateProfile from '@/components/auth/UserProfileUpdate'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const UserUpdatePage = () => {
   const { id } = useParams()
@@ -13,9 +17,24 @@ const UserUpdatePage = () => {
   const router = useRouter()
 
   const { data: profile } = useProfile(profileId)
+  const { data: userInfo } = useUserInfo()
   const { mutate: patchProfile } = usePatchProfile()
 
   const [updatedProfile, setUpdatedProfile] = useState({})
+  const [badgeId, setBadgeId] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (userInfo) {
+      setBadgeId(userInfo.badgeId)
+    }
+  }, [userInfo])
+
+  useEffect(() => {
+    setUpdatedProfile((prevProfile) => ({
+      ...prevProfile,
+      badgeId,
+    }))
+  }, [badgeId])
 
   if (!profile) return null
 
@@ -23,13 +42,17 @@ const UserUpdatePage = () => {
     setUpdatedProfile((prevProfile) => ({
       ...prevProfile,
       ...data,
-      badgeId: null,
+      badgeId,
     }))
   }
 
   const handleSubmit = () => {
     patchProfile(updatedProfile)
     router.back()
+  }
+
+  const handleBadgeClick = (badge: number) => {
+    setBadgeId(badge)
   }
 
   return (
@@ -45,13 +68,17 @@ const UserUpdatePage = () => {
           <div className="text-title3 text-gray1 items-start font-semibold mb-2.5">
             수집한 칭호
           </div>
-          <div className="flex flex-wrap gap-2.5 ">
+          <div className="flex flex-wrap gap-2.5">
             {profile.badgeInfos.map((badge, index) => (
               <Button
                 key={index}
                 text={badge.name}
                 color={badge.name}
                 size="badge"
+                onClick={() => handleBadgeClick(badge.id)}
+                className={`${
+                  badgeId === badge.id ? 'outline outline-4 outline-main' : ''
+                }`}
               />
             ))}
           </div>
