@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import React, { Suspense, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useUserInfo } from '@/service/user/useUserService'
 import { useToast } from '@/hooks/useToast'
@@ -52,60 +52,58 @@ const Category = () => {
     if (categoryPath === '/') {
       return selected === '/'
         ? 'text-main1 font-bold after:content-[""] after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-[3px] after:bg-main1 after:opacity-100'
-        : ''
+        : 'text-maindark'
     } else if (selected?.startsWith(categoryPath.split('?')[0])) {
       return 'text-main1 font-bold after:content-[""] after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-[3px] after:bg-main1 after:opacity-100'
     } else {
-      return ''
+      return 'text-maindark'
     }
   }
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <div className="h-12 border-t border-t-gray5 whitespace-nowrap flex justify-between items-center overflow-x-scroll scrollbar-hide">
-        <ul className="flex items-center text-title3 font-normal">
-          {categories.map((category) => (
-            <li key={category.path} className="list-none">
-              <button
-                type="button"
-                onClick={() => handleClick(category.path)}
-                className={`mr-7 cursor-pointer relative hover:text-main1 transition-all ${getButtonClass(category.path)}`}
-              >
-                {category.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-
-        <ul className="hidden sm:flex items-center justify-center whitespace-nowrap text-title3 font-normal list-none">
-          {extraCategories.map((category) => (
-            <li key={category.path} className="list-none">
-              <button
-                type="button"
-                onClick={() => handleProtectedClick(category.path)}
-                className={`ml-7 cursor-pointer relative hover:text-main1 transition-all ${getButtonClass(category.path)}`}
-              >
-                {category.label}
-              </button>
-            </li>
-          ))}
-          <li className="list-none">
+    <div className="h-12 border-t border-t-gray5 whitespace-nowrap flex justify-between items-center overflow-x-scroll scrollbar-hide">
+      <ul className="flex items-center text-title3 font-normal">
+        {categories.map((category) => (
+          <li key={category.path} className="list-none">
             <button
               type="button"
-              onClick={() => router.push('/search')}
-              className="flex items-center ml-7 w-8 h-8 cursor-pointer relative hover:text-main1 transition-all"
+              onClick={() => handleClick(category.path)}
+              className={`mr-7 cursor-pointer relative hover:text-main1 transition-all ${getButtonClass(category.path)}`}
             >
-              <Image
-                src="/images/common/search.svg"
-                alt="search"
-                width={35}
-                height={35}
-              />
+              {category.label}
             </button>
           </li>
-        </ul>
-      </div>
-    </Suspense>
+        ))}
+      </ul>
+
+      <ul className="hidden sm:flex items-center justify-center whitespace-nowrap text-title3 font-normal list-none">
+        {extraCategories.map((category) => (
+          <li key={category.path} className="list-none">
+            <button
+              type="button"
+              onClick={() => handleProtectedClick(category.path)}
+              className={`ml-7 cursor-pointer relative hover:text-main1 transition-all ${getButtonClass(category.path)}`}
+            >
+              {category.label}
+            </button>
+          </li>
+        ))}
+        <li className="list-none">
+          <button
+            type="button"
+            onClick={() => router.push('/search')}
+            className="flex items-center ml-7 w-8 h-8 cursor-pointer relative hover:text-main1 transition-all"
+          >
+            <Image
+              src="/images/common/search.svg"
+              alt="search"
+              width={35}
+              height={35}
+            />
+          </button>
+        </li>
+      </ul>
+    </div>
   )
 }
 

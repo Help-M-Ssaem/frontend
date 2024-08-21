@@ -43,7 +43,7 @@ const MbtiCategories = ({ selectedMbti }: MbtiCategoriesProps) => {
       <div className="overflow-x-auto scrollbar-hide py-9">
         <div className="min-w-max grid grid-cols-5 gap-4">
           <div
-            className={`col-span-1 flex items-start justify-center cursor-pointer ${selectedMbti === 'all' ? 'underline' : ''}`}
+            className={`col-span-1 flex items-start justify-center cursor-pointer text-maindark ${selectedMbti === 'all' ? 'underline' : ''}`}
             onClick={() => handleMbtiChange('all')}
           >
             전체 ({totalBoardCount})

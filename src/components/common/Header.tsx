@@ -82,7 +82,7 @@ const Header = () => {
                 <button
                   type="button"
                   onClick={() => handleCategoryClick(category.path)}
-                  className={`cursor-pointer relative hover:text-main1 transition-all ${
+                  className={`cursor-pointer relative hover:text-main1 transition-all text-maindark ${
                     selected === category.path
                       ? 'text-main1 font-bold after:content-[""] after:absolute after:bottom-[-10px] after:left-0 after:w-full after:h-[2px] after:bg-main1 after:opacity-100'
                       : ''

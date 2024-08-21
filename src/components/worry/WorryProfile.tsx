@@ -41,7 +41,9 @@ const WorryProfile = ({
       </div>
 
       <div className="flex flex-col gap-1">
-        <div className="text-headline font-semibold">{nickName} 님</div>
+        <div className="text-headline font-semibold text-maindark">
+          {nickName} 님
+        </div>
         <div className="flex gap-2.5">
           <Button text={strFromMbti} color={strFromMbti} size="badge" />
           <Image
