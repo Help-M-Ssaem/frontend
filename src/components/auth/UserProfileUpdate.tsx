@@ -45,16 +45,19 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
         .map((char) => (char === char.toUpperCase() ? '1' : '0'))
         .join('')
 
+      const currentMbti = mbti.join('').toUpperCase()
+      const defaultImageUrl = `/images/mbti/${currentMbti}.svg`
+
       const updatedData = {
-        profileImgUrl,
         nickName,
-        mbti: mbtiString,
+        mbti: mbtiString.toUpperCase(),
         caseSensitivity,
         introduction,
+        changeImageUrl:
+          profileImgUrl === defaultImageUrl ? null : profileImgUrl,
       }
 
       if (
-        updatedData.profileImgUrl !== profile.profileImgUrl ||
         updatedData.nickName !== profile.nickName ||
         updatedData.mbti !== profile.mbti ||
         updatedData.introduction !== profile.introduction
@@ -92,15 +95,14 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
     const currentMbti = mbti.join('').toUpperCase()
     const defaultImageUrl = `/images/mbti/${currentMbti}.svg`
 
-    if (profileImgUrl === defaultImageUrl) {
-      showToast('기본 이미지는 삭제할 수 없습니다.')
-    } else {
-      deleteProfileImg(null, {
-        onSuccess: () => {
-          setProfileImgUrl(defaultImageUrl)
-        },
-      })
-    }
+    deleteProfileImg(null, {
+      onSuccess: () => {
+        setProfileImgUrl(defaultImageUrl)
+      },
+      onError: () => {
+        showToast('기본 이미지는 삭제할 수 없습니다.')
+      },
+    })
   }
 
   if (!profile) return null

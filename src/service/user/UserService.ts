@@ -14,8 +14,8 @@ class UserService extends Service {
     return this.http.get<User>('/member/info')
   }
 
-  patchProfile(profile: Profile) {
-    return this.http.patch<Profile>('/member/profile', profile)
+  patchProfile(profile: any) {
+    return this.http.patch('/member/profile', profile)
   }
 
   postProfileImg(profileImg: FormData) {

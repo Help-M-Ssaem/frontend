@@ -18,13 +18,13 @@ const useProfile = (id: number) =>
 const useUserInfo = () => useQuery(queryOptions.userInfo)
 
 const usePatchProfile = () => {
-  const mutationFn = (profile: Profile): Promise<void> =>
+  const mutationFn = (profile: any): Promise<void> =>
     queryOptions.patchProfile.mutationFn(profile)
 
-  const options: UseMutationOptions<void, Error, Profile, unknown> = {
+  const options: UseMutationOptions<void, Error, any, unknown> = {
     mutationFn,
   }
-  return useMutation<void, Error, Profile>(options)
+  return useMutation<void, Error, any>(options)
 }
 
 const usePostProfileImg = () => {

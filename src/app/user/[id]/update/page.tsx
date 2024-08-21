@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useProfile, usePatchProfile } from '@/service/user/useUserService'
 import Button from '@/components/common/Button'
 import UserUpdateProfile from '@/components/auth/UserProfileUpdate'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const UserUpdatePage = () => {
   const { id } = useParams()
@@ -15,16 +15,7 @@ const UserUpdatePage = () => {
   const { data: profile } = useProfile(profileId)
   const { mutate: patchProfile } = usePatchProfile()
 
-  const [updatedProfile, setUpdatedProfile] = useState(profile)
-
-  useEffect(() => {
-    if (profile) {
-      setUpdatedProfile((prevProfile: any) => ({
-        ...prevProfile,
-        badgeId: null,
-      }))
-    }
-  }, [profile])
+  const [updatedProfile, setUpdatedProfile] = useState({})
 
   if (!profile) return null
 
@@ -32,11 +23,12 @@ const UserUpdatePage = () => {
     setUpdatedProfile((prevProfile) => ({
       ...prevProfile,
       ...data,
+      badgeId: null,
     }))
   }
 
   const handleSubmit = () => {
-    patchProfile(updatedProfile || profile)
+    patchProfile(updatedProfile)
     router.back()
   }
 
@@ -70,7 +62,7 @@ const UserUpdatePage = () => {
         <Button
           color="LIGHTPURPLE"
           text="취소하기"
-          size="medium"
+          size="small"
           onClick={() => {
             router.back()
           }}
@@ -78,7 +70,7 @@ const UserUpdatePage = () => {
         <Button
           color="PURPLE"
           text="수정하기"
-          size="medium"
+          size="small"
           onClick={handleSubmit}
         />
       </div>

@@ -35,7 +35,7 @@ const queryOptions = {
 
   patchProfile: {
     queryKey: (boardId: number) => queryKeys.profile(boardId),
-    mutationFn: async (profile: Profile): Promise<void> => {
+    mutationFn: async (profile: any): Promise<void> => {
       await UserService.patchProfile(profile)
     },
   },
