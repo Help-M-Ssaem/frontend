@@ -17,8 +17,6 @@ const WorryDetail = () => {
   const { data: worryDetail } = useWorryDetail(Number(id))
   const { data: userInfo } = useUserInfo()
 
-  const formattedCreatedAt = worryDetail?.createdAt.split(' ')[0]
-
   const handleChattingStartClick = () => {
     if (userInfo?.id === worryDetail?.memberSimpleInfo.id) {
       showToast('본인이 작성한 글입니다.')
@@ -76,7 +74,7 @@ const WorryDetail = () => {
               />
               <div className="flex flex-col items-end gap-1 sm:flex-row sm:gap-3.5 sm:items-start text-caption text-gray2">
                 <p>조회수 {worryDetail.hits}회</p>
-                <p>{formattedCreatedAt}</p>
+                <p>{worryDetail.createdAt}</p>
               </div>
             </div>
 
