@@ -2,27 +2,40 @@
 
 import Button from '@/components/common/Button'
 import Container from '@/components/common/Container'
-import { useParams } from 'next/navigation'
-import { useWorryDetail } from '@/service/worry/useWorryService'
+import { useParams, useRouter } from 'next/navigation'
+import { useDeleteWorry, useWorryDetail } from '@/service/worry/useWorryService'
 import WorryProfile from '@/components/worry/WorryProfile'
 import { useUserInfo } from '@/service/user/useUserService'
 import { useToast } from '@/hooks/useToast'
 
 const WorryDetail = () => {
   const { id } = useParams()
+  const worryId = Number(id)
+  const router = useRouter()
+  const { showToast } = useToast()
+
   const { data: worryDetail } = useWorryDetail(Number(id))
   const { data: userInfo } = useUserInfo()
 
   const formattedCreatedAt = worryDetail?.createdAt.split(' ')[0]
 
-  const { showToast } = useToast()
-
   const handleChattingStartClick = () => {
-    if (userInfo && userInfo.id === worryDetail?.memberSimpleInfo.id) {
+    if (userInfo?.id === worryDetail?.memberSimpleInfo.id) {
+      showToast('본인이 작성한 글입니다.')
+    } else if (
+      userInfo &&
+      userInfo.mbti.toUpperCase() === worryDetail?.targetMbti
+    ) {
       showToast('채팅을 시작합니다.')
     } else {
       showToast('MBTI가 달라요')
     }
+  }
+
+  const { mutate } = useDeleteWorry()
+  const handleDeleteClick = () => {
+    mutate(worryId)
+    router.push('/worry?waitingPage=1&solvedPage=1')
   }
 
   return (
@@ -37,13 +50,15 @@ const WorryDetail = () => {
               text="수정"
               color="PURPLE"
               size="small"
-              onClick={() => {}}
+              onClick={() => {
+                router.push(`/worry/${id}/update`)
+              }}
             />
             <Button
               text="삭제"
               color="PURPLE"
               size="small"
-              onClick={() => {}}
+              onClick={handleDeleteClick}
             />
           </div>
         )}
@@ -53,6 +68,7 @@ const WorryDetail = () => {
           <>
             <div className="flex justify-between mb-7.5">
               <WorryProfile
+                userId={worryDetail.memberSimpleInfo.id}
                 profileImgUrl={worryDetail.memberSimpleInfo.profileImgUrl}
                 nickName={worryDetail.memberSimpleInfo.nickName}
                 strFromMbti={worryDetail.memberSimpleInfo.mbti}
