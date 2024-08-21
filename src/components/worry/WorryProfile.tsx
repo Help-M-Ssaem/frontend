@@ -1,9 +1,11 @@
 'use client'
 
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import Button, { MBTI } from '../common/Button'
 
 export interface WorryProfileProps {
+  userId: number
   profileImgUrl: string
   nickName: string
   strFromMbti: MBTI
@@ -11,13 +13,23 @@ export interface WorryProfileProps {
 }
 
 const WorryProfile = ({
+  userId,
   profileImgUrl,
   nickName,
   strFromMbti,
   strToMbti,
 }: WorryProfileProps) => {
+  const router = useRouter()
+
+  const handleProfileClick = () => {
+    router.push(`/user/${userId}`)
+  }
+
   return (
-    <div className="flex items-center gap-4.5">
+    <div
+      className="flex items-center gap-4.5 cursor-pointer"
+      onClick={handleProfileClick}
+    >
       <div className="w-14 h-14 relative rounded-full overflow-hidden">
         <Image
           src={profileImgUrl}

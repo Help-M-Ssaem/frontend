@@ -1,7 +1,7 @@
 import { Color, MBTI } from '@/components/common/Button'
 
 interface User {
-  id?: number
+  id: number
   nickName: string
   mbti: MBTI
   badge: Color
