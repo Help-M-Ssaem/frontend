@@ -146,7 +146,7 @@ const BoardUpdatePage = () => {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full h-10 border border-gray-300 rounded-md p-2 mb-4"
+          className="w-full h-10 border border-gray-300 rounded-md p-2 mb-4 text-maindark"
         />
         <div className="text-headline font-normal text-gray2 mb-5">
           내용을 입력해주세요.
@@ -165,11 +165,12 @@ const BoardUpdatePage = () => {
               callback(imgUrl, 'image')
             },
           }}
+          className="text-maindark"
         />
         <div className="flex gap-2.5 justify-end mt-4">
           <Button
             text="취소하기"
-            color="PURPLE"
+            color="LIGHTPURPLE"
             size="small"
             onClick={() => router.back()}
           />

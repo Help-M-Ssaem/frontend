@@ -91,7 +91,7 @@ const BoardDetail = () => {
                 <div className="flex justify-end gap-2.5 mb-5">
                   <Button
                     text="수정"
-                    color="PURPLE"
+                    color="LIGHTPURPLE"
                     size="small"
                     onClick={() => {
                       router.push(`/board/${id}/update`)
@@ -117,9 +117,11 @@ const BoardDetail = () => {
             </div>
 
             <div className="flex flex-col gap-1">
-              <p className="text-title3 font-bold">{boardDetail.title}</p>
+              <p className="text-title3 font-bold text-maindark">
+                {boardDetail.title}
+              </p>
               <div
-                className="text-body text-mainblack"
+                className="text-body text-maindark"
                 dangerouslySetInnerHTML={{ __html: boardDetail.content }}
               />
             </div>

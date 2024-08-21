@@ -146,7 +146,7 @@ const WorryCreatePage = () => {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full h-10 border border-gray-300 rounded-md p-2 mb-4"
+          className="w-full h-10 border border-gray-300 rounded-md p-2 mb-4 text-maindark"
         />
 
         <div className="text-headline font-normal text-gray2 mb-2">
@@ -166,6 +166,7 @@ const WorryCreatePage = () => {
               callback(imgUrl, 'image')
             },
           }}
+          className="text-maindark"
         />
 
         <div className="flex gap-2.5 justify-end mt-4">
