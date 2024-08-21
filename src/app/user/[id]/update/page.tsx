@@ -32,9 +32,9 @@ const UserUpdatePage = () => {
   useEffect(() => {
     setUpdatedProfile((prevProfile) => ({
       ...prevProfile,
-      badgeId,
+      badgeId: badgeId === userInfo?.badgeId ? null : badgeId,
     }))
-  }, [badgeId])
+  }, [badgeId, userInfo])
 
   if (!profile) return null
 
@@ -42,7 +42,7 @@ const UserUpdatePage = () => {
     setUpdatedProfile((prevProfile) => ({
       ...prevProfile,
       ...data,
-      badgeId,
+      badgeId: badgeId === userInfo?.badgeId ? null : badgeId,
     }))
   }
 

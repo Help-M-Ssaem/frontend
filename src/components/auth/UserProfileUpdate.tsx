@@ -19,22 +19,22 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
   const { mutate: deleteProfileImg } = useDeleteProfileImg()
   const { showToast } = useToast()
 
-  const [profileImgUrl, setProfileImgUrl] = useState('')
-  const [nickName, setNickName] = useState('')
-  const [mbti, setMbti] = useState<string[]>(['', '', '', ''])
-  const [introduction, setIntroduction] = useState<string | undefined>('')
+  const [profileImgUrl, setProfileImgUrl] = useState<string | null>(null)
+  const [nickName, setNickName] = useState<string | null>(null)
+  const [mbti, setMbti] = useState<(string | null)[]>([null, null, null, null])
+  const [introduction, setIntroduction] = useState<string | null>(null)
 
   useEffect(() => {
     if (profile) {
-      setProfileImgUrl(profile.profileImgUrl)
-      setNickName(profile.nickName)
+      setProfileImgUrl(profile.profileImgUrl || null)
+      setNickName(profile.nickName || null)
       setMbti([
-        profile.mbti[0],
-        profile.mbti[1],
-        profile.mbti[2],
-        profile.mbti[3],
+        profile.mbti[0] || null,
+        profile.mbti[1] || null,
+        profile.mbti[2] || null,
+        profile.mbti[3] || null,
       ])
-      setIntroduction(profile.introduction)
+      setIntroduction(profile.introduction || null)
     }
   }, [profile])
 
@@ -42,7 +42,7 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
     if (profile) {
       const mbtiString = mbti.join('')
       const caseSensitivity = mbti
-        .map((char) => (char === char.toUpperCase() ? '1' : '0'))
+        .map((char) => (char === char?.toUpperCase() ? '1' : '0'))
         .join('')
 
       const currentMbti = mbti.join('').toUpperCase()
@@ -114,7 +114,7 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
           <div className="relative flex flex-col items-center justify-center gap-2">
             <div className="relative w-[194px] h-[194px]">
               <Image
-                src={profileImgUrl}
+                src={profileImgUrl || ''}
                 alt="profile"
                 fill
                 className="rounded-full object-cover cursor-pointer"
@@ -145,7 +145,7 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
           <div className="flex flex-col gap-2 self-start w-full">
             <div className="text-title3 text-gray1 font-semibold">닉네임</div>
             <input
-              value={nickName}
+              value={nickName || ''}
               onChange={(e) => setNickName(e.target.value)}
               className="w-full border border-gray4 bg-white p-2.5 rounded-1.25 focus:outline-none"
             />
@@ -156,22 +156,22 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
             <div className="flex justify-between align-center gap-2">
               <MbtiSelect
                 options={['E', 'e', 'I', 'i']}
-                selectedOption={mbti[0]}
+                selectedOption={mbti[0] || ''}
                 onSelect={(selected) => handleMbtiChange(0, selected)}
               />
               <MbtiSelect
                 options={['S', 's', 'N', 'n']}
-                selectedOption={mbti[1]}
+                selectedOption={mbti[1] || ''}
                 onSelect={(selected) => handleMbtiChange(1, selected)}
               />
               <MbtiSelect
                 options={['T', 't', 'F', 'f']}
-                selectedOption={mbti[2]}
+                selectedOption={mbti[2] || ''}
                 onSelect={(selected) => handleMbtiChange(2, selected)}
               />
               <MbtiSelect
                 options={['J', 'j', 'P', 'p']}
-                selectedOption={mbti[3]}
+                selectedOption={mbti[3] || ''}
                 onSelect={(selected) => handleMbtiChange(3, selected)}
               />
             </div>
@@ -182,7 +182,7 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
               한 줄 소개
             </div>
             <input
-              value={introduction}
+              value={introduction || ''}
               onChange={(e) => setIntroduction(e.target.value)}
               className="w-full border border-gray4 bg-white p-2.5 rounded-1.25 focus:outline-none"
             />
