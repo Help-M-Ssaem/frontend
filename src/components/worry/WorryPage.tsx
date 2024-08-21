@@ -116,12 +116,14 @@ const WorryPage = () => {
           해결 완료된 고민
         </div>
         <Container color="purple">
-          <MbtiSelect
-            strFromMbti={solvedStrFromMbti}
-            strToMbti={solvedStrToMbti}
-            setStrFromMbti={setSolvedStrFromMbti}
-            setStrToMbti={setSolvedStrToMbti}
-          />
+          <div className="mb-4">
+            <MbtiSelect
+              strFromMbti={solvedStrFromMbti}
+              strToMbti={solvedStrToMbti}
+              setStrFromMbti={setSolvedStrFromMbti}
+              setStrToMbti={setSolvedStrToMbti}
+            />
+          </div>
           <div className="h-[1px] bg-main mb-7.5" />
           {solvedWorryList &&
             solvedWorryList.result.map((worry: WorryI) => (

@@ -32,8 +32,8 @@ const HotDiscussion = ({ hotDiscussion }: HotDiscussionProps) => {
             <div className="text-caption text-gray2">{createdAt}</div>
           </div>
           <div className="flex flex-col gap-1">
-            <p className="text-title3 font-bold">{title}</p>
-            <p className="text-body text-mainblack">{content}</p>
+            <p className="text-title3 font-bold text-maindark">{title}</p>
+            <p className="text-body text-maindark">{content}</p>
           </div>
         </div>
 

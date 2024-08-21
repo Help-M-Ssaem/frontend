@@ -42,9 +42,9 @@ const Board = ({ board }: BoardProps) => {
       <div className="flex flex-col justify-between gap-5">
         <Profile user={memberSimpleInfo} />
         <div className="flex flex-col gap-1">
-          <p className="text-title3 font-bold">{title}</p>
+          <p className="text-title3 font-bold text-maindark">{title}</p>
           <div
-            className="text-body text-mainblack"
+            className="text-body text-maindark"
             dangerouslySetInnerHTML={{ __html: truncatedContent }}
           />
         </div>
