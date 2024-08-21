@@ -25,7 +25,7 @@ const Login = ({ user }: LoginProps) => {
         <p className="text-gray2 text-caption cursor-pointer">로그아웃</p>
       </div>
       <div className="flex flex-col gap-4 items-center">
-        <Profile user={{ profileImgUrl, nickName, mbti, badge }} />
+        <Profile user={{ id, profileImgUrl, nickName, mbti, badge }} />
         <ul className="flex justify-center w-full text-gray2 text-caption">
           {menuItems.map((item, index) => (
             <li key={item.id} className="flex items-center">
