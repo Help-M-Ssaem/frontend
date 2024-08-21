@@ -56,6 +56,18 @@ class WorryService extends Service {
     })
   }
 
+  postWorryImage(image: FormData) {
+    return this.http
+      .post(`/member/worry-boards/files`, image, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        return response.data
+      })
+  }
+
   patchWorry({ id, worry }: WorryPatchProps) {
     return this.http.patch(`/member/worry-board/${id}`, worry, {
       headers: {

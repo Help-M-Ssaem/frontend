@@ -12,6 +12,7 @@ import { useState, useEffect, Suspense } from 'react'
 import SearchBar from '@/components/common/SearchBar'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { WorryI } from '@/model/Worry'
+import Button from '../common/Button'
 
 const WorryPage = () => {
   const router = useRouter()
@@ -74,12 +75,23 @@ const WorryPage = () => {
           M쌤 매칭을 기다리는 고민
         </div>
         <Container color="purple">
-          <MbtiSelect
-            strFromMbti={waitingStrFromMbti}
-            strToMbti={waitingStrToMbti}
-            setStrFromMbti={setWaitingStrFromMbti}
-            setStrToMbti={setWaitingStrToMbti}
-          />
+          <div className="flex justify-between items-center mb-4">
+            <MbtiSelect
+              strFromMbti={waitingStrFromMbti}
+              strToMbti={waitingStrToMbti}
+              setStrFromMbti={setWaitingStrFromMbti}
+              setStrToMbti={setWaitingStrToMbti}
+            />
+            <Button
+              text="글쓰기"
+              color="PURPLE"
+              size="small"
+              onClick={() => {
+                router.push('/worry/create')
+              }}
+            />
+          </div>
+
           <div className="h-[1px] bg-main mb-7.5" />
           {waitingWorryList &&
             waitingWorryList.result.map((worry: WorryI) => (

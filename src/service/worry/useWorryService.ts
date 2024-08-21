@@ -83,6 +83,17 @@ const usePostWorry = () => {
   return useMutation<void, Error, FormData>(options)
 }
 
+const usePostWorryImage = () => {
+  const mutationFn = async (worryImage: FormData): Promise<string> => {
+    const response = await queryOptions.postWorryImage.mutationFn(worryImage)
+    return response
+  }
+  const options: UseMutationOptions<string, Error, FormData, unknown> = {
+    mutationFn,
+  }
+  return useMutation<string, Error, FormData>(options)
+}
+
 const usePatchWorry = () => {
   const mutationFn = ({ id, worry }: WorryPatchProps): Promise<void> =>
     queryOptions.patchWorry.mutationFn({ id, worry })
@@ -120,6 +131,7 @@ export {
   useSolvedWorryListMember,
   useWorryDetail,
   usePostWorry,
+  usePostWorryImage,
   usePatchWorry,
   useDeleteWorry,
   usePatchWorrySolved,

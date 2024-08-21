@@ -5,12 +5,25 @@ import Container from '@/components/common/Container'
 import { useParams } from 'next/navigation'
 import { useWorryDetail } from '@/service/worry/useWorryService'
 import WorryProfile from '@/components/worry/WorryProfile'
+import { useUserInfo } from '@/service/user/useUserService'
+import { useToast } from '@/hooks/useToast'
 
 const WorryDetail = () => {
   const { id } = useParams()
   const { data: worryDetail } = useWorryDetail(Number(id))
+  const { data: userInfo } = useUserInfo()
 
   const formattedCreatedAt = worryDetail?.createdAt.split(' ')[0]
+
+  const { showToast } = useToast()
+
+  const handleChattingStartClick = () => {
+    if (userInfo && userInfo.id === worryDetail?.memberSimpleInfo.id) {
+      showToast('채팅을 시작합니다.')
+    } else {
+      showToast('MBTI가 달라요')
+    }
+  }
 
   return (
     <>
@@ -18,14 +31,27 @@ const WorryDetail = () => {
         M쌤 매칭을 기다리는 고민
       </div>
       <Container color="purple">
-        <div className="flex justify-end gap-2.5 mb-5">
-          <Button text="수정" color="PURPLE" size="small" onClick={() => {}} />
-          <Button text="삭제" color="PURPLE" size="small" onClick={() => {}} />
-        </div>
-        <div className="h-[1px] bg-main" />
+        {worryDetail && worryDetail.isEditAllowed && (
+          <div className="flex justify-end gap-2.5">
+            <Button
+              text="수정"
+              color="PURPLE"
+              size="small"
+              onClick={() => {}}
+            />
+            <Button
+              text="삭제"
+              color="PURPLE"
+              size="small"
+              onClick={() => {}}
+            />
+          </div>
+        )}
+
+        <div className="h-[1px] bg-main my-5" />
         {worryDetail && (
           <>
-            <div className="flex justify-between my-7.5">
+            <div className="flex justify-between mb-7.5">
               <WorryProfile
                 profileImgUrl={worryDetail.memberSimpleInfo.profileImgUrl}
                 nickName={worryDetail.memberSimpleInfo.nickName}
@@ -47,14 +73,13 @@ const WorryDetail = () => {
             </div>
           </>
         )}
-        <div className="h-[1px] bg-main" />
+        <div className="h-[1px] bg-main my-5" />
         <div className="flex justify-center">
           <Button
             text="채팅 시작"
             color="PURPLE"
             size="small"
-            onClick={() => {}}
-            className="my-10"
+            onClick={handleChattingStartClick}
           />
         </div>
       </Container>
