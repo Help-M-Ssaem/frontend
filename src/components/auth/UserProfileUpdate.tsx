@@ -48,6 +48,7 @@ const UserProfileUpdate = () => {
 
   const handleResetToDefault = () => {
     const currentMbti = mbti.join('').toUpperCase()
+    console.log(currentMbti)
     const defaultImageUrl = `/images/mbti/${currentMbti}.svg`
     setProfileImgUrl(defaultImageUrl)
   }
@@ -58,28 +59,27 @@ const UserProfileUpdate = () => {
     <div className="flex flex-col items-center justify-center gap-4 max-w-80">
       {profile && (
         <>
-          <div className="flex flex-col items-center justify-center gap-2">
+          <div className="relative flex flex-col items-center justify-center gap-2">
             <div className="relative w-[194px] h-[194px]">
               <Image
                 src={profileImgUrl}
                 alt="profile"
                 fill
-                className="rounded-full object-cover"
-              />
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <div
-                className="text-gray1 underline cursor-pointer"
+                className="rounded-full object-cover cursor-pointer"
                 onClick={handleProfileClick}
-              >
-                프로필 설정
-              </div>
+              />
               <div
-                className="text-gray1 underline cursor-pointer"
                 onClick={handleResetToDefault}
+                className="absolute top-0 right-0 bg-main4 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer"
               >
-                기본 이미지로 변경
+                <span className="text-gray-600 text-title2">&times;</span>
               </div>
+            </div>
+            <div
+              className="text-gray1 underline cursor-pointer"
+              onClick={handleProfileClick}
+            >
+              프로필 설정
             </div>
             <input
               type="file"
@@ -104,18 +104,22 @@ const UserProfileUpdate = () => {
             <div className="flex justify-between align-center gap-2">
               <MbtiSelect
                 options={['E', 'e', 'I', 'i']}
+                selectedOption={mbti[0]}
                 onSelect={(selected) => handleMbtiChange(0, selected)}
               />
               <MbtiSelect
                 options={['S', 's', 'N', 'n']}
+                selectedOption={mbti[1]}
                 onSelect={(selected) => handleMbtiChange(1, selected)}
               />
               <MbtiSelect
                 options={['T', 't', 'F', 'f']}
+                selectedOption={mbti[2]}
                 onSelect={(selected) => handleMbtiChange(2, selected)}
               />
               <MbtiSelect
                 options={['J', 'j', 'P', 'p']}
+                selectedOption={mbti[3]}
                 onSelect={(selected) => handleMbtiChange(3, selected)}
               />
             </div>
