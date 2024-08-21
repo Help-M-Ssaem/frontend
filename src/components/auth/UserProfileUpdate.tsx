@@ -40,21 +40,19 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
 
   useEffect(() => {
     if (profile) {
-      const mbtiString = mbti.join('')
+      const mbtiString = mbti.map((char) => char || '').join('')
       const caseSensitivity = mbti
-        .map((char) => (char === char?.toUpperCase() ? '1' : '0'))
+        .map((char) => (char && char === char.toUpperCase() ? '1' : '0'))
         .join('')
-
-      const currentMbti = mbti.join('').toUpperCase()
-      const defaultImageUrl = `/images/mbti/${currentMbti}.svg`
 
       const updatedData = {
         nickName,
-        mbti: mbtiString.toUpperCase(),
-        caseSensitivity,
+        mbti: mbtiString.toUpperCase() === '' ? null : mbtiString.toUpperCase(),
+        caseSensitivity:
+          mbtiString.toUpperCase() === '' ? null : caseSensitivity,
         introduction,
         changeImageUrl:
-          profileImgUrl === defaultImageUrl ? null : profileImgUrl,
+          profileImgUrl === profile.profileImgUrl ? null : profileImgUrl,
       }
 
       if (
@@ -67,7 +65,7 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
     }
   }, [profileImgUrl, nickName, mbti, introduction])
 
-  const handleMbtiChange = (index: number, selectedMbti: string) => {
+  const handleMbtiChange = (index: number, selectedMbti: string | null) => {
     const updatedMbti = [...mbti]
     updatedMbti[index] = selectedMbti
     setMbti(updatedMbti)
@@ -92,7 +90,10 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
   }
 
   const handleResetToDefault = () => {
-    const currentMbti = mbti.join('').toUpperCase()
+    const currentMbti = mbti
+      .map((char) => char || '')
+      .join('')
+      .toUpperCase()
     const defaultImageUrl = `/images/mbti/${currentMbti}.svg`
 
     deleteProfileImg(null, {
@@ -157,22 +158,22 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
               <MbtiSelect
                 options={['E', 'e', 'I', 'i']}
                 selectedOption={mbti[0] || ''}
-                onSelect={(selected) => handleMbtiChange(0, selected)}
+                onSelect={(selected) => handleMbtiChange(0, selected || null)}
               />
               <MbtiSelect
                 options={['S', 's', 'N', 'n']}
                 selectedOption={mbti[1] || ''}
-                onSelect={(selected) => handleMbtiChange(1, selected)}
+                onSelect={(selected) => handleMbtiChange(1, selected || null)}
               />
               <MbtiSelect
                 options={['T', 't', 'F', 'f']}
                 selectedOption={mbti[2] || ''}
-                onSelect={(selected) => handleMbtiChange(2, selected)}
+                onSelect={(selected) => handleMbtiChange(2, selected || null)}
               />
               <MbtiSelect
                 options={['J', 'j', 'P', 'p']}
                 selectedOption={mbti[3] || ''}
-                onSelect={(selected) => handleMbtiChange(3, selected)}
+                onSelect={(selected) => handleMbtiChange(3, selected || null)}
               />
             </div>
           </div>
