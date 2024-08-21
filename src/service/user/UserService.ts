@@ -15,15 +15,19 @@ class UserService extends Service {
   }
 
   patchProfile(profile: Profile) {
-    return this.http.patch<Profile>('/profile', profile)
+    return this.http.patch<Profile>('/member/profile', profile)
   }
 
   postProfileImg(profileImg: FormData) {
-    return this.http.post('/member/profile/file', profileImg, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
+    return this.http
+      .post('/member/profile/file', profileImg, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        return response.data
+      })
   }
 
   deleteProfileImg() {

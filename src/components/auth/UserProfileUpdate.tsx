@@ -1,13 +1,23 @@
-'use client'
-
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { useUserInfo } from '@/service/user/useUserService'
+import { useToast } from '@/hooks/useToast'
+import {
+  useDeleteProfileImg,
+  usePostProfileImg,
+  useUserInfo,
+} from '@/service/user/useUserService'
 import MbtiSelect from './MbtiSelect'
 
-const UserProfileUpdate = () => {
+interface UserProfileUpdateProps {
+  onUpdate: (data: any) => void
+}
+
+const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
   const { data: profile } = useUserInfo()
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const { mutate: postProfileImg } = usePostProfileImg()
+  const { mutate: deleteProfileImg } = useDeleteProfileImg()
+  const { showToast } = useToast()
 
   const [profileImgUrl, setProfileImgUrl] = useState('')
   const [nickName, setNickName] = useState('')
@@ -28,6 +38,32 @@ const UserProfileUpdate = () => {
     }
   }, [profile])
 
+  useEffect(() => {
+    if (profile) {
+      const mbtiString = mbti.join('')
+      const caseSensitivity = mbti
+        .map((char) => (char === char.toUpperCase() ? '1' : '0'))
+        .join('')
+
+      const updatedData = {
+        profileImgUrl,
+        nickName,
+        mbti: mbtiString,
+        caseSensitivity,
+        introduction,
+      }
+
+      if (
+        updatedData.profileImgUrl !== profile.profileImgUrl ||
+        updatedData.nickName !== profile.nickName ||
+        updatedData.mbti !== profile.mbti ||
+        updatedData.introduction !== profile.introduction
+      ) {
+        onUpdate(updatedData)
+      }
+    }
+  }, [profileImgUrl, nickName, mbti, introduction])
+
   const handleMbtiChange = (index: number, selectedMbti: string) => {
     const updatedMbti = [...mbti]
     updatedMbti[index] = selectedMbti
@@ -41,16 +77,30 @@ const UserProfileUpdate = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      const imageUrl = URL.createObjectURL(file)
-      setProfileImgUrl(imageUrl)
+      const formData = new FormData()
+      formData.append('image', file)
+
+      postProfileImg(formData, {
+        onSuccess: (uploadedUrl) => {
+          setProfileImgUrl(uploadedUrl)
+        },
+      })
     }
   }
 
   const handleResetToDefault = () => {
     const currentMbti = mbti.join('').toUpperCase()
-    console.log(currentMbti)
     const defaultImageUrl = `/images/mbti/${currentMbti}.svg`
-    setProfileImgUrl(defaultImageUrl)
+
+    if (profileImgUrl === defaultImageUrl) {
+      showToast('기본 이미지는 삭제할 수 없습니다.')
+    } else {
+      deleteProfileImg(null, {
+        onSuccess: () => {
+          setProfileImgUrl(defaultImageUrl)
+        },
+      })
+    }
   }
 
   if (!profile) return null

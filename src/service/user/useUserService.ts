@@ -28,13 +28,16 @@ const usePatchProfile = () => {
 }
 
 const usePostProfileImg = () => {
-  const mutationFn = (profileImg: FormData): Promise<void> =>
-    queryOptions.postProfileImg.mutationFn(profileImg)
+  const mutationFn = async (profileImg: FormData): Promise<string> => {
+    const response = await queryOptions.postProfileImg.mutationFn(profileImg)
+    console.log(response)
+    return response
+  }
 
-  const options: UseMutationOptions<void, Error, FormData, unknown> = {
+  const options: UseMutationOptions<string, Error, FormData, unknown> = {
     mutationFn,
   }
-  return useMutation<void, Error, FormData>(options)
+  return useMutation<string, Error, FormData>(options)
 }
 
 const useDeleteProfileImg = () => {

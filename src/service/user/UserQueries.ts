@@ -5,6 +5,7 @@ const queryKeys = {
   user: ['user'] as const,
   terms: ['terms'] as const,
   profile: (id: number) => ['profile', id] as const,
+  profileImg: ['profileImg'] as const,
 }
 
 const queryOptions = {
@@ -40,14 +41,15 @@ const queryOptions = {
   },
 
   postProfileImg: {
-    queryKey: queryKeys.profile,
-    mutationFn: async (profileImg: FormData): Promise<void> => {
-      await UserService.postProfileImg(profileImg)
+    queryKey: queryKeys.profileImg,
+    mutationFn: async (profileImg: FormData): Promise<any> => {
+      const response = await UserService.postProfileImg(profileImg)
+      return response
     },
   },
 
   deleteProfileImg: {
-    queryKey: queryKeys.profile,
+    queryKey: queryKeys.profileImg,
     mutationFn: async (): Promise<void> => {
       await UserService.deleteProfileImg()
     },
