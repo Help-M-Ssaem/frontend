@@ -1,12 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { useUserInfo } from '@/service/user/useUserService'
 import MbtiSelect from './MbtiSelect'
 
 const UserProfileUpdate = () => {
   const { data: profile } = useUserInfo()
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [profileImgUrl, setProfileImgUrl] = useState('')
   const [nickName, setNickName] = useState('')
@@ -33,6 +34,24 @@ const UserProfileUpdate = () => {
     setMbti(updatedMbti)
   }
 
+  const handleProfileClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      const imageUrl = URL.createObjectURL(file)
+      setProfileImgUrl(imageUrl)
+    }
+  }
+
+  const handleResetToDefault = () => {
+    const currentMbti = mbti.join('').toUpperCase()
+    const defaultImageUrl = `/images/mbti/${currentMbti}.svg`
+    setProfileImgUrl(defaultImageUrl)
+  }
+
   if (!profile) return null
 
   return (
@@ -48,9 +67,27 @@ const UserProfileUpdate = () => {
                 className="rounded-full object-cover"
               />
             </div>
-            <div className="text-gray1 underline cursor-pointer">
-              프로필 설정
+            <div className="flex flex-col items-center gap-2">
+              <div
+                className="text-gray1 underline cursor-pointer"
+                onClick={handleProfileClick}
+              >
+                프로필 설정
+              </div>
+              <div
+                className="text-gray1 underline cursor-pointer"
+                onClick={handleResetToDefault}
+              >
+                기본 이미지로 변경
+              </div>
             </div>
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="hidden"
+              accept="image/*"
+              onChange={handleFileChange}
+            />
           </div>
 
           <div className="flex flex-col gap-2 self-start w-full">
