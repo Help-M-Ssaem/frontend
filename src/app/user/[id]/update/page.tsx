@@ -25,7 +25,7 @@ const UserUpdatePage = () => {
 
   useEffect(() => {
     if (userInfo) {
-      setBadgeId(userInfo.badgeId)
+      setBadgeId(userInfo.badgeId ?? null)
     }
   }, [userInfo])
 
