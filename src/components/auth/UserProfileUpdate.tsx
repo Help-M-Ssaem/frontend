@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { useToast } from '@/hooks/useToast'
 import {
   useDeleteProfileImg,
+  useDeleteProfileImgS3,
   usePostProfileImg,
   useUserInfo,
 } from '@/service/user/useUserService'
@@ -17,6 +18,8 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { mutate: postProfileImg } = usePostProfileImg()
   const { mutate: deleteProfileImg } = useDeleteProfileImg()
+  const { mutate: deleteProfileImgS3 } = useDeleteProfileImgS3()
+
   const { showToast } = useToast()
 
   const [profileImgUrl, setProfileImgUrl] = useState<string | null>(null)
@@ -97,18 +100,34 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
       .toUpperCase()
     const defaultImageUrl = `/images/mbti/${currentMbti}.svg`
 
-    deleteProfileImg(undefined, {
-      onSuccess: () => {
-        setProfileImgUrl(defaultImageUrl)
-      },
-      onError: () => {
-        if (profileImgUrl !== profile?.profileImgUrl) {
+    // DB에 저장된 이미지 삭제
+    if (profileImgUrl === profile?.profileImgUrl) {
+      deleteProfileImg(undefined, {
+        onSuccess: () => {
           setProfileImgUrl(defaultImageUrl)
-        } else {
+          if (profileImgUrl === defaultImageUrl) {
+            showToast('기본 이미지는 삭제할 수 없습니다.')
+          }
+        },
+        onError: () => {
           showToast('기본 이미지는 삭제할 수 없습니다.')
-        }
-      },
-    })
+        },
+      })
+    }
+    // S3에 임시로 저장된 이미지 삭제
+    else {
+      deleteProfileImgS3(profile?.profileImgUrl || '', {
+        onSuccess: () => {
+          setProfileImgUrl(defaultImageUrl)
+          if (profileImgUrl === defaultImageUrl) {
+            showToast('기본 이미지는 삭제할 수 없습니다.')
+          }
+        },
+        onError: () => {
+          showToast('기본 이미지는 삭제할 수 없습니다.')
+        },
+      })
+    }
   }
 
   if (!profile) return null

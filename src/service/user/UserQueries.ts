@@ -53,6 +53,13 @@ const queryOptions = {
       await UserService.deleteProfileImg()
     },
   },
+
+  deleteProfileImgS3: {
+    queryKey: queryKeys.profileImg,
+    mutationFn: async (imageUrl: string): Promise<void> => {
+      await UserService.deleteProfileImgS3(imageUrl)
+    },
+  },
 }
 
 export default queryOptions

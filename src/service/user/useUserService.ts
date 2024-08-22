@@ -48,6 +48,16 @@ const useDeleteProfileImg = () => {
   return useMutation<void, Error, void>(options)
 }
 
+const useDeleteProfileImgS3 = () => {
+  const mutationFn = (imageUrl: string): Promise<void> =>
+    queryOptions.deleteProfileImgS3.mutationFn(imageUrl)
+
+  const options: UseMutationOptions<void, Error, string, unknown> = {
+    mutationFn,
+  }
+  return useMutation<void, Error, string>(options)
+}
+
 export {
   useProfile,
   useTerms,
@@ -55,4 +65,5 @@ export {
   usePatchProfile,
   usePostProfileImg,
   useDeleteProfileImg,
+  useDeleteProfileImgS3,
 }

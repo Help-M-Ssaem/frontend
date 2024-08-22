@@ -33,6 +33,10 @@ class UserService extends Service {
   deleteProfileImg() {
     return this.http.delete('/member/profile')
   }
+
+  deleteProfileImgS3(imageUrl: string) {
+    return this.http.post(`/member/s3/file?imageUrl=${imageUrl}`)
+  }
 }
 
 export default new UserService()
