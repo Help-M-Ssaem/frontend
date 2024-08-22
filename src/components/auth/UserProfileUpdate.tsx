@@ -58,7 +58,8 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
       if (
         updatedData.nickName !== profile.nickName ||
         updatedData.mbti !== profile.mbti ||
-        updatedData.introduction !== profile.introduction
+        updatedData.introduction !== profile.introduction ||
+        updatedData.changeImageUrl !== null
       ) {
         onUpdate(updatedData)
       }
