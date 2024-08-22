@@ -102,7 +102,11 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
         setProfileImgUrl(defaultImageUrl)
       },
       onError: () => {
-        showToast('기본 이미지는 삭제할 수 없습니다.')
+        if (profileImgUrl !== profile?.profileImgUrl) {
+          setProfileImgUrl(defaultImageUrl)
+        } else {
+          showToast('기본 이미지는 삭제할 수 없습니다.')
+        }
       },
     })
   }
