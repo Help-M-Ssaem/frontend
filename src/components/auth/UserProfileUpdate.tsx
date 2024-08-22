@@ -96,7 +96,7 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
       .toUpperCase()
     const defaultImageUrl = `/images/mbti/${currentMbti}.svg`
 
-    deleteProfileImg(null, {
+    deleteProfileImg(undefined, {
       onSuccess: () => {
         setProfileImgUrl(defaultImageUrl)
       },
