@@ -66,18 +66,22 @@ const Info = () => {
         <div className="flex justify-between align-center gap-2">
           <MbtiSelect
             options={['E', 'e', 'I', 'i']}
+            selectedOption={mbti[0]}
             onSelect={(selected) => handleMbtiChange(0, selected)}
           />
           <MbtiSelect
             options={['S', 's', 'N', 'n']}
+            selectedOption={mbti[1]}
             onSelect={(selected) => handleMbtiChange(1, selected)}
           />
           <MbtiSelect
             options={['T', 't', 'F', 'f']}
+            selectedOption={mbti[2]}
             onSelect={(selected) => handleMbtiChange(2, selected)}
           />
           <MbtiSelect
             options={['J', 'j', 'P', 'p']}
+            selectedOption={mbti[3]}
             onSelect={(selected) => handleMbtiChange(3, selected)}
           />
         </div>

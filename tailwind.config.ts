@@ -105,6 +105,7 @@ const config: Config = {
         '13%': '13%',
       },
       borderRadius: {
+        '1.25': '5px',
         '2.5': '10px',
         '3.75': '15px',
         '7.5': '30px',
@@ -148,6 +149,7 @@ const config: Config = {
       },
       maxWidth: {
         '67.5': '270px',
+        '80': '320px',
       },
       boxShadow: {
         'custom-light': '0 4px 10px rgba(0, 0, 0, 0.10)',
