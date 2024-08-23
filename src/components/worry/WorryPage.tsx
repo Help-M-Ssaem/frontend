@@ -12,6 +12,7 @@ import { useState, useEffect, Suspense } from 'react'
 import SearchBar from '@/components/common/SearchBar'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { WorryI } from '@/model/Worry'
+import PopularProfileList from '../user/PopularProfileList'
 import Button from '../common/Button'
 
 const WorryPage = () => {
@@ -70,6 +71,7 @@ const WorryPage = () => {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
+      <PopularProfileList />
       <div className="flex flex-col">
         <div className="text-title3 text-maindark font-semibold my-5">
           M쌤 매칭을 기다리는 고민

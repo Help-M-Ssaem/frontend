@@ -1,18 +1,18 @@
 import { Meta, StoryFn } from '@storybook/react'
-import PopularMssaem, { PopularMssaemProps } from './PopularMssaem'
+import PopularProfile, { PopularProfileProps } from './PopularProfile'
 
 export default {
-  title: 'Worry/PopularMssaem',
-  component: PopularMssaem,
-} as Meta<PopularMssaemProps>
+  title: 'Worry/PopularProfile',
+  component: PopularProfile,
+} as Meta<PopularProfileProps>
 
-const Template: StoryFn<PopularMssaemProps> = (args: PopularMssaemProps) => (
-  <PopularMssaem {...args} />
+const Template: StoryFn<PopularProfileProps> = (args: PopularProfileProps) => (
+  <PopularProfile {...args} />
 )
 
 export const Primary = Template.bind({})
 Primary.args = {
-  popularMssaem: {
+  popularProfile: {
     id: 1,
     nickName: '유보라',
     mbti: 'ESFP',
