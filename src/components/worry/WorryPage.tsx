@@ -75,7 +75,7 @@ const WorryPage = () => {
           M쌤 매칭을 기다리는 고민
         </div>
         <Container color="purple">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center">
             <MbtiSelect
               strFromMbti={waitingStrFromMbti}
               strToMbti={waitingStrToMbti}
@@ -92,12 +92,12 @@ const WorryPage = () => {
             />
           </div>
 
-          <div className="h-[1px] bg-main mb-7.5" />
+          <div className="h-[1px] bg-main my-4 sm:mt-5 sm:mb-6" />
           {waitingWorryList &&
             waitingWorryList.result.map((worry: WorryI) => (
               <div key={worry.id}>
                 <WorryBoard worryBoard={worry} />
-                <div className="h-[1px] bg-main my-7.5" />
+                <div className="h-[1px] bg-main my-4 sm:my-6" />
               </div>
             ))}
 

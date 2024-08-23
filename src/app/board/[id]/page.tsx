@@ -5,7 +5,7 @@ import Image from 'next/image'
 import MbtiCategories from '@/components/board/MbtiCategories'
 import Button from '@/components/common/Button'
 import Container from '@/components/common/Container'
-import Profile from '@/components/common/Profile'
+import Profile from '@/components/user/Profile'
 import {
   useBoardDetail,
   useDeleteBoard,
@@ -110,8 +110,9 @@ const BoardDetail = () => {
 
             <div className="flex justify-between my-7.5">
               <Profile user={boardDetail.memberSimpleInfo} />
-              <div className="flex gap-3.5 text-caption text-gray2">
-                <p>조회수 {boardDetail.hits}회</p> |
+              <div className="flex text-caption text-gray2 items-end justify-end flex-col-reverse gap-1 sm:gap-3.5 sm:flex-row sm:items-start">
+                <p>조회수 {boardDetail.hits}회</p>
+                <p className="hidden sm:inline">|</p>
                 <p>{boardDetail.createdAt}</p>
               </div>
             </div>
@@ -126,23 +127,25 @@ const BoardDetail = () => {
               />
             </div>
 
-            <div className="flex justify-center items-center gap-6">
-              <div className="text-main2 text-title2 font-semibold">
+            <div className="flex justify-center items-center gap-2 sm:gap-6 my-4">
+              <div className="text-main2 text-body sm:text-title2 font-semibold">
                 {likeCount}
               </div>
-              <Image
-                src={`/images/board/${isLiked ? 'like_fill' : 'like_empty'}.svg`}
-                width={80}
-                height={80}
-                alt="like_btn"
-                className={`my-10 ${
-                  userInfo && userInfo.id === boardDetail.memberSimpleInfo.id
-                    ? 'cursor-default'
-                    : 'cursor-pointer'
-                }`}
-                onClick={handleLikeToggle}
-              />
+              <div className="w-12 h-12 sm:w-20 sm:h-20 relative overflow-hidden">
+                <Image
+                  src={`/images/board/${isLiked ? 'like_fill' : 'like_empty'}.svg`}
+                  alt="like_btn"
+                  className={`object-cover ${
+                    userInfo && userInfo.id === boardDetail.memberSimpleInfo.id
+                      ? 'cursor-default'
+                      : 'cursor-pointer'
+                  }`}
+                  fill
+                  onClick={handleLikeToggle}
+                />
+              </div>
             </div>
+
             <CommentList
               id={boardId}
               page={0}

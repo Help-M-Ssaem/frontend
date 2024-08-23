@@ -3,7 +3,7 @@
 import { BoardI } from '@/model/Board'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import Profile from '../common/Profile'
+import Profile from '../user/Profile'
 
 export interface BoardProps {
   board: BoardI

@@ -34,7 +34,7 @@ const MbtiSelect = ({
 
   return (
     <div className="flex relative w-full">
-      <div className="flex justify-between items-center gap-4">
+      <div className="flex justify-between items-center gap-1.5 backdrop:sm:gap-4">
         <Dropdown
           selectedType={displayType(strFromMbti)}
           showDropdown={showLeftDropdown}

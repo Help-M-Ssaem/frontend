@@ -4,7 +4,7 @@ import Button from '@/components/common/Button'
 import Container from '@/components/common/Container'
 import { useParams, useRouter } from 'next/navigation'
 import { useDeleteWorry, useWorryDetail } from '@/service/worry/useWorryService'
-import WorryProfile from '@/components/worry/WorryProfile'
+import WorryProfile from '@/components/user/WorryProfile'
 import { useUserInfo } from '@/service/user/useUserService'
 import { useToast } from '@/hooks/useToast'
 
@@ -72,8 +72,9 @@ const WorryDetail = () => {
                 strFromMbti={worryDetail.memberSimpleInfo.mbti}
                 strToMbti={worryDetail.targetMbti}
               />
-              <div className="flex flex-col items-end gap-1 sm:flex-row sm:gap-3.5 sm:items-start text-caption text-gray2">
+              <div className="flex text-caption text-gray2 items-end justify-end flex-col-reverse gap-1 sm:gap-3.5 sm:flex-row sm:items-start">
                 <p>조회수 {worryDetail.hits}회</p>
+                <p className="hidden sm:inline">|</p>
                 <p>{worryDetail.createdAt}</p>
               </div>
             </div>

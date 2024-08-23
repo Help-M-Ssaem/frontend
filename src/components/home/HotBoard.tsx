@@ -2,7 +2,7 @@
 
 import { HotBoardI } from '@/model/Home'
 import Image from 'next/image'
-import Profile from '../common/Profile'
+import Profile from '../user/Profile'
 import Container from '../common/Container'
 
 export interface HotBoardProps {

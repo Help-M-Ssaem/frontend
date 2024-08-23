@@ -2,7 +2,7 @@
 
 import ChattingInput from '@/components/chatting/ChattingInput'
 import ChattingProfile from '@/components/chatting/ChattingProfile'
-import Profile from '@/components/common/Profile'
+import Profile from '@/components/user/Profile'
 import { ChattingProfileI } from '@/model/Chatting'
 import { User } from '@/model/User'
 import React, { useEffect, useRef, useState } from 'react'

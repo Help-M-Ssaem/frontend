@@ -3,7 +3,7 @@
 import { HotDiscussionI } from '@/model/Home'
 import Image from 'next/image'
 import { DiscussionOptionI } from '@/model/Discussion'
-import Profile from '../common/Profile'
+import Profile from '../user/Profile'
 import Container from '../common/Container'
 import DiscussionOption from '../discussion/DiscussionOption'
 

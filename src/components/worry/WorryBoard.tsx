@@ -29,8 +29,8 @@ const WorryBoard = ({ worryBoard }: WorryBoardProps) => {
         router.push(`/worry/${id}`)
       }}
     >
-      <div className="flex flex-col gap-3.5">
-        <div className="flex items-center gap-2.5">
+      <div className="flex flex-col gap-2 sm:gap-3.5">
+        <div className="flex items-center gap-1 sm:gap-2.5">
           <Button text={memberMbti} color={memberMbti} size="badge" />
           <Image
             src="/images/worry/arrow_right.svg"

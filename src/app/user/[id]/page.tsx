@@ -1,7 +1,7 @@
 'use client'
 
 import ActivityCount from '@/components/auth/ActivityCount'
-import UserProfile from '@/components/auth/UserProfile'
+import UserProfile from '@/components/user/UserProfile'
 import Container from '@/components/common/Container'
 import { useParams, useRouter } from 'next/navigation'
 import { useUserInfo, useProfile } from '@/service/user/useUserService'

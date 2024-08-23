@@ -2,7 +2,7 @@
 
 import { DiscussionBoardI, DiscussionOptionI } from '@/model/Discussion'
 import Image from 'next/image'
-import Profile from '../common/Profile'
+import Profile from '../user/Profile'
 import DiscussionOption from './DiscussionOption'
 
 export interface DiscussionBoardProps {
