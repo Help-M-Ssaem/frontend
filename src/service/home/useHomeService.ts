@@ -23,7 +23,7 @@ const useHotDiscussionMore = (page: number, size: number) =>
 
 const useWorry = () => useQuery(queryOptions.worry)
 
-const usePopularMssaem = () => useQuery(queryOptions.popularMssaem)
+const usePopularProfile = () => useQuery(queryOptions.popularProfile)
 
 export {
   useHotThree,
@@ -32,5 +32,5 @@ export {
   useHotDiscussion,
   useHotDiscussionMore,
   useWorry,
-  usePopularMssaem,
+  usePopularProfile,
 }

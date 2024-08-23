@@ -41,7 +41,7 @@ class HomeService extends Service {
     return this.http.get<WorryI[]>(`/worry-board/home`)
   }
 
-  getPopularMssaem() {
+  getPopularProfile() {
     return this.http.get<User[]>(`/teacher`)
   }
 }

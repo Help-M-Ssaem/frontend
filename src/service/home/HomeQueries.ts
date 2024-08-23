@@ -7,7 +7,7 @@ const queryKeys = {
   hotDiscussion: ['hotDiscussion'] as const,
   hotDiscussionMore: ['hotDiscussionMore'] as const,
   worry: ['worry'] as const,
-  popularMssaem: ['popularMssaem'] as const,
+  popularProfile: ['popularProfile'] as const,
 }
 
 interface HotMoreProps {
@@ -58,10 +58,10 @@ const queryOptions = {
       return res.data
     },
   },
-  popularMssaem: {
-    queryKey: queryKeys.popularMssaem,
+  popularProfile: {
+    queryKey: queryKeys.popularProfile,
     queryFn: async () => {
-      const res = await HomeService.getPopularMssaem()
+      const res = await HomeService.getPopularProfile()
       return res.data
     },
   },
