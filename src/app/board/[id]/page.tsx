@@ -110,8 +110,9 @@ const BoardDetail = () => {
 
             <div className="flex justify-between my-7.5">
               <Profile user={boardDetail.memberSimpleInfo} />
-              <div className="flex gap-3.5 text-caption text-gray2">
-                <p>조회수 {boardDetail.hits}회</p> |
+              <div className="flex text-caption text-gray2 items-end justify-end flex-col-reverse gap-1 sm:gap-3.5 sm:flex-row">
+                <p>조회수 {boardDetail.hits}회</p>
+                <p className="hidden sm:inline">|</p>
                 <p>{boardDetail.createdAt}</p>
               </div>
             </div>
