@@ -56,7 +56,7 @@ const BoardPage = () => {
         {mbti === 'all' ? '전체' : mbti} 게시판
       </div>
       <Container color="purple">
-        <div className="text-right mb-5">
+        <div className="text-right">
           <Button
             text="글 쓰기"
             color="PURPLE"
@@ -64,12 +64,13 @@ const BoardPage = () => {
             onClick={handleWriteClick}
           />
         </div>
-        <div className="h-[1px] bg-main mb-7.5" />
+
+        <div className="h-[1px] bg-main my-4 sm:mt-5 sm:mb-6" />
         {boardList &&
           boardList.result.map((board: BoardI) => (
             <div key={board.id}>
               <Board board={board} />
-              <div className="h-[1px] bg-main my-7.5" />
+              <div className="h-[1px] bg-main my-4 sm:my-6" />
             </div>
           ))}
 
