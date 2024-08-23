@@ -7,7 +7,7 @@ import {
   usePostProfileImg,
   useUserInfo,
 } from '@/service/user/useUserService'
-import MbtiSelect from './MbtiSelect'
+import MbtiSelect from '../auth/MbtiSelect'
 
 interface UserProfileUpdateProps {
   onUpdate: (data: any) => void

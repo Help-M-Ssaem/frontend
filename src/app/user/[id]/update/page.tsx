@@ -8,7 +8,7 @@ import {
   useUserInfo,
 } from '@/service/user/useUserService'
 import Button from '@/components/common/Button'
-import UserUpdateProfile from '@/components/auth/UserProfileUpdate'
+import UserUpdateProfile from '@/components/user/UserProfileUpdate'
 import { useState, useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
