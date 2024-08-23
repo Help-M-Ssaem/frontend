@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { User } from '@/model/User'
 import Button from '../common/Button'
@@ -9,10 +10,17 @@ export interface PopularProfileProps {
 }
 
 const PopularProfile = ({ popularProfile }: PopularProfileProps) => {
-  const { nickName, mbti, badge, profileImgUrl, introduction } = popularProfile
+  const { id, nickName, mbti, badge, profileImgUrl, introduction } =
+    popularProfile
+  const router = useRouter()
 
   return (
-    <div className="flex flex-col items-center gap-2 sm:gap-4">
+    <div
+      className="flex flex-col items-center gap-2 sm:gap-4 cursor-pointer"
+      onClick={() => {
+        router.push(`/user/${id}`)
+      }}
+    >
       <div className="relative w-[100px] h-[100px] sm:w-[144px] sm:h-[144px] md:w-[174px] md:h-[174px]">
         <Image
           src={profileImgUrl}
