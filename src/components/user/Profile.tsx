@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { User } from '@/model/User'
 import Image from 'next/image'
-import Button from './Button'
+import Button from '../common/Button'
 
 export interface ProfileProps {
   user: User
@@ -39,7 +39,7 @@ const Profile = ({ user, createdAt }: ProfileProps) => {
             <div className="text-gray2 text-caption">{createdAt}</div>
           )}
         </div>
-        <div className="flex gap-2.5">
+        <div className="flex gap-2">
           <Button text={user.mbti} color={user.mbti} size="badge" />
           {user.badge && <Button text={user.badge} size="badge" />}
         </div>

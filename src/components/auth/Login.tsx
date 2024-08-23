@@ -2,7 +2,7 @@
 
 import { User } from '@/model/User'
 import { useRouter } from 'next/navigation'
-import Profile from '../common/Profile'
+import Profile from '../user/Profile'
 
 export interface LoginProps {
   user: User

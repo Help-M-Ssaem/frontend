@@ -1,4 +1,4 @@
-import Profile, { ProfileProps } from '@/components/common/Profile'
+import Profile, { ProfileProps } from '@/components/user/Profile'
 import { Meta, StoryFn } from '@storybook/react'
 
 export default {

@@ -10,7 +10,7 @@ import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useToast } from '@/hooks/useToast'
 import { useUserInfo } from '@/service/user/useUserService'
-import Profile from '../common/Profile'
+import Profile from '../user/Profile'
 
 export interface CommentProps {
   comment: CommentI

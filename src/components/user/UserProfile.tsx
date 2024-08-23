@@ -25,7 +25,7 @@ const UserProfile = ({ profile }: UserProfileProps) => {
         <div className="text-title1 text-maindark font-bold">{nickName} 님</div>
         <div className="flex gap-2.5">
           <Button text={mbti} color={mbti} size="badge" />
-          <Button text={badge} color={badge} size="badge" />
+          {badge !== null && <Button text={badge} color={badge} size="badge" />}
         </div>
       </div>
       <div className="flex flex-col gap-2 self-start">

@@ -5,7 +5,7 @@ import Image from 'next/image'
 import MbtiCategories from '@/components/board/MbtiCategories'
 import Button from '@/components/common/Button'
 import Container from '@/components/common/Container'
-import Profile from '@/components/common/Profile'
+import Profile from '@/components/user/Profile'
 import {
   useBoardDetail,
   useDeleteBoard,
