@@ -67,7 +67,7 @@ const Header = () => {
         </div>
 
         {/* mobile */}
-        <div className="sm:hidden flex justify-between items-center pt-10 pb-2">
+        <div className="sm:hidden flex justify-between items-center pt-4 pb-2">
           <Image
             src="/images/common/cat_logo.svg"
             alt="cat logo"
@@ -103,7 +103,7 @@ const Header = () => {
         </div>
         <Category />
       </header>
-      <div className="pt-30 sm:pt-38.5">
+      <div className="pt-24 sm:pt-38.5">
         {/* 다른 콘텐츠는 이 div 내부에 위치 */}
       </div>
     </>
