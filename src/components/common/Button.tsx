@@ -35,7 +35,8 @@ const buttonTheme = {
     ...extraColors,
   },
   size: {
-    small: 'px-8.75 py-2 rounded-3xl text-body font-bold',
+    small:
+      'px-4 py-1 text-footnote sm:font-semibold sm:px-8.75 sm:py-2 sm:text-body sm:font-bold rounded-3xl ',
     medium: 'px-5 py-2.5 rounded-3xl text-title3 font-bold',
     large: 'px-8.75 py-2.5 rounded-3xl text-title3 font-bold',
     login: 'py-3 max-w-95 w-full rounded-2xl text-body font-regular',
