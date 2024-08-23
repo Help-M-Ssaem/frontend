@@ -61,6 +61,13 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
       if (
         updatedData.nickName !== profile.nickName ||
         updatedData.mbti !== profile.mbti ||
+        mbtiString !==
+          [
+            profile.mbti[0],
+            profile.mbti[1],
+            profile.mbti[2],
+            profile.mbti[3],
+          ].join('') ||
         updatedData.introduction !== profile.introduction ||
         updatedData.changeImageUrl !== null
       ) {
