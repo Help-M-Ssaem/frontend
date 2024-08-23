@@ -18,20 +18,19 @@ const Profile = ({ user, createdAt }: ProfileProps) => {
 
   return (
     <div
-      className="flex items-center gap-4.5 cursor-pointer"
+      className="flex items-center gap-2.5 sm:gap-4 cursor-pointer"
       onClick={handleProfileClick}
     >
-      <div className="w-14 h-14 relative rounded-full overflow-hidden">
+      <div className="w-12 h-12 sm:w-14 sm:h-14 relative rounded-full overflow-hidden">
         <Image
           src={user.profileImgUrl}
           alt="profile"
           className="w-full h-full object-cover"
-          width={40}
-          height={40}
+          fill
         />
       </div>
       <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <div className="text-headline font-semibold text-maindark">
             {user.nickName} 님
           </div>
@@ -39,9 +38,11 @@ const Profile = ({ user, createdAt }: ProfileProps) => {
             <div className="text-gray2 text-caption">{createdAt}</div>
           )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-1.5 sm:gap-2">
           <Button text={user.mbti} color={user.mbti} size="badge" />
-          {user.badge && <Button text={user.badge} size="badge" />}
+          {user.badge && (
+            <Button text={user.badge} color={user.badge} size="badge" />
+          )}
         </div>
       </div>
     </div>

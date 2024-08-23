@@ -39,7 +39,8 @@ const buttonTheme = {
     medium: 'px-5 py-2.5 rounded-3xl text-title3 font-bold',
     large: 'px-8.75 py-2.5 rounded-3xl text-title3 font-bold',
     login: 'py-3 max-w-95 w-full rounded-2xl text-body font-regular',
-    badge: 'px-2.5 py-0.75 rounded-3xl text-footnote font-regular',
+    badge:
+      'px-2.5 py-0.75 rounded-3xl text-caption sm:text-footnote font-regular',
   },
 }
 
@@ -67,7 +68,6 @@ const Button = ({
 }: ButtonProps) => {
   let colorClass
 
-  // color가 소문자일 경우 대문자로 변환
   const normalizedColor =
     typeof color === 'string' ? color.toUpperCase() : color
 
