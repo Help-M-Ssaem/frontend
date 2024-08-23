@@ -1,4 +1,5 @@
 import { HotThreeI } from '@/model/Home'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 export interface HotThreeProps {
@@ -7,7 +8,15 @@ export interface HotThreeProps {
 }
 
 const HotThree = ({ hotThree, board }: HotThreeProps) => {
-  const { boardTitle, discussionTitle, worryBoardTitle } = hotThree
+  const {
+    boardId,
+    boardTitle,
+    discussionId,
+    discussionTitle,
+    worryBoardId,
+    worryBoardTitle,
+  } = hotThree
+  const router = useRouter()
 
   const getCurrentLabel = () => {
     if (board === 'board') return '게시물'
@@ -26,8 +35,15 @@ const HotThree = ({ hotThree, board }: HotThreeProps) => {
   const currentLabel = getCurrentLabel()
   const title = getTitle()
 
-  // TODO: 바로가기 link
-  const handleGoToClick = () => {}
+  const handleGoToClick = () => {
+    if (board === 'board') {
+      router.push(`/board/${boardId}`)
+    } else if (board === 'discussion') {
+      router.push(`/discussion/${discussionId}`)
+    } else if (board === 'worry') {
+      router.push(`/worry/${worryBoardId}`)
+    }
+  }
 
   return (
     <div className="relative flex flex-col justify-between h-44 pt-10 pb-5 px-7.5 bg-white rounded-7.5 w-full min-w-67.5 sm:min-w-0">
