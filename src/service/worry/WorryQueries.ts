@@ -7,6 +7,7 @@ import WorryService, {
 const queryKeys = {
   worry: (worryId: number) => ['worry', worryId] as const,
   worryList: ['worryList'] as const,
+  worryListImage: ['worryListImage'] as const,
 }
 
 const queryOptions = {
@@ -66,6 +67,14 @@ const queryOptions = {
   postWorry: {
     mutationFn: async (worry: FormData): Promise<void> => {
       await WorryService.postWorry(worry)
+    },
+  },
+
+  postWorryImage: {
+    queryKey: queryKeys.worryListImage,
+    mutationFn: async (WorryImage: FormData): Promise<any> => {
+      const response = await WorryService.postWorryImage(WorryImage)
+      return response
     },
   },
 

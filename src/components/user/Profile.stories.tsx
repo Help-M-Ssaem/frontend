@@ -1,4 +1,4 @@
-import Profile, { ProfileProps } from '@/components/common/Profile'
+import Profile, { ProfileProps } from '@/components/user/Profile'
 import { Meta, StoryFn } from '@storybook/react'
 
 export default {
@@ -13,6 +13,7 @@ const Template: StoryFn<ProfileProps> = (args: ProfileProps) => (
 export const Primary = Template.bind({})
 Primary.args = {
   user: {
+    id: 1,
     profileImgUrl: '/images/common/default.svg',
     nickName: '유보라',
     mbti: 'ENFP',

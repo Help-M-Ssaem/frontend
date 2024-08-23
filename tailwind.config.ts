@@ -64,7 +64,7 @@ const config: Config = {
       fontSize: {
         herotitle: '38px',
         bigtitle: '32px',
-        title1: '28px',
+        title1: '26px',
         title2: '22px',
         title3: '18px',
         headline: '16px',
@@ -96,6 +96,7 @@ const config: Config = {
         '38.5': '154px',
         '68': '272px',
         '95': '380px',
+        '4%': '4%',
         '5%': '5%',
         '6%': '6%',
         '7%': '7%',
@@ -104,6 +105,7 @@ const config: Config = {
         '13%': '13%',
       },
       borderRadius: {
+        '1.25': '5px',
         '2.5': '10px',
         '3.75': '15px',
         '7.5': '30px',
@@ -147,6 +149,7 @@ const config: Config = {
       },
       maxWidth: {
         '67.5': '270px',
+        '80': '320px',
       },
       boxShadow: {
         'custom-light': '0 4px 10px rgba(0, 0, 0, 0.10)',

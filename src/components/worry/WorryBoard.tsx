@@ -29,8 +29,8 @@ const WorryBoard = ({ worryBoard }: WorryBoardProps) => {
         router.push(`/worry/${id}`)
       }}
     >
-      <div className="flex flex-col gap-3.5">
-        <div className="flex items-center gap-2.5">
+      <div className="flex flex-col gap-2 sm:gap-3.5">
+        <div className="flex items-center gap-1 sm:gap-2.5">
           <Button text={memberMbti} color={memberMbti} size="badge" />
           <Image
             src="/images/worry/arrow_right.svg"
@@ -42,9 +42,9 @@ const WorryBoard = ({ worryBoard }: WorryBoardProps) => {
           <p className="text-gray2 text-caption">{createdDate}</p>
         </div>
         <div className="flex flex-col gap-1.75">
-          <div className="text-title3 font-semibold">{title}</div>
+          <div className="text-title3 font-semibold text-maindark">{title}</div>
           <div
-            className="text-body font-regular"
+            className="text-body font-regular text-maindark"
             dangerouslySetInnerHTML={{ __html: truncatedContent }}
           />
         </div>

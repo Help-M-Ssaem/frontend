@@ -3,7 +3,7 @@
 import { HotDiscussionI } from '@/model/Home'
 import Image from 'next/image'
 import { DiscussionOptionI } from '@/model/Discussion'
-import Profile from '../common/Profile'
+import Profile from '../user/Profile'
 import Container from '../common/Container'
 import DiscussionOption from '../discussion/DiscussionOption'
 
@@ -32,8 +32,8 @@ const HotDiscussion = ({ hotDiscussion }: HotDiscussionProps) => {
             <div className="text-caption text-gray2">{createdAt}</div>
           </div>
           <div className="flex flex-col gap-1">
-            <p className="text-title3 font-bold">{title}</p>
-            <p className="text-body text-mainblack">{content}</p>
+            <p className="text-title3 font-bold text-maindark">{title}</p>
+            <p className="text-body text-maindark">{content}</p>
           </div>
         </div>
 

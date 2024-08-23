@@ -13,6 +13,7 @@ import SearchBar from '@/components/common/SearchBar'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { WorryI } from '@/model/Worry'
 import PopularMssaemList from './PopularMssaemList'
+import Button from '../common/Button'
 
 const WorryPage = () => {
   const router = useRouter()
@@ -76,18 +77,29 @@ const WorryPage = () => {
           M쌤 매칭을 기다리는 고민
         </div>
         <Container color="purple">
-          <MbtiSelect
-            strFromMbti={waitingStrFromMbti}
-            strToMbti={waitingStrToMbti}
-            setStrFromMbti={setWaitingStrFromMbti}
-            setStrToMbti={setWaitingStrToMbti}
-          />
-          <div className="h-[1px] bg-main mb-7.5" />
+          <div className="flex justify-between items-center">
+            <MbtiSelect
+              strFromMbti={waitingStrFromMbti}
+              strToMbti={waitingStrToMbti}
+              setStrFromMbti={setWaitingStrFromMbti}
+              setStrToMbti={setWaitingStrToMbti}
+            />
+            <Button
+              text="글쓰기"
+              color="PURPLE"
+              size="small"
+              onClick={() => {
+                router.push('/worry/create')
+              }}
+            />
+          </div>
+
+          <div className="h-[1px] bg-main my-4 sm:mt-5 sm:mb-6" />
           {waitingWorryList &&
             waitingWorryList.result.map((worry: WorryI) => (
               <div key={worry.id}>
                 <WorryBoard worryBoard={worry} />
-                <div className="h-[1px] bg-main my-7.5" />
+                <div className="h-[1px] bg-main my-4 sm:my-6" />
               </div>
             ))}
 
@@ -106,12 +118,14 @@ const WorryPage = () => {
           해결 완료된 고민
         </div>
         <Container color="purple">
-          <MbtiSelect
-            strFromMbti={solvedStrFromMbti}
-            strToMbti={solvedStrToMbti}
-            setStrFromMbti={setSolvedStrFromMbti}
-            setStrToMbti={setSolvedStrToMbti}
-          />
+          <div className="mb-4">
+            <MbtiSelect
+              strFromMbti={solvedStrFromMbti}
+              strToMbti={solvedStrToMbti}
+              setStrFromMbti={setSolvedStrFromMbti}
+              setStrToMbti={setSolvedStrToMbti}
+            />
+          </div>
           <div className="h-[1px] bg-main mb-7.5" />
           {solvedWorryList &&
             solvedWorryList.result.map((worry: WorryI) => (

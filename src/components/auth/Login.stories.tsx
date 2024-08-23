@@ -1,18 +1,20 @@
-import Login from '@/components/auth/Login'
-import { User } from '@/model/User'
+import Login, { LoginProps } from '@/components/auth/Login'
 import { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Auth/Login',
   component: Login,
-} as Meta<User>
+} as Meta<LoginProps>
 
-const Template: StoryFn<User> = (args: User) => <Login {...args} />
+const Template: StoryFn<LoginProps> = (args: LoginProps) => <Login {...args} />
 
 export const Primary = Template.bind({})
 Primary.args = {
-  profileImgUrl: '/images/common/default.svg',
-  nickName: '유보라',
-  mbti: 'ENFP',
-  badge: '엠비티어른',
+  user: {
+    id: 1,
+    profileImgUrl: '/images/common/default.svg',
+    nickName: '유보라',
+    mbti: 'ENFP',
+    badge: '엠비티어른',
+  },
 }

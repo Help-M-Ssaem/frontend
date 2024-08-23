@@ -1,44 +1,89 @@
 'use client'
 
-import { useState } from 'react'
-import { useCommentList } from '@/service/comment/useCommentService'
+import { useState, useEffect } from 'react'
 import { CommentI } from '@/model/Comment'
+import {
+  useCommentList,
+  useDiscussionCommentList,
+} from '@/service/comment/useCommentService'
+import { useToast } from '@/hooks/useToast'
 import Comment from './Comment'
-import ChattingInput from '../chatting/ChattingInput'
+import CommentInput from './CommentInput'
 
-interface CommentListProps {
+export interface CommentListProps {
   id: number
   page: number
   size: number
+  commentCount: number
+  onCommentCountUpdate: (newCount: number) => void
+  boardType?: string
 }
 
-const CommentList = ({ id, page, size }: CommentListProps) => {
-  const [newComment, setNewComment] = useState<FormData>(new FormData())
-  const { data: commentList } = useCommentList({ id, page, size })
+const CommentList = ({
+  id,
+  page,
+  size,
+  commentCount,
+  onCommentCountUpdate,
+  boardType,
+}: CommentListProps) => {
+  const { data: generalCommentListData, refetch: refetchGeneralComments } =
+    useCommentList({ id, page, size })
 
-  const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formData = new FormData()
-    formData.append('comment', e.target.value)
-    setNewComment(formData)
-  }
+  const {
+    data: discussionCommentListData,
+    refetch: refetchDiscussionComments,
+  } = useDiscussionCommentList({ id, page, size })
 
+  const commentListData =
+    boardType === 'discussion'
+      ? discussionCommentListData
+      : generalCommentListData
+
+  const refetch =
+    boardType === 'discussion'
+      ? refetchDiscussionComments
+      : refetchGeneralComments
+
+  const [commentList, setCommentList] = useState<CommentI[]>([])
+
+  useEffect(() => {
+    if (commentListData) {
+      setCommentList(commentListData.result)
+    }
+  }, [commentListData])
+
+  const [replyId, setReplyId] = useState<number | undefined>(undefined)
+  const [isReply, setIsReply] = useState(false)
+
+  const { showToast } = useToast()
+
+  // TODO: 공유, 신고 기능 추가
   const handleShareBtnClick = () => {
-    console.log('share')
+    showToast('공유 기능은 준비 중입니다')
   }
   const handleReportBtnClick = () => {
-    console.log('report')
+    showToast('신고 기능은 준비 중입니다')
   }
-  const handleCommentSubmit = () => {
-    console.log('submit')
+
+  const handleCommentClick = (commentId: number) => {
+    setReplyId(commentId)
+    setIsReply(!isReply)
+  }
+  const handleReplySubmitSuccess = () => {
+    setIsReply(false)
+    setReplyId(undefined)
+    onCommentCountUpdate(commentCount + 1)
+    refetch()
   }
 
   return (
     <div className="flex flex-col">
       <div className="flex justify-between">
         <div className="text-maindark text-title3 font-semibold">
-          전체 댓글 {commentList && commentList.totalSize}개
+          전체 댓글 {commentCount}개
         </div>
-        <div className="flex gap-4 text-gray2 text-title3 font-semibold">
+        <div className="flex gap-4 text-gray2 text-headline font-semibold">
           <button
             type="button"
             className="cursor-pointer"
@@ -56,23 +101,56 @@ const CommentList = ({ id, page, size }: CommentListProps) => {
         </div>
       </div>
       <div className="h-[1px] bg-main my-4" />
+
       {commentList &&
-        commentList.result.map((comment: CommentI) => (
-          <>
-            <Comment key={comment.commentId} comment={comment} />
-            <div className="h-[1px] bg-main my-4" />
-          </>
-        ))}
+        commentList.map(
+          (comment: CommentI) =>
+            !comment.parentId && (
+              <div key={comment.commentId}>
+                <Comment
+                  comment={comment}
+                  onClick={() => handleCommentClick(comment.commentId)}
+                  refetchComments={refetch}
+                />
+                <div className="h-[1px] bg-main my-4" />
+
+                {/* 대댓글 */}
+                {commentList.map(
+                  (reply: CommentI) =>
+                    reply.parentId === comment.commentId && (
+                      <div key={reply.commentId}>
+                        <Comment
+                          comment={reply}
+                          onClick={() => handleCommentClick(reply.parentId)}
+                          refetchComments={refetch}
+                        />
+                        <div className="h-[1px] bg-main my-4" />
+                      </div>
+                    ),
+                )}
+                {isReply && comment.commentId === replyId && (
+                  <CommentInput
+                    replyId={replyId}
+                    refetchComments={refetch}
+                    onSuccess={handleReplySubmitSuccess}
+                  />
+                )}
+              </div>
+            ),
+        )}
 
       <div className="mb-4">
-        <ChattingInput
-          value={newComment.get('comment')?.toString() || ''}
-          onChange={handleCommentChange}
-          onClick={handleCommentSubmit}
+        <CommentInput
+          refetchComments={refetch}
+          onSuccess={handleReplySubmitSuccess}
         />
       </div>
     </div>
   )
+}
+
+CommentList.defaultProps = {
+  boardType: 'board',
 }
 
 export default CommentList

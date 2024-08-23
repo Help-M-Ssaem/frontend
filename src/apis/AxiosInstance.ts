@@ -1,17 +1,24 @@
 import axios, { AxiosInstance } from 'axios'
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
+
 class Service {
   protected http: AxiosInstance
 
-  constructor(
-    baseURL: string = process.env.NEXT_PUBLIC_API_BASE_URL as string,
-  ) {
+  constructor() {
     this.http = axios.create({
-      baseURL,
+      baseURL: API_BASE_URL,
       headers: {
         'Content-Type': 'application/json',
       },
     })
+
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('access_token')
+      if (token) {
+        this.http.defaults.headers.common.Authorization = `${token}`
+      }
+    }
   }
 }
 

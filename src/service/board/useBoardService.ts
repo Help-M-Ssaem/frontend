@@ -71,13 +71,16 @@ const usePostBoard = () => {
 }
 
 const usePostBoardImage = () => {
-  const mutationFn = (board: FormData): Promise<void> =>
-    queryOptions.postBoard.mutationFn(board)
+  const mutationFn = async (boardImage: FormData): Promise<string> => {
+    const response = await queryOptions.postBoardImage.mutationFn(boardImage)
+    return response
+  }
 
-  const options: UseMutationOptions<void, Error, FormData, unknown> = {
+  const options: UseMutationOptions<string, Error, FormData, unknown> = {
     mutationFn,
   }
-  return useMutation<void, Error, FormData>(options)
+
+  return useMutation<string, Error, FormData>(options)
 }
 
 const usePatchBoard = () => {

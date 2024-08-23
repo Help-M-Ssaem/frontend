@@ -22,6 +22,7 @@ Primary.args = {
     commentCount: 18,
     createdAt: '24.06.21',
     memberSimpleInfo: {
+      id: 1,
       profileImgUrl: '/images/common/default.svg',
       nickName: '유보라',
       mbti: 'ENFP',

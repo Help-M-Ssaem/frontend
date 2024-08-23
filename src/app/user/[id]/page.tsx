@@ -1,44 +1,45 @@
 'use client'
 
 import ActivityCount from '@/components/auth/ActivityCount'
-import UserProfile from '@/components/auth/UserProfile'
+import UserProfile from '@/components/user/UserProfile'
 import Container from '@/components/common/Container'
-import { useParams } from 'next/navigation'
-import { useProfile } from '@/service/user/useUserService'
+import { useParams, useRouter } from 'next/navigation'
+import { useUserInfo, useProfile } from '@/service/user/useUserService'
 import Button from '@/components/common/Button'
 import MemberListCount from '@/components/auth/MemberListCount'
 
-const Userpage = () => {
+const UserPage = () => {
   const { id } = useParams()
   const profileId = Number(id)
+  const router = useRouter()
 
-  const { data: profileData } = useProfile(Number(profileId))
+  const { data: userInfo } = useUserInfo()
+  const { data: profile } = useProfile(Number(profileId))
 
-  if (!profileData) return null
-
+  if (!profile) return null
   const activitySections = [
     {
       title: '받은 평가',
       items: [
-        { label: '좋아요', count: profileData.evaluationCount.likeCount },
-        { label: '유익해요', count: profileData.evaluationCount.usefulCount },
-        { label: '재밌어요', count: profileData.evaluationCount.funCount },
+        { label: '좋아요', count: profile.evaluationCount.likeCount },
+        { label: '유익해요', count: profile.evaluationCount.usefulCount },
+        { label: '재밌어요', count: profile.evaluationCount.funCount },
         {
           label: '성의있어요',
-          count: profileData.evaluationCount.sincereCount,
+          count: profile.evaluationCount.sincereCount,
         },
-        { label: '화끈해요', count: profileData.evaluationCount.hotCount },
+        { label: '화끈해요', count: profile.evaluationCount.hotCount },
       ],
     },
     {
       title: '게시판 활동',
       items: [
-        { label: '전체 게시글', count: profileData.boardHistory.boardCount },
+        { label: '전체 게시글', count: profile.boardHistory.boardCount },
         {
           label: '전체 댓글',
-          count: profileData.boardHistory.boardCommentCount,
+          count: profile.boardHistory.boardCommentCount,
         },
-        { label: '받은 좋아요', count: profileData.boardHistory.likeAllCount },
+        { label: '받은 좋아요', count: profile.boardHistory.likeAllCount },
       ],
     },
     {
@@ -46,15 +47,15 @@ const Userpage = () => {
       items: [
         {
           label: '전체 토론글',
-          count: profileData.discussionHistory.discussionCount,
+          count: profile.discussionHistory.discussionCount,
         },
         {
           label: '전체 댓글',
-          count: profileData.discussionHistory.discussionCommentCount,
+          count: profile.discussionHistory.discussionCommentCount,
         },
         {
           label: '전체 참여자',
-          count: profileData.discussionHistory.participationCount,
+          count: profile.discussionHistory.participationCount,
         },
       ],
     },
@@ -63,35 +64,49 @@ const Userpage = () => {
       items: [
         {
           label: '전체 고민',
-          count: profileData.worryBoardHistory.worryBoardCount,
+          count: profile.worryBoardHistory.worryBoardCount,
         },
         {
           label: '전체 해결',
-          count: profileData.worryBoardHistory.solvedWorryBoardCount,
+          count: profile.worryBoardHistory.solvedWorryBoardCount,
         },
         {
           label: '전체 평가',
-          count: profileData.worryBoardHistory.evaluationCount,
+          count: profile.worryBoardHistory.evaluationCount,
         },
       ],
     },
   ]
 
+  const handleProfileUpdate = () => {
+    router.push(`/user/${profileId}/update`)
+  }
+
   return (
     <>
-      <div className="text-title3 text-maindark font-semibold my-6">
-        {profileData.teacherInfo.nickName} 프로필
+      <div className="flex justify-between items-center mt-6 mb-4">
+        <div className="text-title3 text-maindark font-semibold">
+          {profile.teacherInfo.nickName} 프로필
+        </div>
+        {userInfo?.id === profileId && (
+          <div
+            className="text-gray2 underline cursor-pointer"
+            onClick={handleProfileUpdate}
+          >
+            수정하기
+          </div>
+        )}
       </div>
       <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-4 lg:grid-rows-1">
         <Container color="purple" className="md:col-span-1 lg:col-span-1">
-          <UserProfile profile={profileData.teacherInfo} />
+          <UserProfile profile={profile.teacherInfo} />
         </Container>
         <Container color="purple" className="md:col-span-1 lg:col-span-1">
           <div className="text-title3 text-gray1 items-start font-semibold mb-2.5">
             수집한 칭호
           </div>
           <div className="flex flex-wrap gap-2.5 ">
-            {profileData.badgeInfos.map((badge, index) => (
+            {profile.badgeInfos.map((badge, index) => (
               <Button
                 key={index}
                 text={badge.name}
@@ -120,4 +135,4 @@ const Userpage = () => {
   )
 }
 
-export default Userpage
+export default UserPage
