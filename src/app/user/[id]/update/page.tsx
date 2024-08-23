@@ -10,11 +10,13 @@ import {
 import Button from '@/components/common/Button'
 import UserUpdateProfile from '@/components/auth/UserProfileUpdate'
 import { useState, useEffect } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 
 const UserUpdatePage = () => {
   const { id } = useParams()
   const profileId = Number(id)
   const router = useRouter()
+  const queryClient = useQueryClient()
 
   const { data: profile } = useProfile(profileId)
   const { data: userInfo } = useUserInfo()
@@ -47,8 +49,12 @@ const UserUpdatePage = () => {
   }
 
   const handleSubmit = () => {
-    patchProfile(updatedProfile)
-    router.back()
+    patchProfile(updatedProfile, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['profile', profileId] }) // queryKey를 객체로 전달
+        router.back()
+      },
+    })
   }
 
   const handleBadgeClick = (badge: number) => {
