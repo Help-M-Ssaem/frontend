@@ -72,7 +72,7 @@ const WorryDetail = () => {
                 strFromMbti={worryDetail.memberSimpleInfo.mbti}
                 strToMbti={worryDetail.targetMbti}
               />
-              <div className="flex text-caption text-gray2 items-end justify-end flex-col-reverse gap-1 sm:gap-3.5 sm:flex-row">
+              <div className="flex text-caption text-gray2 items-end justify-end flex-col-reverse gap-1 sm:gap-3.5 sm:flex-row sm:items-start">
                 <p>조회수 {worryDetail.hits}회</p>
                 <p className="hidden sm:inline">|</p>
                 <p>{worryDetail.createdAt}</p>
