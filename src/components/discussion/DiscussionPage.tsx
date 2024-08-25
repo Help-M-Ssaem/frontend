@@ -4,6 +4,7 @@ import DiscussionBoard from '@/components/discussion/DiscussionBoard'
 import Pagination from '@/components/common/Pagination'
 import { useDiscussionList } from '@/service/discussion/useDiscussionService'
 import { useState, useEffect, Suspense } from 'react'
+import Button from '@/components/common/Button'
 import SearchBar from '@/components/common/SearchBar'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { DiscussionBoardI } from '@/model/Discussion'
@@ -36,8 +37,16 @@ const DiscussionPage = () => {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <div className="text-title3 text-maindark font-semibold my-5">
-        MBTI 과몰입 토론
+      <div className="flex justify-between items-center my-4">
+        <div className="text-title3 text-maindark font-semibold">
+          MBTI 과몰입 토론
+        </div>
+        <Button
+          text="글 쓰기"
+          color="PURPLE"
+          size="small"
+          onClick={() => router.push('/discussion/create')}
+        />
       </div>
       <div className="flex flex-col">
         {discussionList &&
