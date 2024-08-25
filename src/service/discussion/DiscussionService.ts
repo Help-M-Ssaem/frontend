@@ -37,17 +37,16 @@ class DiscussionService extends Service {
     })
   }
 
-  postDiscussionOptionFiles(blob: Blob) {
-    const formData = new FormData()
-    formData.append('image', blob)
-
+  postDiscussionOptionFiles(image: FormData) {
     return this.http
-      .post(`/member/discussion-options/files`, formData, {
+      .post(`/member/discussion-options/files`, image, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
-      .then((response) => response.data.imgUrl)
+      .then((response) => {
+        return response.data
+      })
   }
 
   deleteDiscussion(id: number) {

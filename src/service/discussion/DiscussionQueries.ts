@@ -6,6 +6,7 @@ import DiscussionService, {
 const queryKeys = {
   discussion: (discussionId: number) => ['discussion', discussionId] as const,
   discussionList: ['discussionList'] as const,
+  discussionListImage: ['discussionListImage'] as const,
 }
 
 const queryOptions = {
@@ -48,9 +49,10 @@ const queryOptions = {
   },
 
   postDiscussionOptionFiles: {
-    mutationFn: async (blob: Blob): Promise<string> => {
-      const response = await DiscussionService.postDiscussionOptionFiles(blob)
-      return response.data
+    queryKey: queryKeys.discussionListImage,
+    mutationFn: async (image: FormData): Promise<string> => {
+      const response = await DiscussionService.postDiscussionOptionFiles(image)
+      return response
     },
   },
 

@@ -39,13 +39,15 @@ const usePostDiscussion = () => {
 }
 
 const usePostDiscussionOptionFiles = () => {
-  const mutationFn = (blob: Blob): Promise<string> =>
-    queryOptions.postDiscussionOptionFiles.mutationFn(blob)
-
-  const options: UseMutationOptions<string, Error, Blob, unknown> = {
+  const mutationFn = async (image: FormData): Promise<string> => {
+    const response =
+      await queryOptions.postDiscussionOptionFiles.mutationFn(image)
+    return response
+  }
+  const options: UseMutationOptions<string, Error, FormData, unknown> = {
     mutationFn,
   }
-  return useMutation<string, Error, Blob>(options)
+  return useMutation<string, Error, FormData>(options)
 }
 
 const useDeleteDiscussion = () => {

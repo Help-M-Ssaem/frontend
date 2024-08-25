@@ -49,10 +49,21 @@ const DiscussionCreatePagePage = () => {
     setOptions(updatedOptions)
   }
 
-  const handleImageBlobHook = async (blob: Blob) => {
-    const imgUrl = await postDiscussionOptionFiles(blob)
-    setImage([...image, imgUrl])
-    return imgUrl
+  const handleUploadImage = async (blob: Blob): Promise<string> => {
+    const formImage = new FormData()
+    formImage.append('image', blob)
+
+    return new Promise<string>((resolve, reject) => {
+      postDiscussionOptionFiles(formImage, {
+        onSuccess: (imgUrl) => {
+          console.log('Uploaded image URL:', imgUrl)
+          resolve(imgUrl)
+        },
+        onError: (error) => {
+          reject(error)
+        },
+      })
+    })
   }
 
   const handleImageChange = async (
@@ -62,9 +73,10 @@ const DiscussionCreatePagePage = () => {
     const file = e.target.files?.[0]
     if (file) {
       try {
-        const imgUUrl = await handleImageBlobHook(file)
+        const imgUrl = await handleUploadImage(file)
+        setImage((prev) => [...prev, imgUrl])
         const updatedOptions = options.map((option, i) =>
-          i === index ? { ...option, image: imgUUrl, hasImage: true } : option,
+          i === index ? { ...option, image: imgUrl, hasImage: true } : option,
         )
         setOptions(updatedOptions)
       } catch (error) {
@@ -90,11 +102,8 @@ const DiscussionCreatePagePage = () => {
   )
 
   const handleSubmit = () => {
-    if (title.trim() === '') {
-      showToast('제목은 공백이면 안됩니다.')
-      return
-    } else if (title.length < 2) {
-      showToast('제목은 2글자 이상입니다.')
+    if (!title) {
+      showToast('제목을 입력해주세요.')
       return
     }
     const isValidOptions = options.every((option, index) => {
@@ -107,10 +116,6 @@ const DiscussionCreatePagePage = () => {
       return true
     })
     if (!isValidOptions) {
-      return
-    }
-    if (options.length < 2) {
-      showToast('항목은 2개 이상이어야 합니다.')
       return
     }
     postDiscussion(formData)
@@ -189,17 +194,19 @@ const DiscussionCreatePagePage = () => {
                     <Image
                       src={option.image}
                       alt="Selected"
+                      width={40}
+                      height={40}
                       className="w-44 h-auto max-h-36 object-contain"
                     />
                   ) : (
-                    <button type="button">
+                    <div>
                       <Image
                         src="/images/discussion/img_btn.svg"
                         alt="Image"
                         width={40}
                         height={40}
                       />
-                    </button>
+                    </div>
                   )}
                   <input
                     type="file"
