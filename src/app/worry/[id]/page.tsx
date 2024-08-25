@@ -3,7 +3,11 @@
 import Button from '@/components/common/Button'
 import Container from '@/components/common/Container'
 import { useParams, useRouter } from 'next/navigation'
-import { useDeleteWorry, useWorryDetail } from '@/service/worry/useWorryService'
+import {
+  useDeleteWorry,
+  usePostChattingRoom,
+  useWorryDetail,
+} from '@/service/worry/useWorryService'
 import WorryProfile from '@/components/user/WorryProfile'
 import { useUserInfo } from '@/service/user/useUserService'
 import { useToast } from '@/hooks/useToast'
@@ -16,6 +20,7 @@ const WorryDetail = () => {
 
   const { data: worryDetail } = useWorryDetail(Number(id))
   const { data: userInfo } = useUserInfo()
+  const { mutate: postChattingRoom } = usePostChattingRoom()
 
   const handleChattingStartClick = () => {
     if (userInfo?.id === worryDetail?.memberSimpleInfo.id) {
@@ -25,6 +30,40 @@ const WorryDetail = () => {
       userInfo.mbti.toUpperCase() === worryDetail?.targetMbti
     ) {
       showToast('채팅을 시작합니다.')
+      postChattingRoom(
+        { worryBoardId: worryId },
+        {
+          onSuccess: (chatRoomId: number) => {
+            const wsUrlUser = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${chatRoomId}&member=${userInfo.id}&worryBoardId=${worryId}`
+            const wsUrlAuthor = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${chatRoomId}&member=${worryDetail?.memberSimpleInfo.id}&worryBoardId=${worryId}`
+
+            // 현재 사용자 웹소켓 연결
+            const socketUser = new WebSocket(wsUrlUser)
+            socketUser.onopen = () => {
+              console.log('User WebSocket is connected')
+              router.push(`/chatting/${chatRoomId}`)
+            }
+            socketUser.onclose = () => {
+              console.log('User WebSocket is closed')
+            }
+            socketUser.onerror = (error) => {
+              console.error('User WebSocket error:', error)
+            }
+
+            // 작성자(다른 사용자)의 웹소켓 연결
+            const socketAuthor = new WebSocket(wsUrlAuthor)
+            socketAuthor.onopen = () => {
+              console.log('Author WebSocket is connected')
+            }
+            socketAuthor.onclose = () => {
+              console.log('Author WebSocket is closed')
+            }
+            socketAuthor.onerror = (error) => {
+              console.error('Author WebSocket error:', error)
+            }
+          },
+        },
+      )
     } else {
       showToast('MBTI가 달라요')
     }

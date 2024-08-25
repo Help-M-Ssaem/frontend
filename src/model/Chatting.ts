@@ -1,17 +1,19 @@
-import { MBTI, Color } from '@/components/common/Button'
-
-interface ChattingProfileI {
-  nickName: string
-  mbti: MBTI
-  badge?: Color
-  profileImgUrl: string
-  recent?: string
-  lastMessage: string
-}
+import { MBTI } from '@/components/common/Button'
+import { User } from './User'
 
 interface ChattingMessageI {
   content: string
   sendAt: string
 }
 
-export type { ChattingProfileI, ChattingMessageI }
+interface ChattingRoomI {
+  chatRoomId: number
+  lastMessage: string
+  lastSendAt: string
+  chatRoomTitle: string
+  memberMbti: MBTI
+  targetMbti: MBTI
+  memberSimpleInfo: User
+}
+
+export type { ChattingMessageI, ChattingRoomI }

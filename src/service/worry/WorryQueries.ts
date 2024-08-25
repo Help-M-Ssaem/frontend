@@ -101,8 +101,9 @@ const queryOptions = {
       worryBoardId,
     }: {
       worryBoardId: number
-    }): Promise<void> => {
-      await WorryService.postChattingRoom({ worryBoardId })
+    }): Promise<number> => {
+      const response = await WorryService.postChattingRoom({ worryBoardId })
+      return response.data
     },
   },
 }

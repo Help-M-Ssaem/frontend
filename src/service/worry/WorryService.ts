@@ -85,7 +85,7 @@ class WorryService extends Service {
   }
 
   postChattingRoom({ worryBoardId }: { worryBoardId: number }) {
-    return this.http.post(`chatroom?worryBoardId=${worryBoardId}`)
+    return this.http.post(`/chatroom?worryBoardId=${worryBoardId}`)
   }
 }
 
