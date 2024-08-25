@@ -47,6 +47,13 @@ const queryOptions = {
     },
   },
 
+  postDiscussionOptionFiles: {
+    mutationFn: async (blob: Blob): Promise<string> => {
+      const response = await DiscussionService.postDiscussionOptionFiles(blob)
+      return response.data
+    },
+  },
+
   deleteDiscussion: {
     queryKey: queryKeys.discussionList,
     mutationFn: async (id: number): Promise<void> => {
