@@ -11,12 +11,18 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Button from '@/components/common/Button'
 
+interface Option {
+  content: string
+  hasImage: boolean
+  image: string | null
+}
+
 const DiscussionCreatePagePage = () => {
   const router = useRouter()
   const { showToast } = useToast()
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
-  const [options, setOptions] = useState([
+  const [options, setOptions] = useState<Option[]>([
     {
       content: '',
       hasImage: false,
@@ -56,7 +62,7 @@ const DiscussionCreatePagePage = () => {
     return new Promise<string>((resolve, reject) => {
       postDiscussionOptionFiles(formImage, {
         onSuccess: (imgUrl) => {
-          console.log('Uploaded image URL:', imgUrl)
+          throw new Error('Uploaded image URL')
           resolve(imgUrl)
         },
         onError: (error) => {
@@ -80,7 +86,7 @@ const DiscussionCreatePagePage = () => {
         )
         setOptions(updatedOptions)
       } catch (error) {
-        console.error('Error uploading image:', error)
+        throw new Error('Error uploading image')
       }
     }
   }
@@ -89,7 +95,7 @@ const DiscussionCreatePagePage = () => {
   const data = {
     title,
     content,
-    getOptionReqs: options.map(({ image, ...rest }) => rest),
+    getOptionReqs: options.map(({ image: _image, ...rest }) => rest),
   }
 
   formData.append(
@@ -106,11 +112,9 @@ const DiscussionCreatePagePage = () => {
       showToast('제목을 입력해주세요.')
       return
     }
-    const isValidOptions = options.every((option, index) => {
+    const isValidOptions = options.every((option) => {
       if (!option.content.trim() && !option.image) {
-        showToast(
-          `항목 ${index + 1}은(는) 내용 또는 이미지 중 하나는 있어야 합니다.`,
-        )
+        showToast(`최소 2개의 내용 또는 이미지 중 하나는 있어야 합니다.`)
         return false
       }
       return true
@@ -135,7 +139,6 @@ const DiscussionCreatePagePage = () => {
     }
   }
 
-  // 선택지를 삭제하는 함수
   const handleRemoveOption = (indexToRemove: number) => {
     if (options.length > 2) {
       image.splice(indexToRemove, 1)
@@ -189,7 +192,10 @@ const DiscussionCreatePagePage = () => {
                   </button>
                 )}
 
-                <label className="flex items-center justify-center w-full h-full cursor-pointer">
+                <label
+                  htmlFor={`image-upload-${index}`}
+                  className="flex items-center justify-center w-full h-full cursor-pointer"
+                >
                   {option.image !== null ? (
                     <Image
                       src={option.image}
@@ -210,6 +216,7 @@ const DiscussionCreatePagePage = () => {
                     </div>
                   )}
                   <input
+                    id={`image-upload-${index}`}
                     type="file"
                     accept="image/*"
                     onChange={(e) => handleImageChange(index, e)}
