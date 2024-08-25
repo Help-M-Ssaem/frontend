@@ -194,9 +194,10 @@ const DiscussionCreatePagePage = () => {
                     <Image
                       src={option.image}
                       alt="Selected"
-                      width={40}
-                      height={40}
-                      className="w-44 h-auto max-h-36 object-contain"
+                      width={150}
+                      height={150}
+                      quality={100}
+                      className="object-contain"
                     />
                   ) : (
                     <div>
