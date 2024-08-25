@@ -5,15 +5,27 @@ import Image from 'next/image'
 import Button from '@/components/common/Button'
 import Container from '@/components/common/Container'
 import Profile from '@/components/user/Profile'
-import { useDiscussionDetail } from '@/service/discussion/useDiscussionService'
-import { useParams } from 'next/navigation'
+import {
+  useDeleteDiscussion,
+  useDiscussionDetail,
+} from '@/service/discussion/useDiscussionService'
+import { useParams, useRouter } from 'next/navigation'
 import CommentList from '@/components/board/CommentList'
 import { DiscussionOptionI } from '@/model/Discussion'
 import DiscussionOption from '@/components/discussion/DiscussionOption'
+import { useUserInfo } from '@/service/user/useUserService'
+import { queryKeys } from '@/service/discussion/DiscussionQueries'
+import { useQueryClient } from '@tanstack/react-query'
+import { useToast } from '@/hooks/useToast'
 
 const DiscussionDetail = () => {
   const { id } = useParams()
-  const { data: discussionDetail } = useDiscussionDetail(Number(id))
+  const discussionId = Number(id)
+  const { data: discussionDetail } = useDiscussionDetail(discussionId)
+  const { data: userInfo } = useUserInfo()
+  const queryClient = useQueryClient()
+  const router = useRouter()
+  const { showToast } = useToast()
 
   const discussion = discussionDetail && discussionDetail.discussionSimpleInfo
   const formattedCreatedAt = discussion && discussion.createdAt.split(' ')[0]
@@ -32,17 +44,40 @@ const DiscussionDetail = () => {
     setCommentCount(newCount)
   }
 
+  const { mutate: deleteDiscussion } = useDeleteDiscussion()
+  const handleDeleteDiscussion = () => {
+    deleteDiscussion(discussionId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.discussionList })
+        router.back()
+      },
+      onError: () => {
+        showToast('참여중인 토론은 삭제할 수 없습니다')
+      },
+    })
+  }
+
   return (
     <>
       <div className="text-title3 text-maindark font-semibold my-5">
         MBTI 과몰입 토론
       </div>
       <Container color="purple">
-        <div className="flex justify-end gap-2.5 mb-5">
-          <Button text="수정" color="PURPLE" size="small" onClick={() => {}} />
-          <Button text="삭제" color="PURPLE" size="small" onClick={() => {}} />
-        </div>
-        <div className="h-[1px] bg-main" />
+        {userInfo &&
+          discussion &&
+          userInfo.id === discussion.memberSimpleInfo.id && (
+            <>
+              <div className="flex justify-end gap-2.5 mb-5">
+                <Button
+                  text="삭제"
+                  color="PURPLE"
+                  size="small"
+                  onClick={handleDeleteDiscussion}
+                />
+              </div>
+              <div className="h-[1px] bg-main" />
+            </>
+          )}
         {discussion && (
           <>
             <div className="flex justify-between my-7.5">

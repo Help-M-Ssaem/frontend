@@ -38,6 +38,18 @@ const usePostDiscussion = () => {
   return useMutation<void, Error, FormData>(options)
 }
 
+const usePostDiscussionOptionFiles = () => {
+  const mutationFn = async (image: FormData): Promise<string> => {
+    const response =
+      await queryOptions.postDiscussionOptionFiles.mutationFn(image)
+    return response
+  }
+  const options: UseMutationOptions<string, Error, FormData, unknown> = {
+    mutationFn,
+  }
+  return useMutation<string, Error, FormData>(options)
+}
+
 const useDeleteDiscussion = () => {
   const mutationFn = (id: number): Promise<void> =>
     queryOptions.deleteDiscussion.mutationFn(id)
@@ -74,6 +86,7 @@ export {
   useDiscussionListMember,
   useDiscussionDetail,
   usePostDiscussion,
+  usePostDiscussionOptionFiles,
   useDeleteDiscussion,
   usePostDiscussionPraticipation,
 }
