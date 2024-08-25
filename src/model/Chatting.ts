@@ -2,18 +2,19 @@ import { MBTI } from '@/components/common/Button'
 import { User } from './User'
 
 interface ChattingMessageI {
-  content: string
-  sendAt: string
+  message: string
+  createdAt: string
+  sendWho: boolean
 }
 
 interface ChattingRoomI {
   chatRoomId: number
+  chatRoomTitle: string
+  memberSimpleInfo: User
+  targetMbti: MBTI
+  worryBoardId: number
   lastMessage: string
   lastSendAt: string
-  chatRoomTitle: string
-  memberMbti: MBTI
-  targetMbti: MBTI
-  memberSimpleInfo: User
 }
 
 export type { ChattingMessageI, ChattingRoomI }
