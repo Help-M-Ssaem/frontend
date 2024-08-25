@@ -62,7 +62,6 @@ const DiscussionCreatePagePage = () => {
     return new Promise<string>((resolve, reject) => {
       postDiscussionOptionFiles(formImage, {
         onSuccess: (imgUrl) => {
-          throw new Error('Uploaded image URL')
           resolve(imgUrl)
         },
         onError: (error) => {
@@ -164,7 +163,7 @@ const DiscussionCreatePagePage = () => {
           type="text"
           value={title}
           onChange={handleTitleChange}
-          className="w-full h-10 border border-gray4 rounded-md p-2 mb-5"
+          className="w-full h-10 border border-gray4 rounded-md p-2 mb-5 focus:outline-none"
         />
 
         <div className="text-headline font-normal text-gray2 mb-2">
@@ -228,7 +227,7 @@ const DiscussionCreatePagePage = () => {
                   type="text"
                   value={option.content}
                   onChange={(e) => handleOptionTextChange(index, e)}
-                  className="w-full h-10 border border-gray-300 rounded-md p-2 mt-2"
+                  className="w-full h-10 border border-gray-300 rounded-md p-2 mt-2 focus:outline-none"
                 />
               </div>
             </div>
@@ -255,7 +254,7 @@ const DiscussionCreatePagePage = () => {
         <textarea
           value={content}
           onChange={handleContentChange}
-          className="w-full h-20 border border-gray4 rounded-md p-2 mb-4"
+          className="w-full h-20 border border-gray4 rounded-md p-2 mb-4 focus:outline-none"
         />
 
         <div className="flex justify-end mt-4 gap-2">
