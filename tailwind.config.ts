@@ -150,6 +150,7 @@ const config: Config = {
       maxWidth: {
         '67.5': '270px',
         '80': '320px',
+        '160': '640px',
       },
       boxShadow: {
         'custom-light': '0 4px 10px rgba(0, 0, 0, 0.10)',
