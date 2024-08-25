@@ -2,29 +2,28 @@ import { ChattingMessageI } from '@/model/Chatting'
 import Image from 'next/image'
 
 export interface ChattingMessageProps {
-  message: ChattingMessageI
-  isReceived: boolean
+  msg: ChattingMessageI
 }
 
-const ChattingMessage = ({ message, isReceived }: ChattingMessageProps) => {
-  const { content, sendAt } = message
+const ChattingMessage = ({ msg }: ChattingMessageProps) => {
+  const { message, createdAt, sendWho } = msg
 
   return (
     <div
-      className={`flex items-end mb-4 ${isReceived ? 'justify-start' : 'justify-end'}`}
+      className={`flex items-end mb-4 ${sendWho ? 'justify-start' : 'justify-end'}`}
     >
       <div
-        className={`flex items-center gap-2.5 ${isReceived ? 'flex-row-reverse' : 'flex-row'}`}
+        className={`flex items-center gap-2.5 ${sendWho ? 'flex-row-reverse' : 'flex-row'}`}
       >
         <div className="text-caption text-gray2 whitespace-nowrap">
-          {sendAt}
+          {createdAt}
         </div>
         <div
-          className={`text-headine text-gray2 font-semibold rounded-7.5 px-5 py-4  max-w-90 ${isReceived ? 'bg-main4' : 'bg-white border border-main'}`}
+          className={`text-headine text-gray2 font-semibold rounded-7.5 px-5 py-4  max-w-90 ${sendWho ? 'bg-main4' : 'bg-white border border-main'}`}
         >
-          {content}
+          {message}
         </div>
-        {isReceived && (
+        {sendWho && (
           <Image
             src="/images/common/default.svg"
             width={56}

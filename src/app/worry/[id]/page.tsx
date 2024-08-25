@@ -11,6 +11,7 @@ import {
 import WorryProfile from '@/components/user/WorryProfile'
 import { useUserInfo } from '@/service/user/useUserService'
 import { useToast } from '@/hooks/useToast'
+import { useWebSocket } from '@/hooks/useSocket'
 
 const WorryDetail = () => {
   const { id } = useParams()
@@ -21,6 +22,7 @@ const WorryDetail = () => {
   const { data: worryDetail } = useWorryDetail(Number(id))
   const { data: userInfo } = useUserInfo()
   const { mutate: postChattingRoom } = usePostChattingRoom()
+  const { connectSocket, socketRef } = useWebSocket()
 
   const handleChattingStartClick = () => {
     if (userInfo?.id === worryDetail?.memberSimpleInfo.id) {
@@ -35,31 +37,21 @@ const WorryDetail = () => {
         {
           onSuccess: (chatRoomId: number) => {
             const wsUrlUser = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${chatRoomId}&member=${userInfo.id}&worryBoardId=${worryId}`
-            const wsUrlAuthor = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${chatRoomId}&member=${worryDetail?.memberSimpleInfo.id}&worryBoardId=${worryId}`
+            // const wsUrlAuthor = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${chatRoomId}&member=${worryDetail?.memberSimpleInfo.id}&worryBoardId=${worryId}`
 
             // 현재 사용자 웹소켓 연결
-            const socketUser = new WebSocket(wsUrlUser)
-            socketUser.onopen = () => {
-              console.log('User WebSocket is connected')
-              router.push(`/chatting/${chatRoomId}`)
-            }
-            socketUser.onclose = () => {
-              console.log('User WebSocket is closed')
-            }
-            socketUser.onerror = (error) => {
-              console.error('User WebSocket error:', error)
-            }
-
-            // 작성자(다른 사용자)의 웹소켓 연결
-            const socketAuthor = new WebSocket(wsUrlAuthor)
-            socketAuthor.onopen = () => {
-              console.log('Author WebSocket is connected')
-            }
-            socketAuthor.onclose = () => {
-              console.log('Author WebSocket is closed')
-            }
-            socketAuthor.onerror = (error) => {
-              console.error('Author WebSocket error:', error)
+            connectSocket(wsUrlUser)
+            if (socketRef.current) {
+              socketRef.current.onopen = () => {
+                console.log('User WebSocket is connected')
+                router.push(`/chatting/${chatRoomId}`)
+              }
+              socketRef.current.onclose = () => {
+                console.log('User WebSocket is closed')
+              }
+              socketRef.current.onerror = (error: any) => {
+                console.error('User WebSocket error:', error)
+              }
             }
           },
         },

@@ -5,6 +5,7 @@ import Recoil from '@/recoil/Recoil'
 import localFont from 'next/font/local'
 import ReactQueryProviders from '@/hooks/useReactQuery'
 import Toaster from '@/components/common/Toaster'
+import { WebSocketProvider } from '@/hooks/useSocket'
 
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
@@ -38,14 +39,16 @@ export default function RootLayout({
       <link rel="icon" href="/favicon.png" sizes="any" />
       <body className={`${pretendard.variable} font-pretendard`}>
         <Recoil>
-          <ReactQueryProviders>
-            <main className="py-3 px-5 sm:px-7% md:px-10% ">
-              <Header />
-              {children}
-              <Footer />
-              <Toaster />
-            </main>
-          </ReactQueryProviders>
+          <WebSocketProvider>
+            <ReactQueryProviders>
+              <main className="py-3 px-5 sm:px-7% md:px-10% ">
+                <Header />
+                {children}
+                <Footer />
+                <Toaster />
+              </main>
+            </ReactQueryProviders>
+          </WebSocketProvider>
         </Recoil>
       </body>
     </html>
