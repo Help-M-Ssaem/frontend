@@ -83,6 +83,10 @@ class WorryService extends Service {
   patchWorrySolved(id: number) {
     return this.http.patch(`/member/worry-board/${id}/solved`)
   }
+
+  postChattingRoom({ worryBoardId }: { worryBoardId: number }) {
+    return this.http.post(`chatroom?worryBoardId=${worryBoardId}`)
+  }
 }
 
 export default new WorryService()
