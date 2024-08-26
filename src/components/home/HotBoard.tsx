@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { HotBoardI } from '@/model/Home'
 import Image from 'next/image'
 import Profile from '../user/Profile'
@@ -13,6 +14,7 @@ const MAX_CONTENT_LENGTH = 50
 
 const HotBoard = ({ hotBoard }: HotBoardProps) => {
   const {
+    id,
     title,
     content,
     imgUrl,
@@ -23,13 +25,21 @@ const HotBoard = ({ hotBoard }: HotBoardProps) => {
     memberSimpleInfo,
   } = hotBoard
 
+  const router = useRouter()
+
   const truncatedContent =
     content.length > MAX_CONTENT_LENGTH
       ? `${content.substring(0, MAX_CONTENT_LENGTH)}...`
       : content
 
   return (
-    <Container color="purple">
+    <Container
+      color="purple"
+      className="cursor-pointer"
+      onClick={() => {
+        router.push(`/board/${id}`)
+      }}
+    >
       <div className="flex justify-between">
         <div className="flex flex-col justify-between gap-5">
           <Profile user={memberSimpleInfo} />

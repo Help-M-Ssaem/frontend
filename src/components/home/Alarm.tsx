@@ -1,6 +1,7 @@
-import React from 'react'
-import Image from 'next/image'
+'use client'
+
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import {
   useAlarmList,
   usePatchAlarmAll,
@@ -9,6 +10,8 @@ import {
   useDeleteAlarm,
 } from '@/service/alarm/useAlarmService'
 import { AlarmI } from '@/model/Alarm'
+import { motion } from 'framer-motion'
+import { ContainerAnimation } from '@/styles/animation'
 
 interface AlarmProps {
   closeAlarmPopup: () => void
@@ -90,7 +93,13 @@ const Alarm = ({ closeAlarmPopup }: AlarmProps) => {
   }
 
   return (
-    <div className="bg-main3 rounded-3.75 shadow-lg w-full p-5">
+    <motion.div
+      className="bg-main3 rounded-3.75 shadow-lg w-full p-5"
+      initial="hidden"
+      animate="visible"
+      variants={ContainerAnimation}
+      transition={{ duration: 0.2 }}
+    >
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-headline text-gray2 font-semibold">전체 알림</h2>
         <div className="flex gap-3">
@@ -158,7 +167,7 @@ const Alarm = ({ closeAlarmPopup }: AlarmProps) => {
           </li>
         ))}
       </ul>
-    </div>
+    </motion.div>
   )
 }
 

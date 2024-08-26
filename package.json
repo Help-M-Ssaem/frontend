@@ -34,6 +34,8 @@
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-config-prettier": "^9.1.0",
+    "framer": "^2.4.1",
+    "framer-motion": "^11.3.30",
     "marked": "^13.0.3",
     "next": "14.2.5",
     "next-auth": "^4.24.7",
