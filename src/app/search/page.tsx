@@ -75,7 +75,9 @@ const SearchPage = () => {
       </div>
 
       <div>
-        <div className="text-gray1 font-semibold mb-2">이전 검색어</div>
+        <div className="text-title3 text-gray1 font-semibold mb-3">
+          이전 검색어
+        </div>
         <div className="flex flex-wrap gap-2">
           {Array.isArray(recentKeywords) ? (
             recentKeywords.map((item, idx: number) => (
@@ -93,12 +95,19 @@ const SearchPage = () => {
       </div>
 
       <div>
-        <div className="text-gray1 font-semibold mb-2">인기 검색어</div>
-        <div className="flex flex-col gap-2">
+        <div className="text-title3 text-gray1 font-semibold mb-3">
+          인기 검색어
+          <span className="text-caption font-regular text-gray3 ml-2">
+            2023.07.14 18:06 기준
+          </span>
+        </div>
+        <div className="flex flex-col gap-3">
           {Array.isArray(realtimeKeywords) ? (
             realtimeKeywords.map((item, idx: number) => (
-              <div key={idx} className="flex items-center gap-2">
-                <span>{idx + 1}</span>
+              <div key={idx} className="flex items-center gap-4">
+                <span className="text-headline text-maindark font-semibold">
+                  {idx + 1}
+                </span>
                 {item.keyword}
               </div>
             ))
