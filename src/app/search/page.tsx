@@ -9,11 +9,16 @@ import {
 } from '@/service/search/useSearchService'
 import { useState, useEffect } from 'react'
 import Button from '@/components/common/Button'
+import { useQueryClient } from '@tanstack/react-query'
+import { queryKeys } from '@/service/search/SearchQueries'
 
 const SearchPage = () => {
   const router = useRouter()
+  const queryClient = useQueryClient()
   const [keyword, setKeyword] = useState('')
+
   const { mutate: keywordSearch } = useKeywordSearch()
+
   const { data: recentKeywords } = useRecentKeywords()
   const { data: realtimeKeywords } = useRealtimeKeywords()
 
@@ -27,7 +32,14 @@ const SearchPage = () => {
 
   const handleSearch = () => {
     if (keyword.trim() !== '') {
-      keywordSearch(keyword)
+      keywordSearch(keyword, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: queryKeys.recentKeywords })
+          queryClient.invalidateQueries({
+            queryKey: queryKeys.realtimeKeywords,
+          })
+        },
+      })
       router.push(`?keyword=${encodeURIComponent(keyword)}`)
     }
   }
@@ -87,7 +99,7 @@ const SearchPage = () => {
             realtimeKeywords.map((item, idx: number) => (
               <div key={idx} className="flex items-center gap-2">
                 <span>{idx + 1}</span>
-                <Button text={item.keyword} size="small" color="LIGHTPURPLE" />
+                {item.keyword}
               </div>
             ))
           ) : (

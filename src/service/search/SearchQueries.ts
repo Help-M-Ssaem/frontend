@@ -1,12 +1,12 @@
 import SearchService, { SearchProps } from './SearchService'
 
 const queryKeys = {
-  boardSearch: 'boardSearch',
-  solvedWorrySearch: 'solvedWorrySearch',
-  waitingWorrySearch: 'waitingWorrySearch',
-  discussionSearch: 'discussionSearch',
-  realtimeKeywords: 'realtimeKeywords',
-  recentKeywords: 'recentKeywords',
+  boardSearch: ['boardSearch'] as const,
+  solvedWorrySearch: ['solvedWorrySearch'] as const,
+  waitingWorrySearch: ['waitingWorrySearch'] as const,
+  discussionSearch: ['discussionSearch'] as const,
+  realtimeKeywords: ['realtimeKeywords'] as const,
+  recentKeywords: ['recentKeywords'] as const,
 }
 
 const queryOptions = {
