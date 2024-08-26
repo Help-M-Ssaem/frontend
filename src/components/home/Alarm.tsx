@@ -135,10 +135,13 @@ const Alarm = ({ closeAlarmPopup }: AlarmProps) => {
                 ) : (
                   <Image
                     src="/images/discussion/delete_btn.svg"
-                    alt="new"
+                    alt="delete"
                     width={12}
                     height={12}
-                    onClick={() => handleDeleteAlarm(alarm.id)}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDeleteAlarm(alarm.id)
+                    }}
                   />
                 )}
               </div>
