@@ -1,5 +1,5 @@
 import Service from '@/apis/AxiosInstance'
-import { AlarmList } from '@/model/Alarm'
+import { AlarmListI } from '@/model/Alarm'
 
 export interface AlarmListProps {
   page: number
@@ -8,7 +8,7 @@ export interface AlarmListProps {
 
 class AlarmService extends Service {
   getAlarmList({ page, size }: AlarmListProps) {
-    return this.http.get<AlarmList>(
+    return this.http.get<AlarmListI>(
       `/member/notifications?page=${page}&size=${size}`,
     )
   }

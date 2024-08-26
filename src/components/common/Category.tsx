@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { useUserInfo } from '@/service/user/useUserService'
 import { useToast } from '@/hooks/useToast'
 import Bookmark from '../board/Bookmark'
+import Alarm from '../home/Alarm'
 
 const categories = [
   { path: '/', label: 'HOME' },
@@ -27,6 +28,7 @@ const Category = () => {
   const { data: userInfo } = useUserInfo()
   const [selected, setSelected] = useState<string | null>(null)
   const [isBookmarkOpen, setIsBookmarkOpen] = useState(false)
+  const [isAlarmsOpen, setIsAlarmsOpen] = useState(false)
 
   const { showToast } = useToast()
 
@@ -49,6 +51,8 @@ const Category = () => {
     }
     if (path === '/favorites') {
       setIsBookmarkOpen(!isBookmarkOpen)
+    } else if (path === '/alarm') {
+      setIsAlarmsOpen(!isAlarmsOpen)
     } else {
       handleClick(path)
     }
@@ -68,6 +72,10 @@ const Category = () => {
 
   const closeBookmarkPopup = () => {
     setIsBookmarkOpen(false)
+  }
+
+  const closeAlarmPopup = () => {
+    setIsAlarmsOpen(false)
   }
 
   return (
@@ -113,6 +121,16 @@ const Category = () => {
               />
             </button>
           </li>
+          {isAlarmsOpen && (
+            <div className="fixed inset-0 z-40" onClick={closeAlarmPopup}>
+              <div
+                className="absolute right-40 top-42 w-[400px] rounded-lg shadow-lg z-50"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Alarm closeAlarmPopup={closeAlarmPopup} />
+              </div>
+            </div>
+          )}
           {isBookmarkOpen && (
             <div className="fixed inset-0 z-40" onClick={closeBookmarkPopup}>
               <div

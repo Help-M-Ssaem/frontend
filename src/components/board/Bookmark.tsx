@@ -20,8 +20,8 @@ const Bookmark = ({ closeBookmarkPopup }: BookmarkProps) => {
   }
 
   return (
-    <div className="p-4 bg-main3 rounded-3.75 shadow-lg w-full">
-      <h2 className="text-headline text-gaay2 font-semibold mb-4">
+    <div className="bg-main3 rounded-3.75 shadow-lg w-full p-5">
+      <h2 className="text-headline text-gray2 font-semibold mb-4">
         나의 즐겨찾기
       </h2>
       <ul className="flex flex-col gap-2.5">
