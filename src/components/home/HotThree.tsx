@@ -1,6 +1,8 @@
 import { HotThreeI } from '@/model/Home'
 import { useRouter } from 'next/navigation'
 import React from 'react'
+import { motion } from 'framer-motion'
+import { ContainerAnimation } from '@/styles/animation'
 
 export interface HotThreeProps {
   hotThree: HotThreeI
@@ -46,7 +48,13 @@ const HotThree = ({ hotThree, board }: HotThreeProps) => {
   }
 
   return (
-    <div className="relative flex flex-col justify-between h-44 pt-10 pb-5 px-7.5 bg-white rounded-7.5 w-full min-w-67.5 sm:min-w-0">
+    <motion.div
+      className="relative flex flex-col justify-between h-44 pt-10 pb-5 px-7.5 bg-white rounded-7.5 w-full min-w-67.5 sm:min-w-0"
+      initial="hidden"
+      animate="visible"
+      variants={ContainerAnimation}
+      transition={{ duration: 0.2 }}
+    >
       <div className="absolute top-[-14px] left-3.75 bg-alarm text-white text-footnote px-2.5 py-2 font-regular">
         HOT
       </div>
@@ -66,7 +74,7 @@ const HotThree = ({ hotThree, board }: HotThreeProps) => {
       >
         바로가기
       </div>
-    </div>
+    </motion.div>
   )
 }
 

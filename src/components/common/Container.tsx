@@ -1,5 +1,7 @@
 'use client'
 
+import { ContainerAnimation } from '@/styles/animation'
+import { motion } from 'framer-motion'
 import React, { ReactNode } from 'react'
 
 const ContainerTheme = {
@@ -19,12 +21,16 @@ export interface ContainerProps {
 }
 
 const Container = ({ children, color, onClick, className }: ContainerProps) => (
-  <div
+  <motion.div
     className={`w-full h-full p-4 sm:px-7.5 sm:py-5 rounded-7.5 ${ContainerTheme.color[color]} flex flex-col ${className}`}
     onClick={onClick}
+    initial="hidden"
+    animate="visible"
+    variants={ContainerAnimation}
+    transition={{ duration: 0.2 }}
   >
     {children}
-  </div>
+  </motion.div>
 )
 
 Container.defaultProps = {

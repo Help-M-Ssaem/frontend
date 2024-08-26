@@ -2,6 +2,8 @@
 
 import { User } from '@/model/User'
 import { useRouter } from 'next/navigation'
+import { motion } from 'framer-motion'
+import { ContainerAnimation } from '@/styles/animation'
 import Profile from '../user/Profile'
 
 export interface LoginProps {
@@ -20,7 +22,13 @@ const Login = ({ user }: LoginProps) => {
   ]
 
   return (
-    <div className="flex flex-col justify-between items-center w-full min-h-full min-w-67.5 p-7 bg-white rounded-7.5">
+    <motion.div
+      className="flex flex-col justify-between items-center w-full min-h-full min-w-67.5 p-7 bg-white rounded-7.5"
+      initial="hidden"
+      animate="visible"
+      variants={ContainerAnimation}
+      transition={{ duration: 0.2 }}
+    >
       <div className="w-full flex justify-end">
         <p className="text-gray2 text-caption cursor-pointer">로그아웃</p>
       </div>
@@ -41,7 +49,7 @@ const Login = ({ user }: LoginProps) => {
           ))}
         </ul>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
