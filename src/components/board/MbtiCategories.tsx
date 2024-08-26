@@ -5,9 +5,10 @@ import { useRouter } from 'next/navigation'
 import mbtiList from '@/constants/mbtiList'
 import {
   useBoardListNumber,
+  useCategoryBookmark,
   usePostCategoryBookmark,
 } from '@/service/board/useBoardService'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export interface MbtiCategoriesProps {
   selectedMbti: string
@@ -15,11 +16,27 @@ export interface MbtiCategoriesProps {
 
 const MbtiCategories = ({ selectedMbti }: MbtiCategoriesProps) => {
   const router = useRouter()
-  const { data } = useBoardListNumber()
-  const totalBoardCount = data?.boardCount || 0
+  const { data: boardListNumber } = useBoardListNumber()
+  const totalBoardCount = boardListNumber?.boardCount || 0
 
-  const { mutate } = usePostCategoryBookmark()
+  const { data: categoryBookmark } = useCategoryBookmark()
+  const { mutate: postCategoryBookmark } = usePostCategoryBookmark()
   const [favorites, setFavorites] = useState<Record<string, boolean>>({})
+
+  useEffect(() => {
+    if (categoryBookmark) {
+      const favoriteMbti = categoryBookmark.reduce(
+        (acc: Record<string, boolean>, item: { mbti: string[] }) => {
+          item.mbti.forEach((mbti) => {
+            acc[mbti] = true
+          })
+          return acc
+        },
+        {},
+      )
+      setFavorites(favoriteMbti)
+    }
+  }, [categoryBookmark])
 
   const handleMbtiChange = (mbti: string) => {
     router.push(`/board?mbti=${mbti}&page=1`)
@@ -30,8 +47,7 @@ const MbtiCategories = ({ selectedMbti }: MbtiCategoriesProps) => {
       ...prevFavorites,
       [mbti]: !prevFavorites[mbti],
     }))
-
-    mutate(mbti)
+    postCategoryBookmark(mbti)
   }
 
   return (
@@ -50,7 +66,8 @@ const MbtiCategories = ({ selectedMbti }: MbtiCategoriesProps) => {
           </div>
           <div className="col-span-4 grid grid-cols-4 gap-4">
             {mbtiList.map((mbti, index) => {
-              const mbtiCount = (data as any)?.[mbti.toLowerCase()] || 0
+              const mbtiCount =
+                (boardListNumber as any)?.[mbti.toLowerCase()] || 0
               const isFavorite = favorites[mbti] || false
               return (
                 <div

@@ -5,6 +5,8 @@ const queryKeys = {
   solvedWorrySearch: 'solvedWorrySearch',
   waitingWorrySearch: 'waitingWorrySearch',
   discussionSearch: 'discussionSearch',
+  realtimeKeywords: 'realtimeKeywords',
+  recentKeywords: 'recentKeywords',
 }
 
 const queryOptions = {
@@ -103,7 +105,7 @@ const queryOptions = {
 
   keywordSearch: {
     queryKey: queryKeys.boardSearch,
-    queryFn: async (keyword: string) => {
+    mutationFn: async (keyword: string) => {
       const res = await SearchService.postKeywordSearch(keyword)
       return res.data
     },
