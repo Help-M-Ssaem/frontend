@@ -1,24 +1,34 @@
 'use client'
 
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import {
   useKeywordSearch,
   useRealtimeKeywords,
   useRecentKeywords,
 } from '@/service/search/useSearchService'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Button from '@/components/common/Button'
 
 const SearchPage = () => {
+  const router = useRouter()
   const [keyword, setKeyword] = useState('')
   const { mutate: keywordSearch } = useKeywordSearch()
   const { data: recentKeywords } = useRecentKeywords()
   const { data: realtimeKeywords } = useRealtimeKeywords()
 
+  useEffect(() => {
+    const url = new URL(window.location.href)
+    const searchKeyword = url.searchParams.get('keyword')
+    if (searchKeyword) {
+      setKeyword(searchKeyword)
+    }
+  }, [])
+
   const handleSearch = () => {
     if (keyword.trim() !== '') {
       keywordSearch(keyword)
-      setKeyword('')
+      router.push(`?keyword=${encodeURIComponent(keyword)}`)
     }
   }
 
