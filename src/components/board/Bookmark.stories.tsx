@@ -6,7 +6,7 @@ export default {
   component: Bookmark,
 } as Meta
 
-const Template: StoryFn = () => <Bookmark />
+const Template: StoryFn = () => <Bookmark closeBookmarkPopup={() => {}} />
 
 export const Primary = Template.bind({})
 Primary.args = {}
