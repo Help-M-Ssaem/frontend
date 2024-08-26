@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { User } from '@/model/User'
 import Button from '../common/Button'
+import { motion } from 'framer-motion'
+import { FadeInAnimation } from '@/styles/animation'
 
 export interface PopularProfileProps {
   popularProfile: User
@@ -15,11 +17,15 @@ const PopularProfile = ({ popularProfile }: PopularProfileProps) => {
   const router = useRouter()
 
   return (
-    <div
+    <motion.div
       className="flex flex-col items-center gap-2 sm:gap-4 cursor-pointer"
       onClick={() => {
         router.push(`/user/${id}`)
       }}
+      initial="hidden"
+      animate="visible"
+      variants={FadeInAnimation}
+      transition={{ duration: 0.2 }}
     >
       <div className="relative w-[100px] h-[100px] sm:w-[144px] sm:h-[144px] md:w-[174px] md:h-[174px]">
         <Image
@@ -41,7 +47,7 @@ const PopularProfile = ({ popularProfile }: PopularProfileProps) => {
       <div className="text-footnote sm:text-body text-gray1 font-regular">
         {introduction}
       </div>
-    </div>
+    </motion.div>
   )
 }
 
