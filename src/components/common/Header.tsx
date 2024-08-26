@@ -35,6 +35,12 @@ const Header = () => {
       showToast('로그인이 필요한 서비스입니다')
       return
     }
+
+    if (path === '/alarm' || path === '/favorites') {
+      showToast('준비 중인 기능입니다')
+      return
+    }
+
     setSelected(path)
     router.push(path)
   }
