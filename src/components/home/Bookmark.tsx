@@ -1,6 +1,10 @@
+'use client'
+
 import Image from 'next/image'
 import { useCategoryBookmark } from '@/service/board/useBoardService'
 import { useRouter } from 'next/navigation'
+import { motion } from 'framer-motion'
+import { ContainerAnimation } from '@/styles/animation'
 
 interface BookmarkI {
   mbti: string[]
@@ -20,7 +24,13 @@ const Bookmark = ({ closeBookmarkPopup }: BookmarkProps) => {
   }
 
   return (
-    <div className="bg-main3 rounded-3.75 shadow-lg w-full p-5">
+    <motion.div
+      className="bg-main3 rounded-3.75 shadow-lg w-full p-5"
+      initial="hidden"
+      animate="visible"
+      variants={ContainerAnimation}
+      transition={{ duration: 0.2 }}
+    >
       <h2 className="text-headline text-gray2 font-semibold mb-4">
         나의 즐겨찾기
       </h2>
@@ -46,7 +56,7 @@ const Bookmark = ({ closeBookmarkPopup }: BookmarkProps) => {
             </li>
           ))}
       </ul>
-    </div>
+    </motion.div>
   )
 }
 

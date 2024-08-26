@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useUserInfo } from '@/service/user/useUserService'
 import { useToast } from '@/hooks/useToast'
-import Bookmark from '../board/Bookmark'
+import Bookmark from '../home/Bookmark'
 import Alarm from '../home/Alarm'
 
 const categories = [

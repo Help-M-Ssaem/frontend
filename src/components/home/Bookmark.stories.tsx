@@ -1,8 +1,8 @@
-import Bookmark from '@/components/board/Bookmark'
+import Bookmark from '@/components/home/Bookmark'
 import { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Board/Bookmark',
+  title: 'Home/Bookmark',
   component: Bookmark,
 } as Meta
 

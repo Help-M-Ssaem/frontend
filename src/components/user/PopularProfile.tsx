@@ -3,9 +3,9 @@
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { User } from '@/model/User'
-import Button from '../common/Button'
 import { motion } from 'framer-motion'
 import { FadeInAnimation } from '@/styles/animation'
+import Button from '../common/Button'
 
 export interface PopularProfileProps {
   popularProfile: User
