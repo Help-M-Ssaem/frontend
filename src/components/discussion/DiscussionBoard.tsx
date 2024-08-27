@@ -20,9 +20,10 @@ const DiscussionBoard = ({ discussionBoard }: DiscussionBoardProps) => {
     participantCount,
     commentCount,
     memberSimpleInfo,
-    options,
+    options: initialOptions,
   } = discussionBoard
 
+  const [options, setOptions] = useState<DiscussionOptionI[]>(initialOptions)
   const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null)
   const [selectedOptionPercent, setSelectedOptionPercent] = useState('')
 
@@ -44,11 +45,23 @@ const DiscussionBoard = ({ discussionBoard }: DiscussionBoardProps) => {
       },
       {
         onSuccess: (data) => {
-          const selectedOption = data.find(
-            (option: DiscussionOptionI) => option.selected,
+          const updatedOptions = data.map((option: DiscussionOptionI) => {
+            if (option.id === optionId) {
+              return { ...option, selected: true }
+            } else {
+              return { ...option, selected: false }
+            }
+          })
+
+          setOptions(updatedOptions)
+
+          const selectedOption = updatedOptions.find(
+            (option) => option.selected,
           )
           setSelectedOptionId(optionId)
-          setSelectedOptionPercent(selectedOption!!.selectedPercent)
+          if (selectedOption) {
+            setSelectedOptionPercent(selectedOption.selectedPercent)
+          }
         },
       },
     )
