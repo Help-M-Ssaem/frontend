@@ -1,7 +1,7 @@
 'use client'
 
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import {
   useKeywordSearch,
   useRealtimeKeywords,
@@ -39,9 +39,11 @@ const SearchPage = () => {
     }
   }, [])
 
-  const handleSearch = () => {
-    if (keyword.trim() !== '') {
-      keywordSearch(keyword, {
+  const handleSearch = (searchKeyword?: string) => {
+    const finalKeyword = searchKeyword || keyword
+    if (finalKeyword.trim() !== '') {
+      setKeyword(finalKeyword)
+      keywordSearch(finalKeyword, {
         onSuccess: (keywordResult) => {
           queryClient.invalidateQueries({ queryKey: queryKeys.recentKeywords })
           queryClient.invalidateQueries({
@@ -50,7 +52,7 @@ const SearchPage = () => {
           setResult(keywordResult)
         },
       })
-      router.push(`?keyword=${encodeURIComponent(keyword)}`)
+      router.push(`?keyword=${encodeURIComponent(finalKeyword)}`)
     }
   }
 
@@ -73,7 +75,7 @@ const SearchPage = () => {
         <button
           className="flex-shrink-0 bg-transparent border-transparent"
           type="button"
-          onClick={handleSearch}
+          onClick={() => handleSearch()}
         >
           <Image
             src="/images/search/search.svg"
@@ -96,6 +98,7 @@ const SearchPage = () => {
                 text={item.keyword}
                 size="small"
                 color="LIGHTPURPLE"
+                onClick={() => handleSearch(item.keyword)}
               />
             ))
           ) : (
@@ -137,13 +140,16 @@ const SearchPage = () => {
               전체 게시판
             </div>
             <Container color="purple">
-              {result.boardSimpleInfos.result.length > 0 &&
+              {result.boardSimpleInfos.result.length > 0 ? (
                 result.boardSimpleInfos.result.map((board: BoardI) => (
                   <div key={board.id}>
                     <Board board={board} />
                     <div className="h-[1px] bg-main my-4 sm:my-6" />
                   </div>
-                ))}
+                ))
+              ) : (
+                <div>게시판이 없습니다.</div>
+              )}
             </Container>
           </div>
 
@@ -152,13 +158,16 @@ const SearchPage = () => {
               MBTI 과몰입 토론
             </div>
             <Container color="purple">
-              {result.getWorriesRes.result.length > 0 &&
+              {result.getWorriesRes.result.length > 0 ? (
                 result.getWorriesRes.result.map((worry: WorryI) => (
                   <div key={worry.id}>
                     <WorryBoard worryBoard={worry} />
                     <div className="h-[1px] bg-main my-4 sm:my-6" />
                   </div>
-                ))}
+                ))
+              ) : (
+                <div>MBTI 과몰입 토론이 없습니다.</div>
+              )}
             </Container>
           </div>
 
@@ -167,7 +176,7 @@ const SearchPage = () => {
               M쌤 매칭을 기다리는 고민
             </div>
             <Container color="purple">
-              {result.discussionSimpleInfo.result.length > 0 &&
+              {result.discussionSimpleInfo.result.length > 0 ? (
                 result.discussionSimpleInfo.result.map(
                   (discussion: DiscussionBoardI) => (
                     <div key={discussion.id} className="flex flex-col">
@@ -177,7 +186,10 @@ const SearchPage = () => {
                       <div className="h-[1px] bg-gray4 my-2.5 sm:my-12.5" />
                     </div>
                   ),
-                )}
+                )
+              ) : (
+                <div>M쌤 매칭을 기다리는 고민이 없습니다.</div>
+              )}
             </Container>
           </div>
         </>
