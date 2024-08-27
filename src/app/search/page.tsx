@@ -1,14 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
-import {
-  useKeywordSearch,
-  useRealtimeKeywords,
-  useRecentKeywords,
-} from '@/service/search/useSearchService'
+import { useKeywordSearch } from '@/service/search/useSearchService'
 import { useState, useEffect } from 'react'
-import Button from '@/components/common/Button'
 import { useQueryClient } from '@tanstack/react-query'
 import { queryKeys } from '@/service/search/SearchQueries'
 import Board from '@/components/board/Board'
@@ -21,11 +15,12 @@ import { WorryI } from '@/model/Worry'
 import { DiscussionBoardI } from '@/model/Discussion'
 import PopularKeywords from '@/components/search/RealtimeKeywords'
 import RecentKeywords from '@/components/search/RecentKeywords'
+import SearchBar from '@/components/search/SearchBar'
 
 const SearchPage = () => {
   const router = useRouter()
   const queryClient = useQueryClient()
-  const [keyword, setKeyword] = useState('')
+  const [keyword, setKeyword] = useState<string>('')
   const [result, setResult] = useState<KeywordSearch | null>(null)
 
   const { mutate: keywordSearch } = useKeywordSearch()
@@ -57,33 +52,11 @@ const SearchPage = () => {
 
   return (
     <div className="flex flex-col my-18 w-full max-w-160 mx-auto gap-8">
-      <div className="flex items-center border-b border-maindark py-1 w-full">
-        <input
-          className="appearance-none bg-transparent border-none w-full text-maindark mr-3 py-1 focus:outline-none"
-          type="text"
-          placeholder="검색어를 입력해주세요."
-          aria-label="Search"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleSearch()
-            }
-          }}
-        />
-        <button
-          className="flex-shrink-0 bg-transparent border-transparent"
-          type="button"
-          onClick={() => handleSearch()}
-        >
-          <Image
-            src="/images/search/search.svg"
-            alt="search"
-            width={35}
-            height={35}
-          />
-        </button>
-      </div>
+      <SearchBar
+        keyword={keyword}
+        setKeyword={setKeyword}
+        handleSearch={handleSearch}
+      />
 
       <RecentKeywords handleSearch={handleSearch} />
 
