@@ -1,3 +1,4 @@
+import { DiscussionOptionI } from '@/model/Discussion'
 import DiscussionService, {
   DiscussionParticipationProps,
   DiscussionListProps,
@@ -68,11 +69,12 @@ const queryOptions = {
     mutationFn: async ({
       discussionId,
       discussionOptionId,
-    }: DiscussionParticipationProps): Promise<void> => {
-      await DiscussionService.postDiscussionPraticipation({
+    }: DiscussionParticipationProps): Promise<DiscussionOptionI[]> => {
+      const res = await DiscussionService.postDiscussionPraticipation({
         discussionId,
         discussionOptionId,
       })
+      return res.data
     },
   },
 }

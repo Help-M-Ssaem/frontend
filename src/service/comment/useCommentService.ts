@@ -114,7 +114,7 @@ const usePostDiscussionComment = () => {
 
 const useDeleteDiscussionComment = () => {
   const mutationFn = ({ id, commentId }: CommentDetailProps): Promise<void> =>
-    queryOptions.deleteComment.mutationFn({ id, commentId })
+    queryOptions.deleteDiscussionComment.mutationFn({ id, commentId })
 
   const options: UseMutationOptions<void, Error, CommentDetailProps, unknown> =
     {
