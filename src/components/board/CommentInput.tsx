@@ -2,7 +2,10 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { usePostComment } from '@/service/comment/useCommentService'
+import {
+  usePostComment,
+  usePostDiscussionComment,
+} from '@/service/comment/useCommentService'
 import { useParams } from 'next/navigation'
 import Button from '../common/Button'
 
@@ -10,19 +13,23 @@ export interface CommentInputProps {
   replyId?: number
   refetchComments?: () => void
   onSuccess?: () => void
+  boardType?: string
 }
 
 const CommentInput = ({
   replyId,
   refetchComments,
   onSuccess,
+  boardType,
 }: CommentInputProps) => {
   const { id } = useParams()
   const [value, setValue] = useState('')
 
   const formData = new FormData()
   formData.append(
-    'postBoardCommentReq',
+    boardType === 'discussion'
+      ? 'postDiscussionCommentReq'
+      : 'postBoardCommentReq',
     new Blob([JSON.stringify(value)], { type: 'application/json' }),
   )
 
@@ -31,6 +38,8 @@ const CommentInput = ({
   }
 
   const { mutate: postComment } = usePostComment()
+  const { mutate: postDiscussionComment } = usePostDiscussionComment()
+
   const handleCommentSubmit = () => {
     const postCommentOptions = {
       id: Number(id),
@@ -38,13 +47,23 @@ const CommentInput = ({
       replyId,
     }
 
-    postComment(postCommentOptions, {
-      onSuccess: () => {
-        setValue('')
-        if (refetchComments) refetchComments()
-        if (onSuccess) onSuccess()
-      },
-    })
+    if (boardType === 'discussion') {
+      postDiscussionComment(postCommentOptions, {
+        onSuccess: () => {
+          setValue('')
+          if (refetchComments) refetchComments()
+          if (onSuccess) onSuccess()
+        },
+      })
+    } else {
+      postComment(postCommentOptions, {
+        onSuccess: () => {
+          setValue('')
+          if (refetchComments) refetchComments()
+          if (onSuccess) onSuccess()
+        },
+      })
+    }
   }
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -84,6 +103,7 @@ CommentInput.defaultProps = {
   replyId: undefined,
   refetchComments: undefined,
   onSuccess: undefined,
+  boardType: 'board',
 }
 
 export default CommentInput

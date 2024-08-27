@@ -35,7 +35,7 @@ const DiscussionDetail = () => {
 
   const [commentCount, setCommentCount] = useState(0)
   const [options, setOptions] = useState<DiscussionOptionI[]>(
-    discussionDetail?.discussionSimpleInfo.options || [],
+    discussion?.options || [],
   )
   const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null)
 
@@ -69,30 +69,27 @@ const DiscussionDetail = () => {
       },
       {
         onSuccess: (data) => {
-          const updatedOptions = data.map((option: DiscussionOptionI) => {
-            return { ...option, selected: option.id === optionId }
-          })
+          const updatedOptions = data.map((option: DiscussionOptionI) => ({
+            ...option,
+            selected: option.id === optionId,
+          }))
 
           setOptions(updatedOptions)
-          const selectedOption = updatedOptions.find(
-            (option) => option.selected,
-          )
-          if (selectedOption) {
-            setSelectedOptionId(optionId)
-          }
+          setSelectedOptionId(optionId)
         },
       },
     )
   }
 
   useEffect(() => {
-    if (discussionDetail) {
-      setOptions(discussionDetail.discussionSimpleInfo.options)
-    }
-  }, [discussionDetail])
-
-  useEffect(() => {
     if (discussion) {
+      const selectedOption = discussion.options.find(
+        (option) => option.selected,
+      )
+      if (selectedOption) {
+        setSelectedOptionId(selectedOption.id)
+      }
+      setOptions(discussion.options)
       setCommentCount(discussion.commentCount)
     }
   }, [discussion])
