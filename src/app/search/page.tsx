@@ -19,6 +19,7 @@ import Container from '@/components/common/Container'
 import { BoardI } from '@/model/Board'
 import { WorryI } from '@/model/Worry'
 import { DiscussionBoardI } from '@/model/Discussion'
+import PopularKeywords from '@/components/search/RealtimeKeywords'
 
 const SearchPage = () => {
   const router = useRouter()
@@ -29,7 +30,6 @@ const SearchPage = () => {
   const { mutate: keywordSearch } = useKeywordSearch()
 
   const { data: recentKeywords } = useRecentKeywords()
-  const { data: realtimeKeywords } = useRealtimeKeywords()
 
   useEffect(() => {
     const url = new URL(window.location.href)
@@ -107,32 +107,6 @@ const SearchPage = () => {
         </div>
       </div>
 
-      {!result && (
-        <div>
-          <div className="text-title3 text-gray1 font-semibold mb-3">
-            인기 검색어
-            <span className="text-caption font-regular text-gray3 ml-2">
-              2023.07.14 18:06 기준
-            </span>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            {Array.isArray(realtimeKeywords) ? (
-              realtimeKeywords.map((item, idx: number) => (
-                <div key={idx} className="flex items-center gap-4">
-                  <span className="text-headline text-maindark font-semibold">
-                    {idx + 1}
-                  </span>
-                  {item.keyword}
-                </div>
-              ))
-            ) : (
-              <div>실시간 인기 검색어를 불러오지 못했습니다.</div>
-            )}
-          </div>
-        </div>
-      )}
-
       {result && (
         <>
           <div>
@@ -194,6 +168,8 @@ const SearchPage = () => {
           </div>
         </>
       )}
+
+      <PopularKeywords />
     </div>
   )
 }
