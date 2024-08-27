@@ -37,14 +37,12 @@ const WorryDetail = () => {
         {
           onSuccess: (chatRoomId: number) => {
             const wsUrlUser = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${chatRoomId}&member=${userInfo.id}&worryBoardId=${worryId}`
-            // const wsUrlAuthor = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${chatRoomId}&member=${worryDetail?.memberSimpleInfo.id}&worryBoardId=${worryId}`
 
-            // 현재 사용자 웹소켓 연결
             connectSocket(wsUrlUser)
             if (socketRef.current) {
               socketRef.current.onopen = () => {
                 console.log('User WebSocket is connected')
-                router.push(`/chatting/${chatRoomId}`)
+                router.push(`/chatting`)
               }
               socketRef.current.onclose = () => {
                 console.log('User WebSocket is closed')

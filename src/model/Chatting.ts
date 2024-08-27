@@ -3,8 +3,8 @@ import { User } from './User'
 
 interface ChattingMessageI {
   message: string
-  createdAt: string
-  sendWho: boolean
+  timestamp: string
+  memberId: string
 }
 
 interface ChattingRoomI {
