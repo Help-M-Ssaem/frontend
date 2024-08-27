@@ -12,6 +12,7 @@ interface HotThreeI {
 }
 
 interface HotBoardI {
+  id: number
   title: string
   content: string
   imgUrl?: string

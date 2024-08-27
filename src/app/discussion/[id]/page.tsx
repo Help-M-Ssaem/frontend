@@ -5,32 +5,94 @@ import Image from 'next/image'
 import Button from '@/components/common/Button'
 import Container from '@/components/common/Container'
 import Profile from '@/components/user/Profile'
-import { useDiscussionDetail } from '@/service/discussion/useDiscussionService'
-import { useParams } from 'next/navigation'
+import {
+  useDeleteDiscussion,
+  useDiscussionDetail,
+  usePostDiscussionPraticipation,
+} from '@/service/discussion/useDiscussionService'
+import { useParams, useRouter } from 'next/navigation'
 import CommentList from '@/components/board/CommentList'
 import { DiscussionOptionI } from '@/model/Discussion'
 import DiscussionOption from '@/components/discussion/DiscussionOption'
+import { useUserInfo } from '@/service/user/useUserService'
+import { queryKeys } from '@/service/discussion/DiscussionQueries'
+import { useQueryClient } from '@tanstack/react-query'
+import { useToast } from '@/hooks/useToast'
 
 const DiscussionDetail = () => {
   const { id } = useParams()
-  const { data: discussionDetail } = useDiscussionDetail(Number(id))
+  const discussionId = Number(id)
+  const { data: discussionDetail } = useDiscussionDetail(discussionId)
+  const { data: userInfo } = useUserInfo()
+  const queryClient = useQueryClient()
+  const router = useRouter()
+  const { showToast } = useToast()
+
+  const { mutate: postDiscussionPraticipation } =
+    usePostDiscussionPraticipation()
 
   const discussion = discussionDetail && discussionDetail.discussionSimpleInfo
-  const formattedCreatedAt = discussion && discussion.createdAt.split(' ')[0]
 
-  const [commentCount, setCommentCount] = useState(
-    discussion?.commentCount || 0,
+  const [commentCount, setCommentCount] = useState(0)
+  const [options, setOptions] = useState<DiscussionOptionI[]>(
+    discussion?.options || [],
   )
-
-  useEffect(() => {
-    if (discussion) {
-      setCommentCount(discussion.commentCount)
-    }
-  }, [discussion])
+  const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null)
 
   const handleCommentCountUpdate = (newCount: number) => {
     setCommentCount(newCount)
   }
+
+  const { mutate: deleteDiscussion } = useDeleteDiscussion()
+  const handleDeleteDiscussion = () => {
+    deleteDiscussion(discussionId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.discussionList })
+        router.back()
+      },
+      onError: () => {
+        showToast('참여중인 토론은 삭제할 수 없습니다')
+      },
+    })
+  }
+
+  const handleOptionClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    optionId: number,
+  ) => {
+    event.stopPropagation()
+
+    postDiscussionPraticipation(
+      {
+        discussionId,
+        discussionOptionId: optionId,
+      },
+      {
+        onSuccess: (data) => {
+          const updatedOptions = data.map((option: DiscussionOptionI) => ({
+            ...option,
+            selected: option.id === optionId,
+          }))
+
+          setOptions(updatedOptions)
+          setSelectedOptionId(optionId)
+        },
+      },
+    )
+  }
+
+  useEffect(() => {
+    if (discussion) {
+      const selectedOption = discussion.options.find(
+        (option) => option.selected,
+      )
+      if (selectedOption) {
+        setSelectedOptionId(selectedOption.id)
+      }
+      setOptions(discussion.options)
+      setCommentCount(discussion.commentCount)
+    }
+  }, [discussion])
 
   return (
     <>
@@ -38,41 +100,56 @@ const DiscussionDetail = () => {
         MBTI 과몰입 토론
       </div>
       <Container color="purple">
-        <div className="flex justify-end gap-2.5 mb-5">
-          <Button text="수정" color="PURPLE" size="small" onClick={() => {}} />
-          <Button text="삭제" color="PURPLE" size="small" onClick={() => {}} />
-        </div>
-        <div className="h-[1px] bg-main" />
+        {userInfo &&
+          discussion &&
+          userInfo.id === discussion.memberSimpleInfo.id && (
+            <>
+              <div className="flex justify-end gap-2.5 mb-5">
+                <Button
+                  text="삭제"
+                  color="PURPLE"
+                  size="small"
+                  onClick={handleDeleteDiscussion}
+                />
+              </div>
+              <div className="h-[1px] bg-main" />
+            </>
+          )}
         {discussion && (
           <>
             <div className="flex justify-between my-7.5">
-              <Profile user={discussion?.memberSimpleInfo} />
+              <Profile user={discussion.memberSimpleInfo} />
               <div className="flex gap-3.5 text-caption text-gray2">
-                <p>{formattedCreatedAt}</p>
+                <p>{discussion.createdAt}</p>
               </div>
             </div>
 
-            <div className="flex flex-col gap-9">
+            <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1">
                 <p className="text-title3 font-bold">{discussion.title}</p>
-                <div className="text-body text-mainblack">
-                  {discussion.content}
-                </div>
+                {discussion.content && (
+                  <p className="text-body text-mainblack">
+                    {discussion.content}
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                {discussion.options &&
-                  discussion.options.map((option: DiscussionOptionI) => (
-                    <DiscussionOption
-                      key={option.id}
-                      discussionOption={option}
-                      size="small"
-                      boardId={Number(id)}
-                    />
-                  ))}
+                {options.map((option: DiscussionOptionI) => (
+                  <DiscussionOption
+                    key={option.id}
+                    discussionOption={option}
+                    size="small"
+                    disabled={selectedOptionId !== null}
+                    selectedPercent={option.selectedPercent}
+                    handleOptionClick={(event) =>
+                      handleOptionClick(event, option.id)
+                    }
+                  />
+                ))}
               </div>
 
-              <div className="flex justify-between mb-10">
+              <div className="flex justify-between mb-8">
                 <div className="flex gap-1">
                   <Image
                     src="/images/discussion/red_circle.svg"

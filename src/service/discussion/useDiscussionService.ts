@@ -3,6 +3,7 @@ import {
   useQuery,
   UseMutationOptions,
 } from '@tanstack/react-query'
+import { DiscussionOptionI } from '@/model/Discussion'
 import { queryOptions } from './DiscussionQueries'
 import { DiscussionParticipationProps } from './DiscussionService'
 
@@ -38,6 +39,18 @@ const usePostDiscussion = () => {
   return useMutation<void, Error, FormData>(options)
 }
 
+const usePostDiscussionOptionFiles = () => {
+  const mutationFn = async (image: FormData): Promise<string> => {
+    const response =
+      await queryOptions.postDiscussionOptionFiles.mutationFn(image)
+    return response
+  }
+  const options: UseMutationOptions<string, Error, FormData, unknown> = {
+    mutationFn,
+  }
+  return useMutation<string, Error, FormData>(options)
+}
+
 const useDeleteDiscussion = () => {
   const mutationFn = (id: number): Promise<void> =>
     queryOptions.deleteDiscussion.mutationFn(id)
@@ -52,21 +65,23 @@ const usePostDiscussionPraticipation = () => {
   const mutationFn = ({
     discussionId,
     discussionOptionId,
-  }: DiscussionParticipationProps): Promise<void> =>
+  }: DiscussionParticipationProps): Promise<DiscussionOptionI[]> =>
     queryOptions.postDiscussionPraticipation.mutationFn({
       discussionId,
       discussionOptionId,
     })
 
   const options: UseMutationOptions<
-    void,
+    DiscussionOptionI[],
     Error,
     DiscussionParticipationProps,
     unknown
   > = {
     mutationFn,
   }
-  return useMutation<void, Error, DiscussionParticipationProps>(options)
+  return useMutation<DiscussionOptionI[], Error, DiscussionParticipationProps>(
+    options,
+  )
 }
 
 export {
@@ -74,6 +89,7 @@ export {
   useDiscussionListMember,
   useDiscussionDetail,
   usePostDiscussion,
+  usePostDiscussionOptionFiles,
   useDeleteDiscussion,
   usePostDiscussionPraticipation,
 }

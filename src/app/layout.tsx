@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: '도와줘요 M쌤 | MBTI 고민상담소',
   description: '도와줘요 M쌤 | MBTI 고민상담소',
   icons: {
-    icon: '/favicon.png',
+    icon: '/images/common/cat_logo.svg',
   },
 }
 
@@ -36,7 +36,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="kr">
-      <link rel="icon" href="/favicon.png" sizes="any" />
+      <link rel="icon" href="/images/common/cat_logo.svg" sizes="any" />
       <body className={`${pretendard.variable} font-pretendard`}>
         <Recoil>
           <WebSocketProvider>

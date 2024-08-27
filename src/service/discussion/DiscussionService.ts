@@ -1,5 +1,5 @@
 import Service from '@/apis/AxiosInstance'
-import { DiscussionDetail, DiscussionList } from '@/model/Discussion'
+import { DiscussionDetail, DiscussionList, DiscussionOptionI } from '@/model/Discussion'
 
 export interface DiscussionListProps {
   id?: number
@@ -37,6 +37,18 @@ class DiscussionService extends Service {
     })
   }
 
+  postDiscussionOptionFiles(image: FormData) {
+    return this.http
+      .post(`/member/discussion-options/files`, image, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        return response.data
+      })
+  }
+
   deleteDiscussion(id: number) {
     return this.http.delete(`/member/discussion/${id}`)
   }
@@ -45,7 +57,7 @@ class DiscussionService extends Service {
     discussionId,
     discussionOptionId,
   }: DiscussionParticipationProps) {
-    return this.http.post(
+    return this.http.post<DiscussionOptionI[]>(
       `/member/discussions/${discussionId}/discussion-options/${discussionOptionId}`,
     )
   }

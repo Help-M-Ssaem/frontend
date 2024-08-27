@@ -24,11 +24,10 @@ interface DiscussionBoardI {
 
 interface DiscussionOptionI {
   id: number
-  content: string
-  imgUrl?: string
+  content: string | null
+  imgUrl: string | null
   selectedPercent: string
   selected: boolean
-  disabled: boolean
 }
 
 export type {

@@ -5,6 +5,7 @@ import { useState } from 'react'
 import {
   useCommentLike,
   useDeleteComment,
+  useDeleteDiscussionComment,
 } from '@/service/comment/useCommentService'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
@@ -16,9 +17,15 @@ export interface CommentProps {
   comment: CommentI
   onClick?: () => void
   refetchComments?: () => void
+  boardType?: string
 }
 
-const Comment = ({ comment, onClick, refetchComments }: CommentProps) => {
+const Comment = ({
+  comment,
+  onClick,
+  refetchComments,
+  boardType,
+}: CommentProps) => {
   const { id } = useParams()
   const boardId = Number(id)
   const {
@@ -31,6 +38,7 @@ const Comment = ({ comment, onClick, refetchComments }: CommentProps) => {
   } = comment
   const { mutate: likeComment } = useCommentLike()
   const { mutate: deleteComment } = useDeleteComment()
+  const { mutate: deleteDiscussionComment } = useDeleteDiscussionComment()
 
   const [liked, setLiked] = useState(comment.isLiked)
   const [likeCount, setLikeCount] = useState(comment.likeCount)
@@ -56,16 +64,29 @@ const Comment = ({ comment, onClick, refetchComments }: CommentProps) => {
   }
 
   const handleCommentDelete = () => {
-    deleteComment(
-      { id: boardId, commentId },
-      {
-        onSuccess: () => {
-          if (refetchComments) {
-            refetchComments()
-          }
+    if (boardType === 'discussion') {
+      deleteDiscussionComment(
+        { id: boardId, commentId },
+        {
+          onSuccess: () => {
+            if (refetchComments) {
+              refetchComments()
+            }
+          },
         },
-      },
-    )
+      )
+    } else {
+      deleteComment(
+        { id: boardId, commentId },
+        {
+          onSuccess: () => {
+            if (refetchComments) {
+              refetchComments()
+            }
+          },
+        },
+      )
+    }
   }
 
   return (
@@ -122,6 +143,7 @@ const Comment = ({ comment, onClick, refetchComments }: CommentProps) => {
 Comment.defaultProps = {
   onClick: undefined,
   refetchComments: undefined,
+  boardType: 'board',
 }
 
 export default Comment

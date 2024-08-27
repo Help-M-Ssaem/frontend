@@ -1,3 +1,4 @@
+import { DiscussionOptionI } from '@/model/Discussion'
 import DiscussionService, {
   DiscussionParticipationProps,
   DiscussionListProps,
@@ -6,6 +7,7 @@ import DiscussionService, {
 const queryKeys = {
   discussion: (discussionId: number) => ['discussion', discussionId] as const,
   discussionList: ['discussionList'] as const,
+  discussionListImage: ['discussionListImage'] as const,
 }
 
 const queryOptions = {
@@ -47,6 +49,14 @@ const queryOptions = {
     },
   },
 
+  postDiscussionOptionFiles: {
+    queryKey: queryKeys.discussionListImage,
+    mutationFn: async (image: FormData): Promise<string> => {
+      const response = await DiscussionService.postDiscussionOptionFiles(image)
+      return response
+    },
+  },
+
   deleteDiscussion: {
     queryKey: queryKeys.discussionList,
     mutationFn: async (id: number): Promise<void> => {
@@ -59,11 +69,12 @@ const queryOptions = {
     mutationFn: async ({
       discussionId,
       discussionOptionId,
-    }: DiscussionParticipationProps): Promise<void> => {
-      await DiscussionService.postDiscussionPraticipation({
+    }: DiscussionParticipationProps): Promise<DiscussionOptionI[]> => {
+      const res = await DiscussionService.postDiscussionPraticipation({
         discussionId,
         discussionOptionId,
       })
+      return res.data
     },
   },
 }

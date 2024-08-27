@@ -111,6 +111,7 @@ const CommentList = ({
                   comment={comment}
                   onClick={() => handleCommentClick(comment.commentId)}
                   refetchComments={refetch}
+                  boardType={boardType}
                 />
                 <div className="h-[1px] bg-main my-4" />
 
@@ -123,6 +124,7 @@ const CommentList = ({
                           comment={reply}
                           onClick={() => handleCommentClick(reply.parentId)}
                           refetchComments={refetch}
+                          boardType={boardType}
                         />
                         <div className="h-[1px] bg-main my-4" />
                       </div>
@@ -133,6 +135,7 @@ const CommentList = ({
                     replyId={replyId}
                     refetchComments={refetch}
                     onSuccess={handleReplySubmitSuccess}
+                    boardType={boardType}
                   />
                 )}
               </div>
@@ -143,6 +146,7 @@ const CommentList = ({
         <CommentInput
           refetchComments={refetch}
           onSuccess={handleReplySubmitSuccess}
+          boardType={boardType}
         />
       </div>
     </div>

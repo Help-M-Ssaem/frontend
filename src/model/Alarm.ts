@@ -1,16 +1,17 @@
-interface Alarm {
+interface AlarmI {
+  id: number
   resourceId: number
-  notificatoinTypeContent: string
+  notificationTypeContent: string
   content: string
   createdAt: string
   state: boolean
-  type: string
+  notificationType: string
 }
 
-interface AlarmList {
+interface AlarmListI {
   page: number
   totalSize: number
-  result: Alarm[]
+  result: AlarmI[]
 }
 
-export type { Alarm, AlarmList }
+export type { AlarmI, AlarmListI }
