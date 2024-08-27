@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DiscussionBoardI, DiscussionOptionI } from '@/model/Discussion'
 import Image from 'next/image'
+import { usePostDiscussionPraticipation } from '@/service/discussion/useDiscussionService'
 import Profile from '../user/Profile'
 import DiscussionOption from './DiscussionOption'
 
@@ -23,12 +24,45 @@ const DiscussionBoard = ({ discussionBoard }: DiscussionBoardProps) => {
   } = discussionBoard
 
   const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null)
+  const [selectedOptionPercent, setSelectedOptionPercent] = useState('')
 
   const formattedCreatedAt = createdAt.split(' ')[0]
 
-  const handleOptionSelect = (optionId: number) => {
-    setSelectedOptionId(optionId)
+  const { mutate: postDiscussionPraticipation } =
+    usePostDiscussionPraticipation()
+
+  const handleOptionClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    optionId: number,
+  ) => {
+    event.stopPropagation()
+
+    postDiscussionPraticipation(
+      {
+        discussionId: id,
+        discussionOptionId: optionId,
+      },
+      {
+        onSuccess: (data) => {
+          const selectedOption = data.find(
+            (option: DiscussionOptionI) => option.selected,
+          )
+          setSelectedOptionId(optionId)
+          setSelectedOptionPercent(selectedOption!!.selectedPercent)
+        },
+      },
+    )
   }
+
+  useEffect(() => {
+    const selectedOption = options.find(
+      (option: DiscussionOptionI) => option.selected,
+    )
+    if (selectedOption) {
+      setSelectedOptionId(selectedOption.id)
+      setSelectedOptionPercent(selectedOption.selectedPercent)
+    }
+  }, [options])
 
   return (
     <div className="flex flex-col gap-6">
@@ -51,10 +85,10 @@ const DiscussionBoard = ({ discussionBoard }: DiscussionBoardProps) => {
                 key={option.id}
                 discussionOption={option}
                 size="small"
-                boardId={id}
-                onSelect={handleOptionSelect}
-                disabled={
-                  selectedOptionId !== null && selectedOptionId !== option.id
+                disabled={selectedOptionId !== null}
+                selectedPercent={selectedOptionPercent}
+                handleOptionClick={(event) =>
+                  handleOptionClick(event, option.id)
                 }
               />
             ))}

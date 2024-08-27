@@ -4,7 +4,6 @@ import { DiscussionOptionI } from '@/model/Discussion'
 import React from 'react'
 import Image from 'next/image'
 import clsx from 'clsx'
-import { usePostDiscussionPraticipation } from '@/service/discussion/useDiscussionService'
 
 const DiscussionOptionTheme = {
   size: {
@@ -16,36 +15,20 @@ const DiscussionOptionTheme = {
 export interface DiscussionOptionProps {
   discussionOption: DiscussionOptionI
   size: keyof typeof DiscussionOptionTheme.size
-  boardId: number
-  onSelect: (optionId: number) => void
   disabled: boolean
+  selectedPercent: string
+  handleOptionClick: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => void
 }
 
 const DiscussionOption = ({
   discussionOption,
   size,
-  boardId,
-  onSelect,
   disabled,
+  handleOptionClick,
 }: DiscussionOptionProps) => {
   const { content, imgUrl, selectedPercent, selected } = discussionOption
-
-  const { mutate } = usePostDiscussionPraticipation()
-
-  const handleClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
-    event.stopPropagation()
-
-    if (!disabled && !selected) {
-      mutate({
-        discussionId: boardId,
-        discussionOptionId: discussionOption.id,
-      })
-
-      onSelect(discussionOption.id)
-    }
-  }
 
   return (
     <button
@@ -56,11 +39,9 @@ const DiscussionOption = ({
         {
           'bg-main2 text-white': selected,
           'bg-white text-black': !selected,
-          'cursor-not-allowed opacity-50': disabled,
-          'cursor-pointer': !disabled,
         },
       )}
-      onClick={handleClick}
+      onClick={handleOptionClick}
       disabled={disabled}
     >
       {!selected && imgUrl && (
