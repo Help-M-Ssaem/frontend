@@ -124,12 +124,14 @@ const DiscussionDetail = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-9">
+            <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1">
                 <p className="text-title3 font-bold">{discussion.title}</p>
-                <div className="text-body text-mainblack">
-                  {discussion.content}
-                </div>
+                {discussion.content && (
+                  <p className="text-body text-mainblack">
+                    {discussion.content}
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -147,7 +149,7 @@ const DiscussionDetail = () => {
                 ))}
               </div>
 
-              <div className="flex justify-between mb-10">
+              <div className="flex justify-between mb-8">
                 <div className="flex gap-1">
                   <Image
                     src="/images/discussion/red_circle.svg"
