@@ -44,9 +44,9 @@ const usePostComment = () => {
   const mutationFn = ({
     id,
     comment,
-    commentId,
+    replyId,
   }: PostCommentProps): Promise<void> =>
-    queryOptions.postComment.mutationFn({ id, comment, commentId })
+    queryOptions.postComment.mutationFn({ id, comment, replyId })
 
   const options: UseMutationOptions<void, Error, PostCommentProps, unknown> = {
     mutationFn,
@@ -102,9 +102,9 @@ const usePostDiscussionComment = () => {
   const mutationFn = ({
     id,
     comment,
-    commentId,
+    replyId,
   }: PostCommentProps): Promise<void> =>
-    queryOptions.postDiscussionComment.mutationFn({ id, comment, commentId })
+    queryOptions.postDiscussionComment.mutationFn({ id, comment, replyId })
 
   const options: UseMutationOptions<void, Error, PostCommentProps, unknown> = {
     mutationFn,

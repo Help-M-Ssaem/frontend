@@ -1,9 +1,10 @@
 'use client'
 
-import { HotDiscussionI } from '@/model/Home'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { HotDiscussionI } from '@/model/Home'
 import { DiscussionOptionI } from '@/model/Discussion'
-import Profile from '../common/Profile'
+import Profile from '../user/Profile'
 import Container from '../common/Container'
 import DiscussionOption from '../discussion/DiscussionOption'
 
@@ -23,8 +24,16 @@ const HotDiscussion = ({ hotDiscussion }: HotDiscussionProps) => {
     options,
   } = hotDiscussion
 
+  const router = useRouter()
+
   return (
-    <Container color="purple">
+    <Container
+      color="purple"
+      className="cursor-pointer"
+      onClick={() => {
+        router.push(`/discussion/${id}`)
+      }}
+    >
       <div className="flex flex-col gap-6">
         <div className="flex flex-col justify-between gap-5">
           <div className="flex justify-between">
@@ -32,8 +41,8 @@ const HotDiscussion = ({ hotDiscussion }: HotDiscussionProps) => {
             <div className="text-caption text-gray2">{createdAt}</div>
           </div>
           <div className="flex flex-col gap-1">
-            <p className="text-title3 font-bold">{title}</p>
-            <p className="text-body text-mainblack">{content}</p>
+            <p className="text-title3 font-bold text-maindark">{title}</p>
+            <p className="text-body text-maindark">{content}</p>
           </div>
         </div>
 

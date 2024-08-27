@@ -1,9 +1,11 @@
 'use client'
 
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import Button, { MBTI } from '../common/Button'
 
 export interface WorryProfileProps {
+  userId: number
   profileImgUrl: string
   nickName: string
   strFromMbti: MBTI
@@ -11,14 +13,24 @@ export interface WorryProfileProps {
 }
 
 const WorryProfile = ({
+  userId,
   profileImgUrl,
   nickName,
   strFromMbti,
   strToMbti,
 }: WorryProfileProps) => {
+  const router = useRouter()
+
+  const handleProfileClick = () => {
+    router.push(`/user/${userId}`)
+  }
+
   return (
-    <div className="flex items-center gap-4.5">
-      <div className="w-14 h-14 relative rounded-full overflow-hidden">
+    <div
+      className="flex items-center gap-2.5 sm:gap-4 cursor-pointer"
+      onClick={handleProfileClick}
+    >
+      <div className="w-12 h-12 sm:w-14 sm:h-14 relative rounded-full overflow-hidden">
         <Image
           src={profileImgUrl}
           alt="profile"
@@ -29,8 +41,10 @@ const WorryProfile = ({
       </div>
 
       <div className="flex flex-col gap-1">
-        <div className="text-headline font-semibold">{nickName} 님</div>
-        <div className="flex gap-2.5">
+        <div className="text-headline font-semibold text-maindark">
+          {nickName} 님
+        </div>
+        <div className="flex gap-1 sm:gap-2.5">
           <Button text={strFromMbti} color={strFromMbti} size="badge" />
           <Image
             src="/images/worry/arrow_right.svg"

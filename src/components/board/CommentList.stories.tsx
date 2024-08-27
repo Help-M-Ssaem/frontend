@@ -1,6 +1,5 @@
-import { CommentListProps } from '@/service/comment/CommentService'
 import { Meta, StoryFn } from '@storybook/react'
-import CommentList from './CommentList'
+import CommentList, { CommentListProps } from './CommentList'
 
 export default {
   title: 'Board/CommentList',

@@ -1,5 +1,5 @@
 import Service from '@/apis/AxiosInstance'
-import { Profile } from '@/model/User'
+import { Profile, User } from '@/model/User'
 
 class UserService extends Service {
   getTerms() {
@@ -11,23 +11,31 @@ class UserService extends Service {
   }
 
   getUserInfo() {
-    return this.http.get<Profile>('/member/info')
+    return this.http.get<User>('/member/info')
   }
 
-  patchProfile(profile: Profile) {
-    return this.http.patch<Profile>('/profile', profile)
+  patchProfile(profile: any) {
+    return this.http.patch('/member/profile', profile)
   }
 
   postProfileImg(profileImg: FormData) {
-    return this.http.post('/member/profile/file', profileImg, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
+    return this.http
+      .post('/member/profile/file', profileImg, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        return response.data
+      })
   }
 
   deleteProfileImg() {
     return this.http.delete('/member/profile')
+  }
+
+  deleteProfileImgS3(imageUrl: string) {
+    return this.http.post(`/member/s3/file?imageUrl=${imageUrl}`)
   }
 }
 

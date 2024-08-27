@@ -1,11 +1,15 @@
+import HotThreeBox from '@/components/home/HotThreeBox'
 import HotBoardBox from '@/components/home/HotBoardBox'
 import HotDiscussionBox from '@/components/home/HotDiscussionBox'
-import HotThreeBox from '@/components/home/HotThreeBox'
+import { fetchUserInfo } from '@/service/user/fetchUserInfo'
+import { User } from '@/model/User'
 
-export default function Home() {
+export default async function HomePage() {
+  const userInfo: User | null = await fetchUserInfo()
+
   return (
     <>
-      <HotThreeBox />
+      <HotThreeBox userInfo={userInfo} />
       <HotBoardBox />
       <HotDiscussionBox />
     </>

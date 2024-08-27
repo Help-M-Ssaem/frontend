@@ -1,21 +1,40 @@
-const mbtiTypes = [
-  '전체',
-  'ISTJ',
-  'ISTP',
-  'ESTP',
-  'ESTJ',
-  'ISFJ',
-  'ISFP',
-  'ESFP',
-  'ESFJ',
-  'INFJ',
-  'INFP',
+export type MBTI =
+  | 'ENFP'
+  | 'ENFJ'
+  | 'INFP'
+  | 'INFJ'
+  | 'INTJ'
+  | 'INTP'
+  | 'ENTJ'
+  | 'ENTP'
+  | 'ISTP'
+  | 'ISFP'
+  | 'ESTP'
+  | 'ESFP'
+  | 'ISTJ'
+  | 'ISFJ'
+  | 'ESTJ'
+  | 'ESFJ'
+
+const mbtiTypes: MBTI[] = [
   'ENFP',
   'ENFJ',
+  'INFP',
+  'INFJ',
   'INTJ',
   'INTP',
-  'ENTP',
   'ENTJ',
+  'ENTP',
+  'ISTP',
+  'ISFP',
+  'ESTP',
+  'ESFP',
+  'ISTJ',
+  'ISFJ',
+  'ESTJ',
+  'ESFJ',
 ]
 
-export default mbtiTypes
+const AllMbtiTypes: (MBTI | '전체')[] = ['전체', ...mbtiTypes]
+
+export { AllMbtiTypes, mbtiTypes }

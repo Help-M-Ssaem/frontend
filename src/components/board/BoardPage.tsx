@@ -10,6 +10,8 @@ import SearchBar from '@/components/common/SearchBar'
 import { useBoardList } from '@/service/board/useBoardService'
 import { useEffect, useState } from 'react'
 import { BoardI } from '@/model/Board'
+import { useToast } from '@/hooks/useToast'
+import { useUserInfo } from '@/service/user/useUserService'
 
 const BoardPage = () => {
   const router = useRouter()
@@ -22,6 +24,9 @@ const BoardPage = () => {
   const pageSize = 6
 
   const { data: boardList } = useBoardList(mbti, page - 1, pageSize)
+  const { data: userInfo } = useUserInfo()
+
+  const { showToast } = useToast()
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
@@ -36,6 +41,14 @@ const BoardPage = () => {
     }
   }, [mbtiQuery])
 
+  const handleWriteClick = () => {
+    if (!userInfo) {
+      showToast('로그인이 필요한 서비스입니다')
+      return
+    }
+    router.push('/board/create')
+  }
+
   return (
     <>
       <MbtiCategories selectedMbti={mbti} />
@@ -43,20 +56,21 @@ const BoardPage = () => {
         {mbti === 'all' ? '전체' : mbti} 게시판
       </div>
       <Container color="purple">
-        <div className="text-right mb-5">
+        <div className="text-right">
           <Button
             text="글 쓰기"
             color="PURPLE"
             size="small"
-            onClick={() => {}}
+            onClick={handleWriteClick}
           />
         </div>
-        <div className="h-[1px] bg-main mb-7.5" />
+
+        <div className="h-[1px] bg-main my-4 sm:mt-5 sm:mb-6" />
         {boardList &&
           boardList.result.map((board: BoardI) => (
             <div key={board.id}>
               <Board board={board} />
-              <div className="h-[1px] bg-main my-7.5" />
+              <div className="h-[1px] bg-main my-4 sm:my-6" />
             </div>
           ))}
 

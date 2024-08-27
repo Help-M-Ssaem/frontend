@@ -61,29 +61,27 @@ const Info = () => {
 
       <div className="flex flex-col gap-5 w-full">
         <div className="text-gray2 text-headline font-semibold">
-          당신의 이메일은 {email}입니다.
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-5 w-full">
-        <div className="text-gray2 text-headline font-semibold">
           당신의 MBTI는 무엇인가요?
         </div>
         <div className="flex justify-between align-center gap-2">
           <MbtiSelect
             options={['E', 'e', 'I', 'i']}
+            selectedOption={mbti[0]}
             onSelect={(selected) => handleMbtiChange(0, selected)}
           />
           <MbtiSelect
             options={['S', 's', 'N', 'n']}
+            selectedOption={mbti[1]}
             onSelect={(selected) => handleMbtiChange(1, selected)}
           />
           <MbtiSelect
             options={['T', 't', 'F', 'f']}
+            selectedOption={mbti[2]}
             onSelect={(selected) => handleMbtiChange(2, selected)}
           />
           <MbtiSelect
             options={['J', 'j', 'P', 'p']}
+            selectedOption={mbti[3]}
             onSelect={(selected) => handleMbtiChange(3, selected)}
           />
         </div>

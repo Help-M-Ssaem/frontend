@@ -1,10 +1,12 @@
 import SearchService, { SearchProps } from './SearchService'
 
 const queryKeys = {
-  boardSearch: 'boardSearch',
-  solvedWorrySearch: 'solvedWorrySearch',
-  waitingWorrySearch: 'waitingWorrySearch',
-  discussionSearch: 'discussionSearch',
+  boardSearch: ['boardSearch'] as const,
+  solvedWorrySearch: ['solvedWorrySearch'] as const,
+  waitingWorrySearch: ['waitingWorrySearch'] as const,
+  discussionSearch: ['discussionSearch'] as const,
+  realtimeKeywords: ['realtimeKeywords'] as const,
+  recentKeywords: ['recentKeywords'] as const,
 }
 
 const queryOptions = {
@@ -103,7 +105,7 @@ const queryOptions = {
 
   keywordSearch: {
     queryKey: queryKeys.boardSearch,
-    queryFn: async (keyword: string) => {
+    mutationFn: async (keyword: string) => {
       const res = await SearchService.postKeywordSearch(keyword)
       return res.data
     },

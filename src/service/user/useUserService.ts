@@ -3,7 +3,6 @@ import {
   UseMutationOptions,
   useQuery,
 } from '@tanstack/react-query'
-import { Profile } from '@/model/User'
 import queryOptions from './UserQueries'
 
 const useTerms = () => useQuery(queryOptions.terms)
@@ -18,23 +17,25 @@ const useProfile = (id: number) =>
 const useUserInfo = () => useQuery(queryOptions.userInfo)
 
 const usePatchProfile = () => {
-  const mutationFn = (profile: Profile): Promise<void> =>
+  const mutationFn = (profile: any): Promise<void> =>
     queryOptions.patchProfile.mutationFn(profile)
 
-  const options: UseMutationOptions<void, Error, Profile, unknown> = {
+  const options: UseMutationOptions<void, Error, any, unknown> = {
     mutationFn,
   }
-  return useMutation<void, Error, Profile>(options)
+  return useMutation<void, Error, any>(options)
 }
 
 const usePostProfileImg = () => {
-  const mutationFn = (profileImg: FormData): Promise<void> =>
-    queryOptions.postProfileImg.mutationFn(profileImg)
+  const mutationFn = async (profileImg: FormData): Promise<string> => {
+    const response = await queryOptions.postProfileImg.mutationFn(profileImg)
+    return response
+  }
 
-  const options: UseMutationOptions<void, Error, FormData, unknown> = {
+  const options: UseMutationOptions<string, Error, FormData, unknown> = {
     mutationFn,
   }
-  return useMutation<void, Error, FormData>(options)
+  return useMutation<string, Error, FormData>(options)
 }
 
 const useDeleteProfileImg = () => {
@@ -47,6 +48,16 @@ const useDeleteProfileImg = () => {
   return useMutation<void, Error, void>(options)
 }
 
+const useDeleteProfileImgS3 = () => {
+  const mutationFn = (imageUrl: string): Promise<void> =>
+    queryOptions.deleteProfileImgS3.mutationFn(imageUrl)
+
+  const options: UseMutationOptions<void, Error, string, unknown> = {
+    mutationFn,
+  }
+  return useMutation<void, Error, string>(options)
+}
+
 export {
   useProfile,
   useTerms,
@@ -54,4 +65,5 @@ export {
   usePatchProfile,
   usePostProfileImg,
   useDeleteProfileImg,
+  useDeleteProfileImgS3,
 }

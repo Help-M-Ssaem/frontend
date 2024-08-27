@@ -4,9 +4,12 @@ import DiscussionBoard from '@/components/discussion/DiscussionBoard'
 import Pagination from '@/components/common/Pagination'
 import { useDiscussionList } from '@/service/discussion/useDiscussionService'
 import { useState, useEffect, Suspense } from 'react'
+import Button from '@/components/common/Button'
 import SearchBar from '@/components/common/SearchBar'
+import { useToast } from '@/hooks/useToast'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { DiscussionBoardI } from '@/model/Discussion'
+import { useUserInfo } from '@/service/user/useUserService'
 import Container from '../common/Container'
 
 const DiscussionPage = () => {
@@ -18,6 +21,8 @@ const DiscussionPage = () => {
   const pageSize = 6
 
   const { data: discussionList } = useDiscussionList(page - 1, pageSize)
+  const { data: userInfo } = useUserInfo()
+  const { showToast } = useToast()
 
   const handleDiscussionBoardClick = (id: number) => {
     router.push(`/discussion/${id}`)
@@ -34,10 +39,26 @@ const DiscussionPage = () => {
     }
   }, [pageQuery])
 
+  const handleWriteClick = () => {
+    if (!userInfo) {
+      showToast('로그인이 필요한 서비스입니다')
+      return
+    }
+    router.push('/discussion/create')
+  }
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <div className="text-title3 text-maindark font-semibold my-5">
-        MBTI 과몰입 토론
+      <div className="flex justify-between items-center my-4">
+        <div className="text-title3 text-maindark font-semibold">
+          MBTI 과몰입 토론
+        </div>
+        <Button
+          text="글 쓰기"
+          color="PURPLE"
+          size="small"
+          onClick={handleWriteClick}
+        />
       </div>
       <div className="flex flex-col">
         {discussionList &&

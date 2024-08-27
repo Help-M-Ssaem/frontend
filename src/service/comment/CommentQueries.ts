@@ -50,12 +50,12 @@ const queryOptions = {
     mutationFn: async ({
       id,
       comment,
-      commentId,
+      replyId,
     }: PostCommentProps): Promise<void> => {
       await CommentService.postComment({
         id,
         comment,
-        commentId,
+        replyId,
       })
     },
   },
@@ -121,12 +121,12 @@ const queryOptions = {
     mutationFn: async ({
       id,
       comment,
-      commentId,
+      replyId,
     }: PostCommentProps): Promise<void> => {
       await CommentService.postDiscussionComment({
         id,
         comment,
-        commentId,
+        replyId,
       })
     },
   },

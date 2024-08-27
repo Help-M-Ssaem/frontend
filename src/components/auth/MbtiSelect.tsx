@@ -1,21 +1,18 @@
 'use client'
 
-import React, { useState } from 'react'
 import Image from 'next/image'
 
 export interface MbtiSelectProps {
   options: string[]
+  selectedOption: string
   onSelect: (selectedOption: string) => void
 }
 
-const MbtiSelect = ({ options, onSelect }: MbtiSelectProps) => {
-  const [selectedOption, setSelectedOption] = useState(options[0])
-
+const MbtiSelect = ({ options, selectedOption, onSelect }: MbtiSelectProps) => {
   const handleNextOption = () => {
     const currentIndex = options.indexOf(selectedOption)
     const nextIndex = (currentIndex + 1) % options.length
     const nextOption = options[nextIndex]
-    setSelectedOption(nextOption)
     onSelect(nextOption)
   }
 
@@ -23,7 +20,6 @@ const MbtiSelect = ({ options, onSelect }: MbtiSelectProps) => {
     const currentIndex = options.indexOf(selectedOption)
     const prevIndex = (currentIndex - 1 + options.length) % options.length
     const prevOption = options[prevIndex]
-    setSelectedOption(prevOption)
     onSelect(prevOption)
   }
 

@@ -3,6 +3,8 @@
 import dynamic from 'next/dynamic'
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { useToast } from '@/hooks/useToast'
+import { useUserInfo } from '@/service/user/useUserService'
 import { useRouter, usePathname } from 'next/navigation'
 import Button from './Button'
 
@@ -18,6 +20,9 @@ const Header = () => {
   const pathname = usePathname()
   const router = useRouter()
   const [selected, setSelected] = useState<string | null>(null)
+  const { data: userInfo } = useUserInfo()
+
+  const { showToast } = useToast()
 
   useEffect(() => {
     if (pathname) {
@@ -25,7 +30,17 @@ const Header = () => {
     }
   }, [pathname])
 
-  const handleClick = (path: string) => {
+  const handleCategoryClick = (path: string) => {
+    if (!userInfo) {
+      showToast('로그인이 필요한 서비스입니다')
+      return
+    }
+
+    if (path === '/alarm' || path === '/favorites') {
+      showToast('준비 중인 기능입니다')
+      return
+    }
+
     setSelected(path)
     router.push(path)
   }
@@ -47,16 +62,18 @@ const Header = () => {
             onClick={() => router.push('/')}
             className="cursor-pointer"
           />
-          <Button
-            text="로그인하고 이용하기"
-            color="PURPLE"
-            size="medium"
-            onClick={() => router.push('/signin')}
-          />
+          {!userInfo && (
+            <Button
+              text="로그인하고 이용하기"
+              color="PURPLE"
+              size="medium"
+              onClick={() => router.push('/signin')}
+            />
+          )}
         </div>
 
         {/* mobile */}
-        <div className="sm:hidden flex justify-between items-center pt-10 pb-2">
+        <div className="sm:hidden flex justify-between items-center pt-4 pb-2">
           <Image
             src="/images/common/cat_logo.svg"
             alt="cat logo"
@@ -70,8 +87,8 @@ const Header = () => {
               <li key={category.path}>
                 <button
                   type="button"
-                  onClick={() => handleClick(category.path)}
-                  className={`cursor-pointer relative hover:text-main1 transition-all ${
+                  onClick={() => handleCategoryClick(category.path)}
+                  className={`cursor-pointer relative hover:text-main1 transition-all text-maindark ${
                     selected === category.path
                       ? 'text-main1 font-bold after:content-[""] after:absolute after:bottom-[-10px] after:left-0 after:w-full after:h-[2px] after:bg-main1 after:opacity-100'
                       : ''
@@ -92,7 +109,7 @@ const Header = () => {
         </div>
         <Category />
       </header>
-      <div className="pt-30 sm:pt-38.5">
+      <div className="pt-24 sm:pt-38.5">
         {/* 다른 콘텐츠는 이 div 내부에 위치 */}
       </div>
     </>
