@@ -1,11 +1,11 @@
-import { BoardDetail } from './Board'
-import { DiscussionBoardI } from './Discussion'
-import { WorryI } from './Worry'
+import { BoardI, BoardList } from './Board'
+import { DiscussionBoardI, DiscussionList } from './Discussion'
+import { WorryI, WorryList } from './Worry'
 
 interface BoardSearch {
   page: number
   totalSize: number
-  result: BoardDetail[]
+  result: BoardI[]
 }
 
 interface WorrySearch {
@@ -26,9 +26,9 @@ interface RealtimeSearch {
 }
 
 interface KeywordSearch {
-  boardSimpleInfos: BoardSearch
-  getWorriesRes: WorrySearch
-  discussionSimpleInfo: DiscussionSearch
+  boardSimpleInfos: BoardList
+  getWorriesRes: WorryList
+  discussionSimpleInfo: DiscussionList
 }
 
 export type {

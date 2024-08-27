@@ -4,6 +4,7 @@ import {
   useQuery,
 } from '@tanstack/react-query'
 import { MBTI } from '@/components/common/Button'
+import { KeywordSearch } from '@/model/Search'
 import { queryOptions } from './SearchQueries'
 
 const useBoardSearch = (
@@ -119,13 +120,15 @@ const useRecentKeywords = () =>
   })
 
 const useKeywordSearch = () => {
-  const mutationFn = (keyword: string): Promise<void> =>
-    queryOptions.keywordSearch.mutationFn(keyword)
+  const mutationFn = async (keyword: string): Promise<KeywordSearch> => {
+    const response = await queryOptions.keywordSearch.mutationFn(keyword)
+    return response
+  }
 
-  const options: UseMutationOptions<void, Error, string, unknown> = {
+  const options: UseMutationOptions<KeywordSearch, Error, string, unknown> = {
     mutationFn,
   }
-  return useMutation<void, Error, string>(options)
+  return useMutation<KeywordSearch, Error, string>(options)
 }
 
 export {
