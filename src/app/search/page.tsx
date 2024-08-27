@@ -20,6 +20,7 @@ import { BoardI } from '@/model/Board'
 import { WorryI } from '@/model/Worry'
 import { DiscussionBoardI } from '@/model/Discussion'
 import PopularKeywords from '@/components/search/RealtimeKeywords'
+import RecentKeywords from '@/components/search/RecentKeywords'
 
 const SearchPage = () => {
   const router = useRouter()
@@ -28,8 +29,6 @@ const SearchPage = () => {
   const [result, setResult] = useState<KeywordSearch | null>(null)
 
   const { mutate: keywordSearch } = useKeywordSearch()
-
-  const { data: recentKeywords } = useRecentKeywords()
 
   useEffect(() => {
     const url = new URL(window.location.href)
@@ -86,26 +85,7 @@ const SearchPage = () => {
         </button>
       </div>
 
-      <div>
-        <div className="text-title3 text-gray1 font-semibold mb-3">
-          이전 검색어
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {Array.isArray(recentKeywords) ? (
-            recentKeywords.map((item, idx: number) => (
-              <Button
-                key={idx}
-                text={item.keyword}
-                size="small"
-                color="LIGHTPURPLE"
-                onClick={() => handleSearch(item.keyword)}
-              />
-            ))
-          ) : (
-            <div>이전 검색어가 없습니다.</div>
-          )}
-        </div>
-      </div>
+      <RecentKeywords handleSearch={handleSearch} />
 
       {result && (
         <>
