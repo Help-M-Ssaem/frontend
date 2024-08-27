@@ -9,57 +9,81 @@ import React, {
   useMemo,
 } from 'react'
 
-const WebSocketContext = createContext<any>(null)
+interface WebSocketContextValue {
+  socketRefs: { [key: string]: WebSocket | null }
+  connectSocket: (url: string, key: string) => void
+  disconnectSocket: (key: string) => void
+  isConnected: (key: string) => boolean
+}
+
+const WebSocketContext = createContext<WebSocketContextValue | null>(null)
 
 export const WebSocketProvider = ({ children }: any) => {
-  const socketRef = useRef<WebSocket | null>(null) // 타입 명시
-  const [isConnected, setIsConnected] = useState(false)
+  const socketRefs = useRef<{ [key: string]: WebSocket | null }>({}) // key별로 WebSocket 관리
+  const [connectedKeys, setConnectedKeys] = useState<Set<string>>(new Set())
 
-  const connectSocket = (url: string) => {
-    if (socketRef.current) {
-      socketRef.current.close()
+  const connectSocket = (url: string, key: string) => {
+    if (socketRefs.current[key]) {
+      socketRefs.current[key]?.close()
     }
-    socketRef.current = new WebSocket(url)
+    socketRefs.current[key] = new WebSocket(url)
 
-    socketRef.current.onopen = () => {
-      setIsConnected(true)
-      console.log('WebSocket connected')
-    }
-
-    socketRef.current.onclose = () => {
-      setIsConnected(false)
-      console.log('WebSocket disconnected')
+    socketRefs.current[key]!.onopen = () => {
+      setConnectedKeys((prev) => new Set(prev).add(key))
+      console.log(`WebSocket connected for key: ${key}`)
     }
 
-    socketRef.current.onerror = (error) => {
-      console.error('WebSocket error:', error)
-      setIsConnected(false)
+    socketRefs.current[key]!.onclose = () => {
+      setConnectedKeys((prev) => {
+        const newSet = new Set(prev)
+        newSet.delete(key)
+        return newSet
+      })
+      console.log(`WebSocket disconnected for key: ${key}`)
+    }
+
+    socketRefs.current[key]!.onerror = (error) => {
+      console.error(`WebSocket error for key ${key}:`, error)
+      setConnectedKeys((prev) => {
+        const newSet = new Set(prev)
+        newSet.delete(key)
+        return newSet
+      })
     }
   }
 
-  const disconnectSocket = () => {
-    if (socketRef.current) {
-      socketRef.current.close()
-      socketRef.current = null
-      setIsConnected(false)
+  const disconnectSocket = (key: string) => {
+    if (socketRefs.current[key]) {
+      socketRefs.current[key]?.close()
+      socketRefs.current[key] = null
+      setConnectedKeys((prev) => {
+        const newSet = new Set(prev)
+        newSet.delete(key)
+        return newSet
+      })
     }
+  }
+
+  const isConnected = (key: string) => {
+    return connectedKeys.has(key)
   }
 
   useEffect(() => {
     return () => {
-      disconnectSocket()
+      Object.keys(socketRefs.current).forEach((key) => {
+        socketRefs.current[key]?.close()
+      })
     }
   }, [])
 
-  // useMemo를 사용하여 value 객체를 메모이제이션
   const value = useMemo(
     () => ({
-      socketRef,
+      socketRefs: socketRefs.current,
       connectSocket,
       disconnectSocket,
       isConnected,
     }),
-    [isConnected], // 종속성 배열에 필요한 값 추가
+    [connectedKeys],
   )
 
   return (
@@ -70,5 +94,9 @@ export const WebSocketProvider = ({ children }: any) => {
 }
 
 export const useWebSocket = () => {
-  return useContext(WebSocketContext)
+  const context = useContext(WebSocketContext)
+  if (!context) {
+    throw new Error('useWebSocket must be used within a WebSocketProvider')
+  }
+  return context
 }

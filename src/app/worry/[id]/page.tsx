@@ -22,7 +22,7 @@ const WorryDetail = () => {
   const { data: worryDetail } = useWorryDetail(Number(id))
   const { data: userInfo } = useUserInfo()
   const { mutate: postChattingRoom } = usePostChattingRoom()
-  const { connectSocket, socketRef } = useWebSocket()
+  const { connectSocket, socketRefs } = useWebSocket()
 
   const handleChattingStartClick = () => {
     if (userInfo?.id === worryDetail?.memberSimpleInfo.id) {
@@ -36,18 +36,19 @@ const WorryDetail = () => {
         { worryBoardId: worryId },
         {
           onSuccess: (chatRoomId: number) => {
+            const key = String(chatRoomId)
             const wsUrlUser = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${chatRoomId}&member=${userInfo.id}&worryBoardId=${worryId}`
 
-            connectSocket(wsUrlUser)
-            if (socketRef.current) {
-              socketRef.current.onopen = () => {
+            connectSocket(wsUrlUser, key)
+            if (socketRefs[key]) {
+              socketRefs[key]!.onopen = () => {
                 console.log('User WebSocket is connected')
                 router.push(`/chatting`)
               }
-              socketRef.current.onclose = () => {
+              socketRefs[key]!.onclose = () => {
                 console.log('User WebSocket is closed')
               }
-              socketRef.current.onerror = (error: any) => {
+              socketRefs[key]!.onerror = (error: any) => {
                 console.error('User WebSocket error:', error)
               }
             }

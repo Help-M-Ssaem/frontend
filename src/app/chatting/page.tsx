@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import ChattingInput from '@/components/chatting/ChattingInput'
 import ChattingProfile from '@/components/chatting/ChattingProfile'
@@ -8,6 +8,7 @@ import ChattingMessage from '@/components/chatting/ChattingMessage'
 import { useUserInfo } from '@/service/user/useUserService'
 import { useParams } from 'next/navigation'
 import { ChattingMessageI, ChattingRoomI } from '@/model/Chatting'
+import { useWebSocket } from '@/hooks/useSocket'
 
 const Chatting = () => {
   const { id } = useParams()
@@ -18,38 +19,41 @@ const Chatting = () => {
   const [messages, setMessages] = useState<ChattingMessageI[]>([])
   const [input, setInput] = useState('')
   const { data: userInfo } = useUserInfo()
+  const { connectSocket, disconnectSocket, socketRefs } = useWebSocket()
 
-  const socketRefs = useRef<{ [key: number]: WebSocket }>({})
-
-  const connectToWebSocket = (room: ChattingRoomI) => {
-    const wsUrlUser = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${room.chatRoomId}&member=${userInfo?.id}&worryBoardId=${room.worryBoardId}`
-    const socket = new WebSocket(wsUrlUser)
-
-    socket.onmessage = (event) => {
-      const newMessage = JSON.parse(event.data)
-      if (room.chatRoomId === currentChatRoomId) {
-        setMessages((prevMessages) => [...prevMessages, newMessage])
-      }
+  const handleWebSocketMessage = (event: MessageEvent, roomId: number) => {
+    const newMessage = JSON.parse(event.data)
+    if (roomId === currentChatRoomId) {
+      setMessages((prevMessages) => [...prevMessages, newMessage])
     }
-
-    socket.onopen = () => {
-      console.log(`Connected to WebSocket for room ${room.chatRoomId}`)
-    }
-
-    socket.onclose = () => {
-      console.log(`WebSocket closed for room ${room.chatRoomId}`)
-      // 자동 재연결 로직
-      setTimeout(() => connectToWebSocket(room), 3000)
-    }
-
-    socket.onerror = (error) => {
-      console.error(`WebSocket error for room ${room.chatRoomId}`, error)
-    }
-
-    socketRefs.current[room.chatRoomId] = socket
   }
 
-  /* 유저가 들어가 있는 모든 채팅방 조회 및 WebSocket 연결 */
+  const connectToWebSocket = (room: ChattingRoomI) => {
+    const key = String(room.chatRoomId)
+
+    // 이미 연결된 WebSocket이 있는 경우 재연결하지 않음
+    if (socketRefs[key] && socketRefs[key]!.readyState === WebSocket.OPEN) {
+      console.log(`WebSocket already connected for room ${room.chatRoomId}`)
+      return
+    }
+
+    const wsUrlUser = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${room.chatRoomId}&member=${userInfo?.id}&worryBoardId=${room.worryBoardId}`
+
+    connectSocket(wsUrlUser, key)
+
+    if (socketRefs[key]) {
+      socketRefs[key]!.onmessage = (event) =>
+        handleWebSocketMessage(event, room.chatRoomId)
+      socketRefs[key]!.onclose = () => {
+        console.log(`WebSocket closed for room ${room.chatRoomId}`)
+        setTimeout(() => connectToWebSocket(room), 1000)
+      }
+      socketRefs[key]!.onerror = (error) => {
+        console.error(`WebSocket error for room ${room.chatRoomId}`, error)
+      }
+    }
+  }
+
   useEffect(() => {
     const fetchChatRoomsAndConnectSockets = async () => {
       try {
@@ -73,9 +77,11 @@ const Chatting = () => {
 
     return () => {
       // 컴포넌트 언마운트 시 모든 WebSocket 연결을 종료
-      Object.values(socketRefs.current).forEach((socket) => socket.close())
+      chatRooms.forEach((room) => {
+        disconnectSocket(String(room.chatRoomId))
+      })
     }
-  }, [userInfo, currentChatRoomId])
+  }, [userInfo])
 
   useEffect(() => {
     if (currentChatRoomId) {
@@ -101,14 +107,14 @@ const Chatting = () => {
 
   /* 메시지 전송 */
   const sendMessage = () => {
-    if (socketRefs.current[currentChatRoomId] && input.trim() !== '') {
+    if (socketRefs[String(currentChatRoomId)] && input.trim() !== '') {
       const message = {
         action: 'sendMessage',
         chatRoomId: currentChatRoomId,
         message: input,
         memberId: userInfo?.id.toString(),
       }
-      socketRefs.current[currentChatRoomId].send(JSON.stringify(message))
+      socketRefs[String(currentChatRoomId)]?.send(JSON.stringify(message))
       setMessages((prevMessages: any) => [
         ...prevMessages,
         {
