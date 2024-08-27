@@ -8,6 +8,7 @@ import Profile from '@/components/user/Profile'
 import {
   useDeleteDiscussion,
   useDiscussionDetail,
+  usePostDiscussionPraticipation,
 } from '@/service/discussion/useDiscussionService'
 import { useParams, useRouter } from 'next/navigation'
 import CommentList from '@/components/board/CommentList'
@@ -27,18 +28,16 @@ const DiscussionDetail = () => {
   const router = useRouter()
   const { showToast } = useToast()
 
+  const { mutate: postDiscussionPraticipation } =
+    usePostDiscussionPraticipation()
+
   const discussion = discussionDetail && discussionDetail.discussionSimpleInfo
-  const formattedCreatedAt = discussion && discussion.createdAt.split(' ')[0]
 
-  const [commentCount, setCommentCount] = useState(
-    discussion?.commentCount || 0,
+  const [commentCount, setCommentCount] = useState(0)
+  const [options, setOptions] = useState<DiscussionOptionI[]>(
+    discussionDetail?.discussionSimpleInfo.options || [],
   )
-
-  useEffect(() => {
-    if (discussion) {
-      setCommentCount(discussion.commentCount)
-    }
-  }, [discussion])
+  const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null)
 
   const handleCommentCountUpdate = (newCount: number) => {
     setCommentCount(newCount)
@@ -56,6 +55,47 @@ const DiscussionDetail = () => {
       },
     })
   }
+
+  const handleOptionClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    optionId: number,
+  ) => {
+    event.stopPropagation()
+
+    postDiscussionPraticipation(
+      {
+        discussionId,
+        discussionOptionId: optionId,
+      },
+      {
+        onSuccess: (data) => {
+          const updatedOptions = data.map((option: DiscussionOptionI) => {
+            return { ...option, selected: option.id === optionId }
+          })
+
+          setOptions(updatedOptions)
+          const selectedOption = updatedOptions.find(
+            (option) => option.selected,
+          )
+          if (selectedOption) {
+            setSelectedOptionId(optionId)
+          }
+        },
+      },
+    )
+  }
+
+  useEffect(() => {
+    if (discussionDetail) {
+      setOptions(discussionDetail.discussionSimpleInfo.options)
+    }
+  }, [discussionDetail])
+
+  useEffect(() => {
+    if (discussion) {
+      setCommentCount(discussion.commentCount)
+    }
+  }, [discussion])
 
   return (
     <>
@@ -81,9 +121,9 @@ const DiscussionDetail = () => {
         {discussion && (
           <>
             <div className="flex justify-between my-7.5">
-              <Profile user={discussion?.memberSimpleInfo} />
+              <Profile user={discussion.memberSimpleInfo} />
               <div className="flex gap-3.5 text-caption text-gray2">
-                <p>{formattedCreatedAt}</p>
+                <p>{discussion.createdAt}</p>
               </div>
             </div>
 
@@ -96,17 +136,18 @@ const DiscussionDetail = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                {discussion.options &&
-                  discussion.options.map((option: DiscussionOptionI) => (
-                    <DiscussionOption
-                      key={option.id}
-                      discussionOption={option}
-                      size="small"
-                      boardId={Number(id)}
-                      onSelect={() => {}}
-                      disabled={false}
-                    />
-                  ))}
+                {options.map((option: DiscussionOptionI) => (
+                  <DiscussionOption
+                    key={option.id}
+                    discussionOption={option}
+                    size="small"
+                    disabled={selectedOptionId !== null}
+                    selectedPercent={option.selectedPercent}
+                    handleOptionClick={(event) =>
+                      handleOptionClick(event, option.id)
+                    }
+                  />
+                ))}
               </div>
 
               <div className="flex justify-between mb-10">

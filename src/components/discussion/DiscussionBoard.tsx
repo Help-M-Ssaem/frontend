@@ -27,8 +27,6 @@ const DiscussionBoard = ({ discussionBoard }: DiscussionBoardProps) => {
   const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null)
   const [selectedOptionPercent, setSelectedOptionPercent] = useState('')
 
-  const formattedCreatedAt = createdAt.split(' ')[0]
-
   const { mutate: postDiscussionPraticipation } =
     usePostDiscussionPraticipation()
 
@@ -82,7 +80,7 @@ const DiscussionBoard = ({ discussionBoard }: DiscussionBoardProps) => {
       <div className="flex flex-col justify-between gap-5">
         <div className="flex justify-between">
           <Profile user={memberSimpleInfo} />
-          <div className="text-caption text-gray2">{formattedCreatedAt}</div>
+          <div className="text-caption text-gray2">{createdAt}</div>
         </div>
         <div className="flex flex-col gap-1">
           <p className="text-title3 font-bold text-maindark">{title}</p>
