@@ -4,6 +4,7 @@ import { DiscussionOptionI } from '@/model/Discussion'
 import React from 'react'
 import Image from 'next/image'
 import clsx from 'clsx'
+import { motion } from 'framer-motion'
 
 const DiscussionOptionTheme = {
   size: {
@@ -31,7 +32,7 @@ const DiscussionOption = ({
   const { content, imgUrl, selectedPercent, selected } = discussionOption
 
   return (
-    <button
+    <motion.button
       type="button"
       className={clsx(
         'flex flex-col justify-center items-center border-gray4 border-1 rounded-7.5 gap-2.5 p-4 text-center w-full min-h-30 sm:min-h-54',
@@ -43,8 +44,11 @@ const DiscussionOption = ({
       )}
       onClick={handleOptionClick}
       disabled={disabled}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ duration: 0.3 }}
     >
-      {!selected && imgUrl && (
+      {imgUrl && (
         <Image src={imgUrl} alt="thumbnail" width={175} height={175} />
       )}
       <div>
@@ -55,9 +59,17 @@ const DiscussionOption = ({
         >
           {content}
         </p>
-        {selected && <p className="text-title2">{selectedPercent}</p>}
+        {selected && (
+          <motion.p
+            className="text-title3"
+            animate={{ opacity: [0, 1], y: [10, 0] }}
+            transition={{ duration: 0.5 }}
+          >
+            {selectedPercent}
+          </motion.p>
+        )}
       </div>
-    </button>
+    </motion.button>
   )
 }
 
