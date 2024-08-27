@@ -1,6 +1,11 @@
 import Service from '@/apis/AxiosInstance'
 import { MBTI } from '@/components/common/Button'
-import { BoardSearch, RealtimeSearch, WorrySearch } from '@/model/Search'
+import {
+  BoardSearch,
+  KeywordSearch,
+  RealtimeSearch,
+  WorrySearch,
+} from '@/model/Search'
 
 export interface SearchProps {
   searchType: number
@@ -60,7 +65,7 @@ class SearchService extends Service {
   }
 
   postKeywordSearch(keyword: string) {
-    return this.http.post(`/keywords`, {
+    return this.http.post<KeywordSearch>(`/keywords`, {
       keyword,
     })
   }
