@@ -19,7 +19,7 @@ interface WebSocketContextValue {
 const WebSocketContext = createContext<WebSocketContextValue | null>(null)
 
 export const WebSocketProvider = ({ children }: any) => {
-  const socketRefs = useRef<{ [key: string]: WebSocket | null }>({}) // key별로 WebSocket 관리
+  const socketRefs = useRef<{ [key: string]: WebSocket | null }>({})
   const [connectedKeys, setConnectedKeys] = useState<Set<string>>(new Set())
 
   const connectSocket = (url: string, key: string) => {

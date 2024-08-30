@@ -15,6 +15,7 @@ interface ChattingRoomI {
   worryBoardId: number
   lastMessage: string
   lastSendAt: string
+  state: boolean
 }
 
 export type { ChattingMessageI, ChattingRoomI }

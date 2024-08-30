@@ -19,7 +19,7 @@ const Chatting = () => {
   const [messages, setMessages] = useState<ChattingMessageI[]>([])
   const [input, setInput] = useState('')
   const { data: userInfo } = useUserInfo()
-  const { connectSocket, disconnectSocket, socketRefs } = useWebSocket()
+  const { connectSocket, socketRefs } = useWebSocket()
 
   const handleWebSocketMessage = (event: MessageEvent, roomId: number) => {
     const newMessage = JSON.parse(event.data)
@@ -30,30 +30,15 @@ const Chatting = () => {
 
   const connectToWebSocket = (room: ChattingRoomI) => {
     const key = String(room.chatRoomId)
-
-    // 이미 연결된 WebSocket이 있는 경우 재연결하지 않음
-    if (socketRefs[key] && socketRefs[key]!.readyState === WebSocket.OPEN) {
-      console.log(`WebSocket already connected for room ${room.chatRoomId}`)
-      return
-    }
-
     const wsUrlUser = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${room.chatRoomId}&member=${userInfo?.id}&worryBoardId=${room.worryBoardId}`
-
     connectSocket(wsUrlUser, key)
-
     if (socketRefs[key]) {
       socketRefs[key]!.onmessage = (event) =>
         handleWebSocketMessage(event, room.chatRoomId)
-      socketRefs[key]!.onclose = () => {
-        console.log(`WebSocket closed for room ${room.chatRoomId}`)
-        setTimeout(() => connectToWebSocket(room), 1000)
-      }
-      socketRefs[key]!.onerror = (error) => {
-        console.error(`WebSocket error for room ${room.chatRoomId}`, error)
-      }
     }
   }
 
+  /* 채팅방 목록 불러오기 */
   useEffect(() => {
     const fetchChatRoomsAndConnectSockets = async () => {
       try {
@@ -75,14 +60,10 @@ const Chatting = () => {
       fetchChatRoomsAndConnectSockets()
     }
 
-    return () => {
-      // 컴포넌트 언마운트 시 모든 WebSocket 연결을 종료
-      chatRooms.forEach((room) => {
-        disconnectSocket(String(room.chatRoomId))
-      })
-    }
+    return () => {}
   }, [userInfo])
 
+  /* 채팅방 변경 시 메시지 불러오기 */
   useEffect(() => {
     if (currentChatRoomId) {
       const selectedRoom = chatRooms.find(
