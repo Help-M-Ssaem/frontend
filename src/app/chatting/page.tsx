@@ -108,6 +108,21 @@ const Chatting = () => {
     }
   }
 
+  /* 채팅방 나가기 */
+  const leaveChatRoom = async (chatRoomId: number) => {
+    try {
+      await axios.delete(
+        `https://ik7f6nxm8g.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${chatRoomId}&memberId=${userInfo?.id}`,
+      )
+      setChatRooms((prevRooms) =>
+        prevRooms.filter((room) => room.chatRoomId !== chatRoomId),
+      )
+      setMessages([])
+    } catch (error) {
+      console.error('Failed to leave the chat room:', error)
+    }
+  }
+
   return (
     <div className="w-full-vw ml-half-vw bg-main3 py-10">
       <div className="flex h-screen-40 border-7.5 mx-2% sm:mx-6% md:mx-13% bg-white rounded-7.5 shadow-custom-light">
@@ -119,13 +134,14 @@ const Chatting = () => {
             {chatRooms.map((room) => (
               <li
                 key={room.chatRoomId}
-                className="border-b last:border-none box-border p-4"
+                className="border-b last:border-none box-border"
               >
                 <ChattingProfile
                   user={room.memberSimpleInfo}
                   lastMessage={room.lastMessage}
                   lastSendAt={room.lastSendAt}
                   onClick={() => setCurrentChatRoomId(room.chatRoomId)}
+                  current={room.chatRoomId === currentChatRoomId}
                 />
               </li>
             ))}
@@ -133,7 +149,17 @@ const Chatting = () => {
         </div>
 
         <div className="flex flex-col flex-1 bg-white rounded-7.5">
-          <div className="flex items-center border-b p-4 h-27.5" />
+          <div className="flex items-center border-b p-4 h-27.5">
+            {currentChatRoomId && (
+              <button
+                type="button"
+                className="text-red-500 ml-auto"
+                onClick={() => leaveChatRoom(currentChatRoomId)}
+              >
+                {currentChatRoomId} 채팅방 나가기
+              </button>
+            )}
+          </div>
           <div className="flex-1 overflow-y-auto box-border">
             {messages.length > 0 ? (
               messages.map((msg, index) => (

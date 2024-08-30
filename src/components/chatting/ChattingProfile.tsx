@@ -9,6 +9,7 @@ export interface ChattingProfileProps {
   lastMessage: string
   lastSendAt: string
   onClick: () => void
+  current: boolean
 }
 
 const ChattingProfile = ({
@@ -16,9 +17,15 @@ const ChattingProfile = ({
   lastMessage,
   lastSendAt,
   onClick,
+  current,
 }: ChattingProfileProps) => {
   return (
-    <div className="flex items-center gap-4.5 cursor-pointer" onClick={onClick}>
+    <div
+      className={`flex items-center gap-4.5 cursor-pointer p-4 ${
+        current ? 'bg-main4' : ''
+      }`}
+      onClick={onClick}
+    >
       <div className="w-14 h-14 relative rounded-full overflow-hidden">
         <Image
           src={user.profileImgUrl}
