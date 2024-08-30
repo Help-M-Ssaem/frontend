@@ -15,7 +15,9 @@ const Chatting = () => {
   const chattingRoomId = Number(id)
 
   const [chatRooms, setChatRooms] = useState<ChattingRoomI[]>([])
-  const [currentChatRoomId, setCurrentChatRoomId] = useState(chattingRoomId)
+  const [currentChatRoomId, setCurrentChatRoomId] = useState<number | null>(
+    chattingRoomId || null,
+  )
   const [messages, setMessages] = useState<ChattingMessageI[]>([])
   const [input, setInput] = useState('')
   const { data: userInfo } = useUserInfo()
@@ -47,6 +49,10 @@ const Chatting = () => {
         )
         const rooms = response.data
         setChatRooms(rooms)
+
+        if (rooms.length > 0 && currentChatRoomId === null) {
+          setCurrentChatRoomId(rooms[0].chatRoomId)
+        }
 
         rooms.forEach((room: ChattingRoomI) => {
           connectToWebSocket(room)
@@ -112,12 +118,15 @@ const Chatting = () => {
   const leaveChatRoom = async (chatRoomId: number) => {
     try {
       await axios.delete(
-        `https://ik7f6nxm8g.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${chatRoomId}&memberId=${userInfo?.id}`,
+        `https://ik7f6nxm8g.execute-api.ap-northeast-2.amazonaws.com/mssaem/chatroom?chatRoomId=${chatRoomId}&memberId=${userInfo?.id}`,
       )
       setChatRooms((prevRooms) =>
         prevRooms.filter((room) => room.chatRoomId !== chatRoomId),
       )
       setMessages([])
+      setCurrentChatRoomId(
+        chatRooms.length > 1 ? chatRooms[0].chatRoomId : null,
+      )
     } catch (error) {
       console.error('Failed to leave the chat room:', error)
     }
