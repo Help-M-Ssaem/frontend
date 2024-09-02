@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useToast } from '@/hooks/useToast'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValueLoadable } from 'recoil'
 import { userInfoState } from '@/recoil/UserInfo'
 import { useRouter, usePathname } from 'next/navigation'
 import Button from './Button'
@@ -22,9 +22,8 @@ const Header = () => {
   const pathname = usePathname()
   const router = useRouter()
   const [selected, setSelected] = useState<string | null>(null)
-  const userInfo = useRecoilValue(userInfoState)
-  const [isLoading, setIsLoading] = useState(true)
-
+  const userInfoLoadable = useRecoilValueLoadable(userInfoState)
+  const { state, contents: userInfo } = userInfoLoadable
   const { showToast } = useToast()
 
   useEffect(() => {
@@ -32,18 +31,6 @@ const Header = () => {
       setSelected(pathname)
     }
   }, [pathname])
-
-  useEffect(() => {
-    if (userInfo !== undefined) {
-      setIsLoading(false)
-    }
-  }, [userInfo])
-
-  useEffect(() => {
-    if (userInfo) {
-      setIsLoading(false)
-    }
-  }, [userInfo])
 
   const handleCategoryClick = (path: string) => {
     if (!userInfo) {
@@ -59,7 +46,7 @@ const Header = () => {
     router.push(path)
   }
 
-  if (isLoading) {
+  if (state === 'loading') {
     return <div>로딩 중...</div>
   }
 
