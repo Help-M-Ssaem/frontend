@@ -1,3 +1,5 @@
+'use client'
+
 import dynamic from 'next/dynamic'
 import type { Metadata } from 'next'
 import '../styles/globals.css'
@@ -6,7 +8,10 @@ import localFont from 'next/font/local'
 import ReactQueryProviders from '@/hooks/useReactQuery'
 import Toaster from '@/components/common/Toaster'
 import { WebSocketProvider } from '@/hooks/useSocket'
-import LoadUserInfo from '@/service/user/LoadUserInfo'
+import { userInfoState } from '@/recoil/UserInfo'
+import { useSetRecoilState } from 'recoil'
+import { useEffect } from 'react'
+import UserService from '@/service/user/UserService'
 
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
@@ -30,17 +35,44 @@ const Footer = dynamic(() => import('@/components/common/Footer'), {
   ssr: false,
 })
 
+export async function getServerSideProps() {
+  try {
+    const response = await UserService.fetchUserInfo()
+    return {
+      props: {
+        initialUserInfo: response.data,
+      },
+    }
+  } catch (error) {
+    console.error('Failed to fetch user info:', error)
+    return {
+      props: {
+        initialUserInfo: null,
+      },
+    }
+  }
+}
+
 export default function RootLayout({
   children,
+  initialUserInfo,
 }: {
   children: React.ReactNode
+  initialUserInfo: any
 }) {
+  const setUserInfo = useSetRecoilState(userInfoState)
+
+  useEffect(() => {
+    if (initialUserInfo) {
+      setUserInfo(initialUserInfo)
+    }
+  }, [initialUserInfo, setUserInfo])
+
   return (
     <html lang="kr">
       <link rel="icon" href="/images/common/cat_logo.svg" sizes="any" />
       <body className={`${pretendard.variable} font-pretendard`}>
         <Recoil>
-          <LoadUserInfo />
           <WebSocketProvider>
             <ReactQueryProviders>
               <main className="py-3 px-5 sm:px-7% md:px-10% ">
