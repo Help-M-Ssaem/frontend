@@ -95,6 +95,17 @@ const queryOptions = {
       await WorryService.patchWorrySolved(worryId)
     },
   },
+
+  postChattingRoom: {
+    mutationFn: async ({
+      worryBoardId,
+    }: {
+      worryBoardId: number
+    }): Promise<number> => {
+      const response = await WorryService.postChattingRoom({ worryBoardId })
+      return response.data
+    },
+  },
 }
 
 export { queryKeys, queryOptions }
