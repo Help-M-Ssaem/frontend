@@ -13,13 +13,4 @@ const Template: StoryFn<ChattingProfileProps> = (
 ) => <ChattingProfile {...args} />
 
 export const Primary = Template.bind({})
-Primary.args = {
-  chattingProfile: {
-    profileImgUrl: '/images/common/default.svg',
-    nickName: '유보라',
-    mbti: 'ENFP',
-    badge: '엠비티어른',
-    recent: '3',
-    lastMessage: '카페에서 남친이랑 싸웠어요..',
-  },
-}
+Primary.args = {}
