@@ -14,6 +14,10 @@ class UserService extends Service {
     return this.http.get<User>('/member/info')
   }
 
+  async fetchUserInfo() {
+    return this.http.get('/member/info')
+  }
+
   patchProfile(profile: any) {
     return this.http.patch('/member/profile', profile)
   }

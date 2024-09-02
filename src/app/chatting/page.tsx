@@ -5,21 +5,18 @@ import axios from 'axios'
 import ChattingInput from '@/components/chatting/ChattingInput'
 import ChattingProfile from '@/components/chatting/ChattingProfile'
 import ChattingMessage from '@/components/chatting/ChattingMessage'
-import { useUserInfo } from '@/service/user/useUserService'
-import { useParams } from 'next/navigation'
 import { ChattingMessageI, ChattingRoomI } from '@/model/Chatting'
 import { useWebSocket } from '@/hooks/useSocket'
+import { userInfoState } from '@/recoil/UserInfo'
+import { useRecoilValue } from 'recoil'
 
 const Chatting = () => {
-  const { id } = useParams()
-  const chattingRoomId = Number(id)
-
   const [chatRooms, setChatRooms] = useState<ChattingRoomI[]>([])
   const [currentChatRoomId, setCurrentChatRoomId] = useState<number | null>(
-    chattingRoomId || null,
+    null,
   )
   const [input, setInput] = useState('')
-  const { data: userInfo } = useUserInfo()
+  const userInfo = useRecoilValue(userInfoState)
   const { connectSocket, socketRefs } = useWebSocket()
 
   const [messages, setMessages] = useState<ChattingMessageI[]>([])
@@ -44,32 +41,30 @@ const Chatting = () => {
   }
 
   /* 채팅방 목록 불러오기 */
-  useEffect(() => {
-    const fetchChatRoomsAndConnectSockets = async () => {
-      try {
-        const response = await axios.get(
-          `https://ik7f6nxm8g.execute-api.ap-northeast-2.amazonaws.com/mssaem/chatroom?memberId=${userInfo?.id}`,
-        )
-        const rooms = response.data
-        setChatRooms(rooms)
+  const fetchChatRoomsAndConnectSockets = async () => {
+    try {
+      const response = await axios.get(
+        `https://ik7f6nxm8g.execute-api.ap-northeast-2.amazonaws.com/mssaem/chatroom?memberId=${userInfo?.id}`,
+      )
+      const rooms = response.data
+      setChatRooms(rooms)
 
-        if (rooms.length > 0 && currentChatRoomId === null) {
-          setCurrentChatRoomId(rooms[0].chatRoomId)
-        }
-
-        rooms.forEach((room: ChattingRoomI) => {
-          connectToWebSocket(room)
-        })
-      } catch (error) {
-        console.error('Failed to fetch chat rooms:', error)
+      if (rooms.length > 0 && currentChatRoomId === null) {
+        setCurrentChatRoomId(rooms[0].chatRoomId)
       }
-    }
 
+      rooms.forEach((room: ChattingRoomI) => {
+        connectToWebSocket(room)
+      })
+    } catch (error) {
+      console.error('Failed to fetch chat rooms:', error)
+    }
+  }
+
+  useEffect(() => {
     if (userInfo) {
       fetchChatRoomsAndConnectSockets()
     }
-
-    return () => {}
   }, [userInfo])
 
   /* 채팅방 변경 시 메시지 불러오기 */

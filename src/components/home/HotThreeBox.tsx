@@ -1,17 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { fetchUserInfo } from '@/service/user/fetchUserInfo'
 import { useHotThree } from '@/service/home/useHomeService'
-import { User } from '@/model/User'
 import { HotThreeI } from '@/model/Home'
+import { useRecoilValue } from 'recoil'
+import { userInfoState } from '@/recoil/UserInfo'
 import HotThree from './HotThree'
 import NotLogin from '../auth/NotLogin'
 import Login from '../auth/Login'
-
-interface HotThreeBoxProps {
-  userInfo: User | null
-}
 
 const renderHotThree = (hotThree: HotThreeI) => (
   <>
@@ -21,19 +16,9 @@ const renderHotThree = (hotThree: HotThreeI) => (
   </>
 )
 
-const HotThreeBox = ({ userInfo: initialUserInfo }: HotThreeBoxProps) => {
+const HotThreeBox = () => {
   const { data: hotThree } = useHotThree()
-  const [userInfo, setUserInfo] = useState<User | null>(initialUserInfo || null)
-
-  useEffect(() => {
-    if (!initialUserInfo) {
-      const fetchData = async () => {
-        const fetchedUserInfo = await fetchUserInfo()
-        setUserInfo(fetchedUserInfo)
-      }
-      fetchData()
-    }
-  }, [initialUserInfo])
+  const userInfo = useRecoilValue(userInfoState)
 
   return (
     <>

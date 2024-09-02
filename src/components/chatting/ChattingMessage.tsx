@@ -35,6 +35,7 @@ const ChattingMessage = ({ other, msg }: ChattingMessageProps) => {
             width={56}
             height={56}
             alt="profile"
+            className="rounded-full"
           />
         )}
         <div
