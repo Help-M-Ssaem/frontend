@@ -38,8 +38,11 @@ const WorryDetail = () => {
           onSuccess: (chatRoomId: number) => {
             const key = String(chatRoomId)
             const wsUrlUser = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${chatRoomId}&member=${userInfo.id}&worryBoardId=${worryId}`
+            const wsUrlOwner = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${chatRoomId}&member=${worryDetail?.memberSimpleInfo.id}&worryBoardId=${worryId}`
 
             connectSocket(wsUrlUser, key)
+            connectSocket(wsUrlOwner, key)
+
             if (socketRefs[key]) {
               socketRefs[key]!.onopen = () => {
                 console.log('User WebSocket is connected')
