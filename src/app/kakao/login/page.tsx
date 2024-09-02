@@ -45,7 +45,7 @@ const KakaoLogin = () => {
     }
 
     getToken()
-  }, [router, service])
+  }, [router])
 
   return null
 }

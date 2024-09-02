@@ -12,13 +12,6 @@ class Service {
         'Content-Type': 'application/json',
       },
     })
-
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('access_token')
-      if (token) {
-        this.setAuthorizationHeader(token)
-      }
-    }
   }
 
   setAuthorizationHeader(token: string) {
