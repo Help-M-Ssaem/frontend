@@ -1,7 +1,5 @@
-'use client'
-
-import dynamic from 'next/dynamic'
 import React, { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useToast } from '@/hooks/useToast'
 import { useRecoilValueLoadable } from 'recoil'
@@ -31,6 +29,12 @@ const Header = () => {
       setSelected(pathname)
     }
   }, [pathname])
+
+  useEffect(() => {
+    if (state === 'hasValue' && userInfo) {
+      // 사용자 정보가 로드된 후에 헤더를 다시 렌더링
+    }
+  }, [state, userInfo])
 
   const handleCategoryClick = (path: string) => {
     if (!userInfo) {

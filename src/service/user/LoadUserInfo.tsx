@@ -12,7 +12,9 @@ const LoadUserInfo = () => {
     const fetchUserInfo = async () => {
       try {
         const response = await UserService.fetchUserInfo()
-        setUserInfo(response.data)
+        if (response.data) {
+          setUserInfo(response.data)
+        }
       } catch (error) {
         console.error('Failed to load user info:', error)
       }
