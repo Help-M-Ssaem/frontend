@@ -8,10 +8,11 @@ import ChattingMessage from '@/components/chatting/ChattingMessage'
 import { ChattingMessageI, ChattingRoomI } from '@/model/Chatting'
 import { useWebSocket } from '@/hooks/useSocket'
 import { userInfoState } from '@/recoil/UserInfo'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { chatRoomsState } from '@/recoil/chatRoomsState'
 
 const Chatting = () => {
-  const [chatRooms, setChatRooms] = useState<ChattingRoomI[]>([])
+  const [chatRooms, setChatRooms] = useRecoilState(chatRoomsState)
   const [currentChatRoomId, setCurrentChatRoomId] = useState<number | null>(
     null,
   )
@@ -47,7 +48,9 @@ const Chatting = () => {
         `https://ik7f6nxm8g.execute-api.ap-northeast-2.amazonaws.com/mssaem/chatroom?memberId=${userInfo?.id}`,
       )
       const rooms = response.data
-      setChatRooms(rooms)
+      if (rooms.length > 0) {
+        setChatRooms(rooms)
+      }
 
       if (rooms.length > 0 && currentChatRoomId === null) {
         setCurrentChatRoomId(rooms[0].chatRoomId)
@@ -70,9 +73,9 @@ const Chatting = () => {
   /* 채팅방 변경 시 메시지 불러오기 */
   useEffect(() => {
     if (currentChatRoomId) {
-      const selectedRoom = chatRooms.find(
-        (room) => room.chatRoomId === currentChatRoomId,
-      )
+      const selectedRoom =
+        chatRooms &&
+        chatRooms.find((room) => room.chatRoomId === currentChatRoomId)
 
       if (selectedRoom) {
         const fetchMessages = async () => {
@@ -125,12 +128,12 @@ const Chatting = () => {
       await axios.delete(
         `https://ik7f6nxm8g.execute-api.ap-northeast-2.amazonaws.com/mssaem/chatroom?chatRoomId=${chatRoomId}&memberId=${userInfo?.id}`,
       )
-      setChatRooms((prevRooms) =>
-        prevRooms.filter((room) => room.chatRoomId !== chatRoomId),
+      setChatRooms((prevRooms: any) =>
+        prevRooms.filter((room: any) => room.chatRoomId !== chatRoomId),
       )
       setMessages([])
       setCurrentChatRoomId(
-        chatRooms.length > 1 ? chatRooms[0].chatRoomId : null,
+        chatRooms && chatRooms.length > 1 ? chatRooms[0].chatRoomId : null,
       )
     } catch (error) {
       console.error('Failed to leave the chat room:', error)
@@ -145,20 +148,21 @@ const Chatting = () => {
             채팅 목록
           </div>
           <ul>
-            {chatRooms.map((room) => (
-              <li
-                key={room.chatRoomId}
-                className="border-b last:border-none box-border"
-              >
-                <ChattingProfile
-                  user={room.memberSimpleInfo}
-                  lastMessage={room.lastMessage}
-                  lastSendAt={room.lastSendAt}
-                  onClick={() => setCurrentChatRoomId(room.chatRoomId)}
-                  current={room.chatRoomId === currentChatRoomId}
-                />
-              </li>
-            ))}
+            {chatRooms &&
+              chatRooms.map((room) => (
+                <li
+                  key={room.chatRoomId}
+                  className="border-b last:border-none box-border"
+                >
+                  <ChattingProfile
+                    user={room.memberSimpleInfo}
+                    lastMessage={room.lastMessage}
+                    lastSendAt={room.lastSendAt}
+                    onClick={() => setCurrentChatRoomId(room.chatRoomId)}
+                    current={room.chatRoomId === currentChatRoomId}
+                  />
+                </li>
+              ))}
           </ul>
         </div>
 
@@ -177,9 +181,11 @@ const Chatting = () => {
           <div className="flex-1 overflow-y-auto box-border">
             {messages.length > 0 ? (
               messages.map((msg, index) => {
-                const currentRoom = chatRooms.find(
-                  (room) => room.chatRoomId === currentChatRoomId,
-                )
+                const currentRoom =
+                  chatRooms &&
+                  chatRooms.find(
+                    (room) => room.chatRoomId === currentChatRoomId,
+                  )
                 return (
                   <div key={index} className="my-2 p-2 box-border">
                     <ChattingMessage

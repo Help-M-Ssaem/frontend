@@ -12,6 +12,9 @@ import WorryProfile from '@/components/user/WorryProfile'
 import { useUserInfo } from '@/service/user/useUserService'
 import { useToast } from '@/hooks/useToast'
 import { useWebSocket } from '@/hooks/useSocket'
+import axios from 'axios'
+import { useSetRecoilState } from 'recoil'
+import { chatRoomsState } from '@/recoil/chatRoomsState'
 
 const WorryDetail = () => {
   const { id } = useParams()
@@ -23,6 +26,21 @@ const WorryDetail = () => {
   const { data: userInfo } = useUserInfo()
   const { mutate: postChattingRoom } = usePostChattingRoom()
   const { connectSocket, socketRefs } = useWebSocket()
+  const setChatRooms = useSetRecoilState(chatRoomsState)
+
+  /* 채팅방 목록 불러오기 */
+  const fetchChatRoomsAndConnectSockets = async () => {
+    try {
+      const response = await axios.get(
+        `https://ik7f6nxm8g.execute-api.ap-northeast-2.amazonaws.com/mssaem/chatroom?memberId=${userInfo?.id}`,
+      )
+      const rooms = response.data
+      setChatRooms(rooms)
+      router.push(`/chatting`)
+    } catch (error) {
+      console.error('Failed to fetch chat rooms:', error)
+    }
+  }
 
   const handleChattingStartClick = () => {
     if (userInfo?.id === worryDetail?.memberSimpleInfo.id) {
@@ -46,15 +64,11 @@ const WorryDetail = () => {
             connectSocket(wsUrlOwner, ownerKey)
 
             if (socketRefs[userKey]) {
-              socketRefs[userKey]!.onopen = () => {
+              socketRefs[userKey]!.onopen = async () => {
                 console.log('User WebSocket is connected')
-                router.push(`/chatting`)
-              }
-              socketRefs[userKey]!.onclose = () => {
-                console.log('User WebSocket is closed')
-              }
-              socketRefs[userKey]!.onerror = (error: any) => {
-                console.error('User WebSocket error:', error)
+                setTimeout(() => {
+                  fetchChatRoomsAndConnectSockets()
+                }, 1000)
               }
             }
           },
