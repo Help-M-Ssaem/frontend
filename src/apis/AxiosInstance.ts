@@ -16,9 +16,13 @@ class Service {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('access_token')
       if (token) {
-        this.http.defaults.headers.common.Authorization = `${token}`
+        this.setAuthorizationHeader(token)
       }
     }
+  }
+
+  setAuthorizationHeader(token: string) {
+    this.http.defaults.headers.common.Authorization = `${token}`
   }
 }
 
