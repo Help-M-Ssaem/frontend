@@ -4,9 +4,11 @@ import dynamic from 'next/dynamic'
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useToast } from '@/hooks/useToast'
-import { useUserInfo } from '@/service/user/useUserService'
+import { useRecoilValue } from 'recoil'
+import { userInfoState } from '@/recoil/UserInfo'
 import { useRouter, usePathname } from 'next/navigation'
 import Button from './Button'
+import Profile from '../user/Profile'
 
 const Category = dynamic(() => import('./Category'), { ssr: false })
 
@@ -20,7 +22,7 @@ const Header = () => {
   const pathname = usePathname()
   const router = useRouter()
   const [selected, setSelected] = useState<string | null>(null)
-  const { data: userInfo } = useUserInfo()
+  const userInfo = useRecoilValue(userInfoState)
 
   const { showToast } = useToast()
 
@@ -35,7 +37,6 @@ const Header = () => {
       showToast('로그인이 필요한 서비스입니다')
       return
     }
-
     if (path === '/alarm' || path === '/favorites') {
       showToast('준비 중인 기능입니다')
       return
@@ -62,13 +63,15 @@ const Header = () => {
             onClick={() => router.push('/')}
             className="cursor-pointer"
           />
-          {!userInfo && (
+          {!userInfo ? (
             <Button
               text="로그인하고 이용하기"
               color="PURPLE"
               size="medium"
               onClick={() => router.push('/signin')}
             />
+          ) : (
+            <Profile user={userInfo} />
           )}
         </div>
 

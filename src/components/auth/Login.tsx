@@ -23,7 +23,7 @@ const Login = ({ user }: LoginProps) => {
 
   return (
     <motion.div
-      className="flex flex-col justify-between items-center w-full min-h-full min-w-67.5 p-7 bg-white rounded-7.5"
+      className="flex flex-col justify-between items-center min-h-full min-w-67.5 p-7 bg-white rounded-7.5"
       initial="hidden"
       animate="visible"
       variants={ContainerAnimation}
