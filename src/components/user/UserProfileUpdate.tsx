@@ -27,6 +27,7 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
   const [mbti, setMbti] = useState<(string | null)[]>([null, null, null, null])
   const [introduction, setIntroduction] = useState<string | null>(null)
 
+  /* 프로필 정보 초기화 */
   useEffect(() => {
     if (profile) {
       setProfileImgUrl(profile.profileImgUrl || null)
@@ -41,6 +42,7 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
     }
   }, [profile])
 
+  /* 프로필 정보 업데이트 */
   useEffect(() => {
     if (profile) {
       const mbtiString = mbti.map((char) => char || '').join('')
@@ -111,7 +113,6 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
     if (profileImgUrl === profile?.profileImgUrl) {
       deleteProfileImg(undefined, {
         onSuccess: () => {
-          setProfileImgUrl(defaultImageUrl)
           if (profileImgUrl === defaultImageUrl) {
             showToast('기본 이미지는 삭제할 수 없습니다.')
           }
@@ -125,7 +126,6 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
     else {
       deleteProfileImgS3(profile?.profileImgUrl || '', {
         onSuccess: () => {
-          setProfileImgUrl(defaultImageUrl)
           if (profileImgUrl === defaultImageUrl) {
             showToast('기본 이미지는 삭제할 수 없습니다.')
           }
