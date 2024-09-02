@@ -1,13 +1,15 @@
 import { ChattingMessageI } from '@/model/Chatting'
+import { User } from '@/model/User'
 import { useUserInfo } from '@/service/user/useUserService'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 export interface ChattingMessageProps {
+  other: User
   msg: ChattingMessageI
 }
 
-const ChattingMessage = ({ msg }: ChattingMessageProps) => {
+const ChattingMessage = ({ other, msg }: ChattingMessageProps) => {
   const { message, timestamp, memberId } = msg
   const { data: userInfo } = useUserInfo()
   const [isMine, setIsMine] = useState(false)
@@ -29,7 +31,7 @@ const ChattingMessage = ({ msg }: ChattingMessageProps) => {
       >
         {!isMine && (
           <Image
-            src="/images/common/default.svg"
+            src={other.profileImgUrl}
             width={56}
             height={56}
             alt="profile"

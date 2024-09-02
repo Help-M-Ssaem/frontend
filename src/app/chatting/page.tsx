@@ -181,11 +181,19 @@ const Chatting = () => {
           </div>
           <div className="flex-1 overflow-y-auto box-border">
             {messages.length > 0 ? (
-              messages.map((msg, index) => (
-                <div key={index} className="my-2 p-2 box-border">
-                  <ChattingMessage msg={msg} />
-                </div>
-              ))
+              messages.map((msg, index) => {
+                const currentRoom = chatRooms.find(
+                  (room) => room.chatRoomId === currentChatRoomId,
+                )
+                return (
+                  <div key={index} className="my-2 p-2 box-border">
+                    <ChattingMessage
+                      other={currentRoom!!.memberSimpleInfo}
+                      msg={msg}
+                    />
+                  </div>
+                )
+              })
             ) : (
               <p className="p-4">No messages yet.</p>
             )}
