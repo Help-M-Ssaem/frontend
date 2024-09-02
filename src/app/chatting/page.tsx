@@ -63,7 +63,9 @@ const Chatting = () => {
 
   useEffect(() => {
     if (userInfo) {
-      fetchChatRoomsAndConnectSockets()
+      setTimeout(() => {
+        fetchChatRoomsAndConnectSockets()
+      }, 1000)
     }
   }, [userInfo])
 
