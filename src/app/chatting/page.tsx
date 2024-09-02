@@ -31,9 +31,11 @@ const Chatting = () => {
   }
 
   const connectToWebSocket = (room: ChattingRoomI) => {
-    const key = String(room.chatRoomId)
+    const key = `${room.chatRoomId}-${userInfo?.id}`
     const wsUrlUser = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${room.chatRoomId}&member=${userInfo?.id}&worryBoardId=${room.worryBoardId}`
+
     connectSocket(wsUrlUser, key)
+
     if (socketRefs[key]) {
       socketRefs[key]!.onmessage = (event) =>
         handleWebSocketMessage(event, room.chatRoomId)
@@ -94,14 +96,18 @@ const Chatting = () => {
 
   /* 메시지 전송 */
   const sendMessage = () => {
-    if (socketRefs[String(currentChatRoomId)] && input.trim() !== '') {
+    const key = `${currentChatRoomId}-${userInfo?.id}`
+
+    if (socketRefs[key] && input.trim() !== '') {
       const message = {
         action: 'sendMessage',
         chatRoomId: currentChatRoomId,
         message: input,
         memberId: userInfo?.id.toString(),
       }
-      socketRefs[String(currentChatRoomId)]?.send(JSON.stringify(message))
+
+      socketRefs[key]?.send(JSON.stringify(message))
+
       setMessages((prevMessages: any) => [
         ...prevMessages,
         {
@@ -110,6 +116,7 @@ const Chatting = () => {
           memberId: userInfo?.id.toString(),
         },
       ])
+
       setInput('')
     }
   }

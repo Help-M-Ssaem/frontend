@@ -36,22 +36,24 @@ const WorryDetail = () => {
         { worryBoardId: worryId },
         {
           onSuccess: (chatRoomId: number) => {
-            const key = String(chatRoomId)
+            const userKey = `${chatRoomId}-${userInfo.id}`
+            const ownerKey = `${chatRoomId}-${worryDetail?.memberSimpleInfo.id}`
+
             const wsUrlUser = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${chatRoomId}&member=${userInfo.id}&worryBoardId=${worryId}`
             const wsUrlOwner = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${chatRoomId}&member=${worryDetail?.memberSimpleInfo.id}&worryBoardId=${worryId}`
 
-            connectSocket(wsUrlUser, key)
-            connectSocket(wsUrlOwner, key)
+            connectSocket(wsUrlUser, userKey)
+            connectSocket(wsUrlOwner, ownerKey)
 
-            if (socketRefs[key]) {
-              socketRefs[key]!.onopen = () => {
+            if (socketRefs[userKey]) {
+              socketRefs[userKey]!.onopen = () => {
                 console.log('User WebSocket is connected')
                 router.push(`/chatting`)
               }
-              socketRefs[key]!.onclose = () => {
+              socketRefs[userKey]!.onclose = () => {
                 console.log('User WebSocket is closed')
               }
-              socketRefs[key]!.onerror = (error: any) => {
+              socketRefs[userKey]!.onerror = (error: any) => {
                 console.error('User WebSocket error:', error)
               }
             }
