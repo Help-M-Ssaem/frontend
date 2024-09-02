@@ -24,7 +24,6 @@ const Header = () => {
   const [selected, setSelected] = useState<string | null>(null)
   const userInfo = useRecoilValue(userInfoState)
   const { showToast } = useToast()
-  console.log('userInfo:', userInfo)
 
   useEffect(() => {
     if (pathname) {

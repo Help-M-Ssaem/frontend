@@ -4,16 +4,18 @@ import ActivityCount from '@/components/auth/ActivityCount'
 import UserProfile from '@/components/user/UserProfile'
 import Container from '@/components/common/Container'
 import { useParams, useRouter } from 'next/navigation'
-import { useUserInfo, useProfile } from '@/service/user/useUserService'
+import { useProfile } from '@/service/user/useUserService'
 import Button from '@/components/common/Button'
 import MemberListCount from '@/components/auth/MemberListCount'
+import { userInfoState } from '@/recoil/UserInfo'
+import { useRecoilValue } from 'recoil'
 
 const UserPage = () => {
   const { id } = useParams()
   const profileId = Number(id)
   const router = useRouter()
+  const userInfo = useRecoilValue(userInfoState)
 
-  const { data: userInfo } = useUserInfo()
   const { data: profile } = useProfile(Number(profileId))
 
   if (!profile) return null
