@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useToast } from '@/hooks/useToast'
-import { useRecoilValueLoadable } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { userInfoState } from '@/recoil/UserInfo'
 import { useRouter, usePathname } from 'next/navigation'
 import Button from './Button'
@@ -22,21 +22,15 @@ const Header = () => {
   const pathname = usePathname()
   const router = useRouter()
   const [selected, setSelected] = useState<string | null>(null)
-  const userInfoLoadable = useRecoilValueLoadable(userInfoState)
-  const { state, contents: userInfo } = userInfoLoadable
+  const userInfo = useRecoilValue(userInfoState)
   const { showToast } = useToast()
+  console.log('userInfo:', userInfo)
 
   useEffect(() => {
     if (pathname) {
       setSelected(pathname)
     }
   }, [pathname])
-
-  useEffect(() => {
-    if (state === 'hasValue' && userInfo) {
-      // 사용자 정보가 로드된 후에 헤더를 다시 렌더링
-    }
-  }, [state, userInfo])
 
   const handleCategoryClick = (path: string) => {
     if (!userInfo) {
@@ -50,10 +44,6 @@ const Header = () => {
 
     setSelected(path)
     router.push(path)
-  }
-
-  if (state === 'loading') {
-    return <div>로딩 중...</div>
   }
 
   return (
@@ -73,15 +63,15 @@ const Header = () => {
             onClick={() => router.push('/')}
             className="cursor-pointer"
           />
-          {!userInfo ? (
+          {userInfo !== null ? (
+            <Profile user={userInfo} />
+          ) : (
             <Button
               text="로그인하고 이용하기"
               color="PURPLE"
               size="medium"
               onClick={() => router.push('/signin')}
             />
-          ) : (
-            <Profile user={userInfo} />
           )}
         </div>
 
