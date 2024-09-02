@@ -30,9 +30,10 @@ const KakaoLogin = () => {
         } else if (res.data.accessToken) {
           // 정상적으로 토큰을 받은 경우 /로 리다이렉트
           localStorage.setItem('access_token', res.data.accessToken)
+          axios.defaults.headers.common.Authorization = `${res.data.accessToken}`
           router.push('/')
         } else {
-          // 토큰이 없을 경우에도 /signin/terms로 리다이렉트
+          // 토큰이 없을 경우에 /signin/terms로 리다이렉트
           router.push('/signin/terms')
         }
       } catch (error) {
