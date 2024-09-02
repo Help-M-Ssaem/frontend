@@ -39,6 +39,12 @@ const Header = () => {
     }
   }, [userInfo])
 
+  useEffect(() => {
+    if (userInfo) {
+      setIsLoading(false)
+    }
+  }, [userInfo])
+
   const handleCategoryClick = (path: string) => {
     if (!userInfo) {
       showToast('로그인이 필요한 서비스입니다')
