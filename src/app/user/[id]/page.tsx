@@ -1,24 +1,34 @@
 'use client'
 
+import { useEffect } from 'react'
 import ActivityCount from '@/components/auth/ActivityCount'
 import UserProfile from '@/components/user/UserProfile'
 import Container from '@/components/common/Container'
 import { useParams, useRouter } from 'next/navigation'
-import { useProfile } from '@/service/user/useUserService'
+import { useProfile, useUserInfo } from '@/service/user/useUserService'
 import Button from '@/components/common/Button'
 import MemberListCount from '@/components/auth/MemberListCount'
+import { useRecoilState } from 'recoil'
 import { userInfoState } from '@/recoil/UserInfo'
-import { useRecoilValue } from 'recoil'
 
 const UserPage = () => {
   const { id } = useParams()
   const profileId = Number(id)
   const router = useRouter()
-  const userInfo = useRecoilValue(userInfoState)
 
-  const { data: profile } = useProfile(Number(profileId))
+  const { data: userInfo } = useUserInfo()
+  const [recoilUserInfo, setUserInfo] = useRecoilState(userInfoState)
+
+  const { data: profile } = useProfile(profileId)
+
+  useEffect(() => {
+    if (userInfo) {
+      setUserInfo(userInfo)
+    }
+  }, [userInfo, setUserInfo])
 
   if (!profile) return null
+
   const activitySections = [
     {
       title: '받은 평가',
@@ -90,7 +100,7 @@ const UserPage = () => {
         <div className="text-title3 text-maindark font-semibold">
           {profile.teacherInfo.nickName} 프로필
         </div>
-        {userInfo?.id === profileId && (
+        {recoilUserInfo?.id === profileId && (
           <div
             className="text-gray2 underline cursor-pointer"
             onClick={handleProfileUpdate}

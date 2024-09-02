@@ -2,13 +2,15 @@
 
 import Container from '@/components/common/Container'
 import { useParams, useRouter } from 'next/navigation'
-import { useProfile, usePatchProfile } from '@/service/user/useUserService'
+import {
+  useProfile,
+  usePatchProfile,
+  useUserInfo,
+} from '@/service/user/useUserService'
 import Button from '@/components/common/Button'
 import UserUpdateProfile from '@/components/user/UserProfileUpdate'
 import { useState, useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { useRecoilState } from 'recoil'
-import { userInfoState } from '@/recoil/UserInfo'
 
 const UserUpdatePage = () => {
   const { id } = useParams()
@@ -16,7 +18,7 @@ const UserUpdatePage = () => {
   const router = useRouter()
   const queryClient = useQueryClient()
 
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+  const { data: userInfo } = useUserInfo()
 
   const { data: profile } = useProfile(profileId)
   const { mutate: patchProfile } = usePatchProfile()
@@ -50,10 +52,6 @@ const UserUpdatePage = () => {
   const handleSubmit = () => {
     patchProfile(updatedProfile, {
       onSuccess: () => {
-        setUserInfo((prevUserInfo: any) => ({
-          ...prevUserInfo,
-          ...updatedProfile,
-        }))
         queryClient.invalidateQueries({ queryKey: ['profile', profileId] }) // queryKey를 객체로 전달
         router.back()
       },
