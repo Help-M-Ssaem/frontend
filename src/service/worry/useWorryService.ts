@@ -124,6 +124,27 @@ const usePatchWorrySolved = () => {
   return useMutation<void, Error, number>(options)
 }
 
+const usePostChattingRoom = () => {
+  const mutationFn = async ({
+    worryBoardId,
+  }: {
+    worryBoardId: number
+  }): Promise<number> => {
+    return queryOptions.postChattingRoom.mutationFn({ worryBoardId })
+  }
+
+  const options: UseMutationOptions<
+    number,
+    Error,
+    { worryBoardId: number },
+    unknown
+  > = {
+    mutationFn,
+  }
+
+  return useMutation<number, Error, { worryBoardId: number }>(options)
+}
+
 export {
   useWaitingWorryList,
   useWaitingWorryListMember,
@@ -135,4 +156,5 @@ export {
   usePatchWorry,
   useDeleteWorry,
   usePatchWorrySolved,
+  usePostChattingRoom,
 }

@@ -94,7 +94,7 @@ class CommentService extends Service {
   }
 
   deleteDiscussionComment({ id, commentId }: CommentDetailProps) {
-    return this.http.delete(`/member/boards/${id}/comments/${commentId}`)
+    return this.http.delete(`/member/discussions/${id}/comments/${commentId}`)
   }
 }
 

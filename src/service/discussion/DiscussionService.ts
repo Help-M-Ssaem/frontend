@@ -1,5 +1,5 @@
 import Service from '@/apis/AxiosInstance'
-import { DiscussionDetail, DiscussionList } from '@/model/Discussion'
+import { DiscussionDetail, DiscussionList, DiscussionOptionI } from '@/model/Discussion'
 
 export interface DiscussionListProps {
   id?: number
@@ -57,7 +57,7 @@ class DiscussionService extends Service {
     discussionId,
     discussionOptionId,
   }: DiscussionParticipationProps) {
-    return this.http.post(
+    return this.http.post<DiscussionOptionI[]>(
       `/member/discussions/${discussionId}/discussion-options/${discussionOptionId}`,
     )
   }

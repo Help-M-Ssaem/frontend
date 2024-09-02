@@ -1,26 +1,34 @@
 'use client'
 
 import Image from 'next/image'
-import { ChattingProfileI } from '@/model/Chatting'
+import { User } from '@/model/User'
 import Button from '../common/Button'
 
 export interface ChattingProfileProps {
-  chattingProfile: ChattingProfileI
+  user: User
+  lastMessage: string
+  lastSendAt: string
   onClick: () => void
+  current: boolean
 }
 
 const ChattingProfile = ({
-  chattingProfile,
+  user,
+  lastMessage,
+  lastSendAt,
   onClick,
+  current,
 }: ChattingProfileProps) => {
-  const { nickName, mbti, badge, profileImgUrl, recent, lastMessage } =
-    chattingProfile
-
   return (
-    <div className="flex items-center gap-4.5 cursor-pointer" onClick={onClick}>
+    <div
+      className={`flex items-center gap-4.5 cursor-pointer p-4 ${
+        current ? 'bg-main4' : ''
+      }`}
+      onClick={onClick}
+    >
       <div className="w-14 h-14 relative rounded-full overflow-hidden">
         <Image
-          src={profileImgUrl}
+          src={user.profileImgUrl}
           alt="profile"
           className="w-full h-full object-cover"
           width={40}
@@ -30,14 +38,14 @@ const ChattingProfile = ({
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2.5">
           <div className="text-headline font-semibold text-maindark">
-            {nickName} 님
+            {user.nickName} 님
           </div>
           <div className="flex gap-2.5">
-            <Button text={mbti} color={mbti} size="badge" />
-            {badge && <Button text={badge} size="badge" />}
+            <Button text={user.mbti} color={user.mbti} size="badge" />
+            {user.badge && <Button text={user.badge} size="badge" />}
           </div>
-          {recent && (
-            <div className="text-gray2 text-caption">{recent}분 전</div>
+          {lastSendAt && (
+            <div className="text-gray2 text-caption">{lastSendAt}</div>
           )}
         </div>
         <div className="text-body text-maindark">{lastMessage}</div>

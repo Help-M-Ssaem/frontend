@@ -3,10 +3,15 @@
 import Button from '@/components/common/Button'
 import Container from '@/components/common/Container'
 import { useParams, useRouter } from 'next/navigation'
-import { useDeleteWorry, useWorryDetail } from '@/service/worry/useWorryService'
+import {
+  useDeleteWorry,
+  usePostChattingRoom,
+  useWorryDetail,
+} from '@/service/worry/useWorryService'
 import WorryProfile from '@/components/user/WorryProfile'
 import { useUserInfo } from '@/service/user/useUserService'
 import { useToast } from '@/hooks/useToast'
+import { useWebSocket } from '@/hooks/useSocket'
 
 const WorryDetail = () => {
   const { id } = useParams()
@@ -16,6 +21,8 @@ const WorryDetail = () => {
 
   const { data: worryDetail } = useWorryDetail(Number(id))
   const { data: userInfo } = useUserInfo()
+  const { mutate: postChattingRoom } = usePostChattingRoom()
+  const { connectSocket, socketRefs } = useWebSocket()
 
   const handleChattingStartClick = () => {
     if (userInfo?.id === worryDetail?.memberSimpleInfo.id) {
@@ -25,6 +32,29 @@ const WorryDetail = () => {
       userInfo.mbti.toUpperCase() === worryDetail?.targetMbti
     ) {
       showToast('채팅을 시작합니다.')
+      postChattingRoom(
+        { worryBoardId: worryId },
+        {
+          onSuccess: (chatRoomId: number) => {
+            const key = String(chatRoomId)
+            const wsUrlUser = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${chatRoomId}&member=${userInfo.id}&worryBoardId=${worryId}`
+
+            connectSocket(wsUrlUser, key)
+            if (socketRefs[key]) {
+              socketRefs[key]!.onopen = () => {
+                console.log('User WebSocket is connected')
+                router.push(`/chatting`)
+              }
+              socketRefs[key]!.onclose = () => {
+                console.log('User WebSocket is closed')
+              }
+              socketRefs[key]!.onerror = (error: any) => {
+                console.error('User WebSocket error:', error)
+              }
+            }
+          },
+        },
+      )
     } else {
       showToast('MBTI가 달라요')
     }
