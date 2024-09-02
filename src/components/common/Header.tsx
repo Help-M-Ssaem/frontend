@@ -23,6 +23,7 @@ const Header = () => {
   const router = useRouter()
   const [selected, setSelected] = useState<string | null>(null)
   const userInfo = useRecoilValue(userInfoState)
+  const [isLoading, setIsLoading] = useState(true)
 
   const { showToast } = useToast()
 
@@ -31,6 +32,12 @@ const Header = () => {
       setSelected(pathname)
     }
   }, [pathname])
+
+  useEffect(() => {
+    if (userInfo !== undefined) {
+      setIsLoading(false)
+    }
+  }, [userInfo])
 
   const handleCategoryClick = (path: string) => {
     if (!userInfo) {
@@ -44,6 +51,10 @@ const Header = () => {
 
     setSelected(path)
     router.push(path)
+  }
+
+  if (isLoading) {
+    return <div>로딩 중...</div>
   }
 
   return (
