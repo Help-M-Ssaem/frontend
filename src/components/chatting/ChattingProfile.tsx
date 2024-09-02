@@ -45,7 +45,7 @@ const ChattingProfile = ({
             {user.badge && <Button text={user.badge} size="badge" />}
           </div>
           {lastSendAt && (
-            <div className="text-gray2 text-caption">{lastSendAt}분 전</div>
+            <div className="text-gray2 text-caption">{lastSendAt}</div>
           )}
         </div>
         <div className="text-body text-maindark">{lastMessage}</div>
