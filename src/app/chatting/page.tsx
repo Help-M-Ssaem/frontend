@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import ChattingInput from '@/components/chatting/ChattingInput'
 import ChattingProfile from '@/components/chatting/ChattingProfile'
@@ -18,15 +18,18 @@ const Chatting = () => {
   const [currentChatRoomId, setCurrentChatRoomId] = useState<number | null>(
     chattingRoomId || null,
   )
-  const [messages, setMessages] = useState<ChattingMessageI[]>([])
   const [input, setInput] = useState('')
   const { data: userInfo } = useUserInfo()
   const { connectSocket, socketRefs } = useWebSocket()
 
+  const messagesRef = useRef<ChattingMessageI[]>([])
+  const [, setMessages] = useState<ChattingMessageI[]>([])
+
   const handleWebSocketMessage = (event: MessageEvent, roomId: number) => {
     const newMessage = JSON.parse(event.data)
     if (roomId === currentChatRoomId) {
-      setMessages((prevMessages) => [...prevMessages, newMessage])
+      messagesRef.current = [...messagesRef.current, newMessage]
+      setMessages([...messagesRef.current])
     }
   }
 
@@ -84,6 +87,7 @@ const Chatting = () => {
             const response = await axios.get(
               `https://ik7f6nxm8g.execute-api.ap-northeast-2.amazonaws.com/mssaem/chatmessage?chatRoomId=${currentChatRoomId}`,
             )
+            messagesRef.current = response.data
             setMessages(response.data)
           } catch (error) {
             console.error('Failed to fetch messages:', error)
@@ -92,32 +96,35 @@ const Chatting = () => {
         fetchMessages()
       }
     }
-  }, [currentChatRoomId])
+  }, [currentChatRoomId, chatRooms])
 
   /* 메시지 전송 */
   const sendMessage = () => {
     const key = `${currentChatRoomId}-${userInfo?.id}`
 
-    if (socketRefs[key] && input.trim() !== '') {
+    if (socketRefs[key]?.readyState === WebSocket.OPEN && input.trim() !== '') {
       const message = {
         action: 'sendMessage',
         chatRoomId: currentChatRoomId,
         message: input,
-        memberId: userInfo?.id.toString(),
+        memberId: userInfo?.id?.toString() || '',
       }
 
       socketRefs[key]?.send(JSON.stringify(message))
 
-      setMessages((prevMessages: any) => [
-        ...prevMessages,
+      messagesRef.current = [
+        ...messagesRef.current,
         {
           message: input,
           timestamp: new Date().toISOString(),
-          memberId: userInfo?.id.toString(),
+          memberId: userInfo?.id?.toString() || '',
         },
-      ])
+      ]
+      setMessages([...messagesRef.current])
 
       setInput('')
+    } else {
+      console.error('WebSocket is not open or message is empty.')
     }
   }
 
@@ -130,6 +137,7 @@ const Chatting = () => {
       setChatRooms((prevRooms) =>
         prevRooms.filter((room) => room.chatRoomId !== chatRoomId),
       )
+      messagesRef.current = []
       setMessages([])
       setCurrentChatRoomId(
         chatRooms.length > 1 ? chatRooms[0].chatRoomId : null,
@@ -177,8 +185,8 @@ const Chatting = () => {
             )}
           </div>
           <div className="flex-1 overflow-y-auto box-border">
-            {messages.length > 0 ? (
-              messages.map((msg, index) => (
+            {messagesRef.current.length > 0 ? (
+              messagesRef.current.map((msg, index) => (
                 <div key={index} className="my-2 p-2 box-border">
                   <ChattingMessage msg={msg} />
                 </div>
