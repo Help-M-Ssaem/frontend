@@ -5,7 +5,6 @@ import React, {
   useContext,
   useRef,
   useState,
-  useEffect,
   useMemo,
 } from 'react'
 
@@ -67,14 +66,6 @@ export const WebSocketProvider = ({ children }: any) => {
   const isConnected = (key: string) => {
     return connectedKeys.has(key)
   }
-
-  useEffect(() => {
-    return () => {
-      Object.keys(socketRefs.current).forEach((key) => {
-        socketRefs.current[key]?.close()
-      })
-    }
-  }, [])
 
   const value = useMemo(
     () => ({
