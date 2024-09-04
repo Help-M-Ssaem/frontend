@@ -11,7 +11,7 @@ import React, {
 interface WebSocketContextValue {
   socketRefs: { [key: string]: WebSocket | null }
   connectSocket: (url: string, key: string) => void
-  disconnectSocket: (key: string) => void
+  // disconnectSocket: (key: string) => void
   isConnected: (key: string) => boolean
 }
 
@@ -32,36 +32,36 @@ export const WebSocketProvider = ({ children }: any) => {
       console.log(`WebSocket connected for key: ${key}`)
     }
 
-    socketRefs.current[key]!.onclose = () => {
-      setConnectedKeys((prev) => {
-        const newSet = new Set(prev)
-        newSet.delete(key)
-        return newSet
-      })
-      console.log(`WebSocket disconnected for key: ${key}`)
-    }
+    // socketRefs.current[key]!.onclose = () => {
+    //   setConnectedKeys((prev) => {
+    //     const newSet = new Set(prev)
+    //     newSet.delete(key)
+    //     return newSet
+    //   })
+    //   console.log(`WebSocket disconnected for key: ${key}`)
+    // }
 
-    socketRefs.current[key]!.onerror = (error) => {
-      console.error(`WebSocket error for key ${key}:`, error)
-      setConnectedKeys((prev) => {
-        const newSet = new Set(prev)
-        newSet.delete(key)
-        return newSet
-      })
-    }
+    // socketRefs.current[key]!.onerror = (error) => {
+    //   console.error(`WebSocket error for key ${key}:`, error)
+    //   setConnectedKeys((prev) => {
+    //     const newSet = new Set(prev)
+    //     newSet.delete(key)
+    //     return newSet
+    //   })
+    // }
   }
 
-  const disconnectSocket = (key: string) => {
-    if (socketRefs.current[key]) {
-      socketRefs.current[key]?.close()
-      socketRefs.current[key] = null
-      setConnectedKeys((prev) => {
-        const newSet = new Set(prev)
-        newSet.delete(key)
-        return newSet
-      })
-    }
-  }
+  // const disconnectSocket = (key: string) => {
+  //   if (socketRefs.current[key]) {
+  //     socketRefs.current[key]?.close()
+  //     socketRefs.current[key] = null
+  //     setConnectedKeys((prev) => {
+  //       const newSet = new Set(prev)
+  //       newSet.delete(key)
+  //       return newSet
+  //     })
+  //   }
+  // }
 
   const isConnected = (key: string) => {
     return connectedKeys.has(key)
@@ -71,7 +71,7 @@ export const WebSocketProvider = ({ children }: any) => {
     () => ({
       socketRefs: socketRefs.current,
       connectSocket,
-      disconnectSocket,
+      // disconnectSocket,
       isConnected,
     }),
     [connectedKeys],
