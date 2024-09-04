@@ -45,7 +45,11 @@ const GoogleLogin = () => {
           router.push('/')
         } else {
           // 에러 코드가 MEMBER_002일 경우 이메일을 localStorage에 저장하고 회원가입 페이지로 이동
-          localStorage.setItem('email', res.data.message)
+          const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/
+          const email = res.data.message.match(emailPattern)
+
+          localStorage.setItem('email', email)
+
           // 토큰이 없을 경우에 /signin/terms로 리다이렉트
           router.push('/signin/terms')
         }

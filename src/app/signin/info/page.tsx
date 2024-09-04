@@ -5,13 +5,15 @@ import MbtiSelect from '@/components/auth/MbtiSelect'
 import Button from '@/components/common/Button'
 import Input from '@/components/common/Input'
 import { usePostSignup } from '@/service/auth/useAuthService'
+import { useRouter } from 'next/navigation'
 
 const Info = () => {
   const [nickName, setNickName] = useState('')
   const [mbti, setMbti] = useState<string[]>(['E', 'S', 'T', 'J'])
   const [email, setEmail] = useState('')
+  const router = useRouter()
 
-  const { mutate } = usePostSignup()
+  const { mutate: postSignup } = usePostSignup()
 
   useEffect(() => {
     const storedEmail = localStorage.getItem('email')
@@ -35,7 +37,14 @@ const Info = () => {
     const caseSensitivity = mbti
       .map((char) => (char === char.toLowerCase() ? '0' : '1'))
       .join('')
-    mutate({ email, nickName, mbti: upperMbti, caseSensitivity })
+    postSignup(
+      { email, nickName, mbti: upperMbti, caseSensitivity },
+      {
+        onSuccess: () => {
+          router.push('/')
+        },
+      },
+    )
   }
 
   return (
