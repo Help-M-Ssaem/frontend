@@ -181,7 +181,11 @@ const Chatting = () => {
   return (
     <div className="w-full-vw ml-half-vw bg-main3 py-10">
       <div className="flex h-screen-40 border-7.5 mx-2% sm:mx-6% md:mx-13% bg-white rounded-7.5 shadow-custom-light">
-        <div className="border-r flex flex-col overflow-y-scroll scrollbar-hide">
+        {/* 채팅 목록 리스트 */}
+        <div
+          className="border-r flex flex-col overflow-y-auto scrollbar-hide"
+          style={{ maxHeight: '400px' }}
+        >
           <div className="flex items-center p-10 border-b text-title3 font-bold h-27.5">
             채팅 목록
           </div>
@@ -204,6 +208,7 @@ const Chatting = () => {
           </ul>
         </div>
 
+        {/* 메시지 리스트 */}
         <div className="flex flex-col flex-1 bg-white rounded-7.5">
           <div className="flex items-center border-b p-4 h-27.5">
             {currentChatRoomId && (
@@ -216,7 +221,12 @@ const Chatting = () => {
               </button>
             )}
           </div>
-          <div className="flex-1 overflow-y-auto box-border p-2">
+
+          {/* 메시지 리스트가 일정 높이를 넘으면 스크롤 */}
+          <div
+            className="flex-1 overflow-y-auto box-border p-2"
+            style={{ maxHeight: '400px' }}
+          >
             {messages.length > 0 ? (
               messages.map((msg, index) => {
                 const currentRoom =
@@ -237,6 +247,7 @@ const Chatting = () => {
               <p className="p-4">No messages yet.</p>
             )}
           </div>
+
           <div className="flex items-center p-6">
             <ChattingInput
               value={input}
