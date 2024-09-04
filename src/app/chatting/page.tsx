@@ -22,6 +22,17 @@ const Chatting = () => {
 
   const [messages, setMessages] = useState<ChattingMessageI[]>([])
 
+  const formatAMPM = (date: Date) => {
+    let hours = date.getHours()
+    let minutes: number | string = date.getMinutes()
+    const ampm = hours >= 12 ? '오후' : '오전'
+    hours %= 12
+    hours = hours || 12
+    minutes = minutes < 10 ? `0${minutes}` : minutes
+    const formattedTime = `${ampm} ${hours}:${minutes}`
+    return formattedTime
+  }
+
   // 1. 메시지 수신 핸들러 함수
   const handleWebSocketMessage = (newMessage: ChattingMessageI) => {
     if (userInfo && userInfo.id !== Number(newMessage.memberId)) {
@@ -138,7 +149,7 @@ const Chatting = () => {
         ...prevMessages,
         {
           message: input,
-          timestamp: new Date().toISOString(),
+          timestamp: formatAMPM(new Date()),
           memberId: userInfo?.id?.toString() || '',
         },
       ])
