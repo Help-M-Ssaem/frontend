@@ -9,6 +9,7 @@ import {
   usePostCategoryBookmark,
 } from '@/service/board/useBoardService'
 import { useState, useEffect } from 'react'
+import { useToast } from '@/hooks/useToast'
 
 export interface MbtiCategoriesProps {
   selectedMbti: string
@@ -22,6 +23,8 @@ const MbtiCategories = ({ selectedMbti }: MbtiCategoriesProps) => {
   const { data: categoryBookmark } = useCategoryBookmark()
   const { mutate: postCategoryBookmark } = usePostCategoryBookmark()
   const [favorites, setFavorites] = useState<Record<string, boolean>>({})
+
+  const { showToast } = useToast()
 
   useEffect(() => {
     if (categoryBookmark) {
@@ -47,7 +50,15 @@ const MbtiCategories = ({ selectedMbti }: MbtiCategoriesProps) => {
       ...prevFavorites,
       [mbti]: !prevFavorites[mbti],
     }))
-    postCategoryBookmark(mbti)
+    postCategoryBookmark(mbti, {
+      onSuccess: () => {
+        if (favorites[mbti]) {
+          showToast('즐겨찾기에서 제거하였습니다.')
+          return
+        }
+        showToast('즐겨찾기에 추가하였습니다.')
+      },
+    })
   }
 
   return (

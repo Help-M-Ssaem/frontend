@@ -57,6 +57,7 @@ const BoardDetail = () => {
     }
     postBoardLike(boardId, {
       onSuccess: () => {
+        showToast(isLiked ? '공감을 취소하였습니다' : '공감을 눌렀습니다')
         setIsLiked(!isLiked)
         setLikeCount((prevCount) => (isLiked ? prevCount - 1 : prevCount + 1))
       },
@@ -71,6 +72,7 @@ const BoardDetail = () => {
     deleteBoard(boardId, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.boardList })
+        showToast('게시글이 삭제되었습니다')
         router.back()
       },
     })
@@ -135,11 +137,7 @@ const BoardDetail = () => {
                 <Image
                   src={`/images/board/${isLiked ? 'like_fill' : 'like_empty'}.svg`}
                   alt="like_btn"
-                  className={`object-cover ${
-                    userInfo && userInfo.id === boardDetail.memberSimpleInfo.id
-                      ? 'cursor-default'
-                      : 'cursor-pointer'
-                  }`}
+                  className="object-cover cursor-pointer"
                   fill
                   onClick={handleLikeToggle}
                 />

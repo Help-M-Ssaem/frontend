@@ -11,6 +11,7 @@ import Button from '@/components/common/Button'
 import UserUpdateProfile from '@/components/user/UserProfileUpdate'
 import { useState, useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import { useToast } from '@/hooks/useToast'
 
 const UserUpdatePage = () => {
   const { id } = useParams()
@@ -19,9 +20,10 @@ const UserUpdatePage = () => {
   const queryClient = useQueryClient()
 
   const { data: userInfo } = useUserInfo()
-
   const { data: profile } = useProfile(profileId)
   const { mutate: patchProfile } = usePatchProfile()
+
+  const { showToast } = useToast()
 
   const [updatedProfile, setUpdatedProfile] = useState({})
   const [badgeId, setBadgeId] = useState<number | null>(null)
@@ -52,7 +54,8 @@ const UserUpdatePage = () => {
   const handleSubmit = () => {
     patchProfile(updatedProfile, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['profile', profileId] }) // queryKey를 객체로 전달
+        queryClient.invalidateQueries({ queryKey: ['profile', profileId] })
+        showToast('프로필 수정을 완료하였습니다')
         router.back()
       },
     })
