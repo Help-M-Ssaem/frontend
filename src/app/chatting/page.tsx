@@ -216,7 +216,7 @@ const Chatting = () => {
               </button>
             )}
           </div>
-          <div className="flex-1 overflow-y-auto box-border">
+          <div className="flex-1 overflow-y-auto box-border p-2">
             {messages.length > 0 ? (
               messages.map((msg, index) => {
                 const currentRoom =
@@ -225,7 +225,7 @@ const Chatting = () => {
                     (room) => room.chatRoomId === currentChatRoomId,
                   )
                 return (
-                  <div key={index} className="my-2 p-2 box-border">
+                  <div key={index} className="my-2 p-1 box-border">
                     <ChattingMessage
                       other={currentRoom!!.memberSimpleInfo}
                       msg={msg}

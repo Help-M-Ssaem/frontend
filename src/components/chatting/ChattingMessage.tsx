@@ -24,7 +24,7 @@ const ChattingMessage = ({ other, msg }: ChattingMessageProps) => {
 
   return (
     <div
-      className={`flex items-end mb-4 ${isMine ? 'justify-end' : 'justify-start'}`}
+      className={`flex items-end ${isMine ? 'justify-end' : 'justify-start'}`}
     >
       <div
         className={`flex items-center gap-2.5 ${isMine ? 'flex-row-reverse' : 'flex-row'}`}
@@ -32,14 +32,14 @@ const ChattingMessage = ({ other, msg }: ChattingMessageProps) => {
         {!isMine && (
           <Image
             src={other.profileImgUrl}
-            width={56}
-            height={56}
+            width={50}
+            height={50}
             alt="profile"
             className="rounded-full"
           />
         )}
         <div
-          className={`flex flex-col gap-1 ${isMine ? 'items-end' : 'items-start'}`}
+          className={`flex items-end gap-2 ${isMine ? 'flex-row-reverse' : 'flex-row'}`}
         >
           <div
             className={`text-headline text-gray2 font-semibold rounded-7.5 px-5 py-4 max-w-90 ${isMine ? 'bg-main4' : 'bg-white border border-main'}`}
