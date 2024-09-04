@@ -185,13 +185,10 @@ const Chatting = () => {
   }, [messages])
 
   return (
-    <div className="w-full-vw h-screen ml-half-vw bg-main3 py-10">
+    <div className="w-full-vw h-[calc(100vh-154px)] ml-half-vw bg-main3 py-10">
       <div className="flex h-full border-7.5 mx-2% sm:mx-6% md:mx-13% bg-white rounded-7.5 shadow-custom-light">
         {/* 채팅 목록 리스트 */}
-        <div
-          className="border-r flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300"
-          style={{ maxHeight: '100%' }}
-        >
+        <div className="border-r flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
           <div className="flex items-center p-10 border-b text-title3 font-bold h-27.5">
             채팅 목록
           </div>
@@ -232,7 +229,6 @@ const Chatting = () => {
           <div
             ref={messageListRef}
             className="flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-gray-300"
-            style={{ maxHeight: '100%' }}
           >
             {messages.length > 0 ? (
               messages.map((msg, index) => {
