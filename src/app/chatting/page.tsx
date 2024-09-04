@@ -22,22 +22,53 @@ const Chatting = () => {
 
   const [messages, setMessages] = useState<ChattingMessageI[]>([])
 
-  const handleWebSocketMessage = (event: MessageEvent, roomId: number) => {
-    const newMessage = JSON.parse(event.data)
+  // 1. 메시지 수신 핸들러 함수
+  const handleWebSocketMessage = (
+    newMessage: ChattingMessageI,
+    roomId: number,
+  ) => {
+    console.log('Received WebSocket message:', newMessage)
     if (roomId === currentChatRoomId) {
       setMessages((prevMessages) => [...prevMessages, newMessage])
     }
   }
 
+  // 2. 메시지 수신 시작 함수
+  const startReceivingMessages = (roomId: number) => {
+    const key = `${roomId}-${userInfo?.id}`
+    const socket = socketRefs[key]
+
+    if (socket) {
+      socket.onmessage = (event) => {
+        const newMessage = JSON.parse(event.data)
+        handleWebSocketMessage(newMessage, roomId)
+      }
+    } else {
+      console.error(`WebSocket is not connected for key: ${key}`)
+    }
+  }
+
+  // 3. WebSocket 연결 함수
   const connectToWebSocket = (room: ChattingRoomI) => {
     const key = `${room.chatRoomId}-${userInfo?.id}`
     const wsUrlUser = `wss://bkleacy8ff.execute-api.ap-northeast-2.amazonaws.com/mssaem?chatRoomId=${room.chatRoomId}&member=${userInfo?.id}&worryBoardId=${room.worryBoardId}`
 
-    connectSocket(wsUrlUser, key)
+    // 이미 해당 방에 연결된 WebSocket이 있는지 확인
+    if (!socketRefs[key]) {
+      console.log(`WebSocket 연결 중: ${key}`)
+      connectSocket(wsUrlUser, key)
+    }
 
-    if (socketRefs[key]) {
-      socketRefs[key]!.onmessage = (event) =>
-        handleWebSocketMessage(event, room.chatRoomId)
+    // WebSocket이 열리면 메시지 수신 시작
+    const socket = socketRefs[key]
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      startReceivingMessages(room.chatRoomId)
+    } else {
+      // WebSocket이 아직 열려있지 않으면 onopen에서 처리
+      socket!.onopen = () => {
+        console.log(`WebSocket connected for key: ${key}`)
+        startReceivingMessages(room.chatRoomId)
+      }
     }
   }
 
