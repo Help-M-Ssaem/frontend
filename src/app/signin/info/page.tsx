@@ -6,14 +6,31 @@ import Button from '@/components/common/Button'
 import Input from '@/components/common/Input'
 import { usePostSignup } from '@/service/auth/useAuthService'
 import { useRouter } from 'next/navigation'
+import UserService from '@/service/user/UserService'
+import { useSetRecoilState } from 'recoil'
+import { userInfoState } from '@/recoil/UserInfo'
+import { useToast } from '@/hooks/useToast'
 
 const Info = () => {
   const [nickName, setNickName] = useState('')
   const [mbti, setMbti] = useState<string[]>(['E', 'S', 'T', 'J'])
   const [email, setEmail] = useState('')
   const router = useRouter()
+  const setUserInfo = useSetRecoilState(userInfoState)
+  const { showToast } = useToast()
 
   const { mutate: postSignup } = usePostSignup()
+
+  const fetchUserInfo = async () => {
+    try {
+      const response = await UserService.fetchUserInfo()
+      if (response.data) {
+        setUserInfo(response.data)
+      }
+    } catch (error) {
+      console.error('Failed to load user info:', error)
+    }
+  }
 
   useEffect(() => {
     const storedEmail = localStorage.getItem('email')
@@ -40,8 +57,10 @@ const Info = () => {
     postSignup(
       { email, nickName, mbti: upperMbti, caseSensitivity },
       {
-        onSuccess: () => {
-          router.push('/')
+        onSuccess: async () => {
+          await fetchUserInfo()
+          showToast('회원가입이 완료되었습니다. 로그인해주세웅~')
+          router.push('/signin')
         },
       },
     )
