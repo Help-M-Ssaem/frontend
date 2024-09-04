@@ -44,8 +44,8 @@ const DiscussionOption = ({
       )}
       onClick={handleOptionClick}
       disabled={disabled}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={{ scale: 1.01 }}
+      whileTap={{ scale: 0.99 }}
       transition={{ duration: 0.3 }}
     >
       {imgUrl && (
