@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import ChattingInput from '@/components/chatting/ChattingInput'
 import ChattingProfile from '@/components/chatting/ChattingProfile'
@@ -19,8 +19,8 @@ const Chatting = () => {
   const [input, setInput] = useState('')
   const userInfo = useRecoilValue(userInfoState)
   const { connectSocket, socketRefs } = useWebSocket()
-
   const [messages, setMessages] = useState<ChattingMessageI[]>([])
+  const messageListRef = useRef<HTMLDivElement>(null) // 메시지 리스트의 ref 추가
 
   const formatAMPM = (date: Date) => {
     let hours = date.getHours()
@@ -178,6 +178,12 @@ const Chatting = () => {
     }
   }
 
+  useEffect(() => {
+    if (messageListRef.current) {
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+    }
+  }, [messages])
+
   return (
     <div className="w-full-vw ml-half-vw bg-main3 py-10">
       <div className="flex h-screen-40 border-7.5 mx-2% sm:mx-6% md:mx-13% bg-white rounded-7.5 shadow-custom-light">
@@ -224,6 +230,7 @@ const Chatting = () => {
 
           {/* 메시지 리스트가 일정 높이를 넘으면 스크롤 */}
           <div
+            ref={messageListRef} // 메시지 리스트에 ref 추가
             className="flex-1 overflow-y-auto box-border p-2"
             style={{ maxHeight: '400px' }}
           >
