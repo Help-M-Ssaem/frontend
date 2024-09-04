@@ -23,12 +23,8 @@ const Chatting = () => {
   const [messages, setMessages] = useState<ChattingMessageI[]>([])
 
   // 1. 메시지 수신 핸들러 함수
-  const handleWebSocketMessage = (
-    newMessage: ChattingMessageI,
-    roomId: number,
-  ) => {
-    console.log('Received WebSocket message:', newMessage)
-    if (roomId === currentChatRoomId) {
+  const handleWebSocketMessage = (newMessage: ChattingMessageI) => {
+    if (userInfo && userInfo.id !== Number(newMessage.memberId)) {
       setMessages((prevMessages) => [...prevMessages, newMessage])
     }
   }
@@ -41,7 +37,7 @@ const Chatting = () => {
     if (socket) {
       socket.onmessage = (event) => {
         const newMessage = JSON.parse(event.data)
-        handleWebSocketMessage(newMessage, roomId)
+        handleWebSocketMessage(newMessage)
       }
     } else {
       console.error(`WebSocket is not connected for key: ${key}`)
