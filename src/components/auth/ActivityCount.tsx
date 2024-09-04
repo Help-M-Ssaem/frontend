@@ -16,7 +16,7 @@ const ActivityCount = ({ title, items }: ActivityCountProps) => {
       </div>
       <ul>
         {items.map((item, index) => (
-          <li key={index} className="flex justify-between my-1">
+          <li key={index} className="flex justify-between my-1 text-maindark">
             <span>{item.label}</span>
             <span>{item.count}</span>
           </li>

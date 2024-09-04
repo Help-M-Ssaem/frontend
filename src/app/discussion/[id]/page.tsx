@@ -126,9 +126,11 @@ const DiscussionDetail = () => {
 
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1">
-                <p className="text-title3 font-bold">{discussion.title}</p>
+                <p className="text-title3 font-bold text-maindark">
+                  {discussion.title}
+                </p>
                 {discussion.content && (
-                  <p className="text-body text-mainblack">
+                  <p className="text-body text-maindark">
                     {discussion.content}
                   </p>
                 )}

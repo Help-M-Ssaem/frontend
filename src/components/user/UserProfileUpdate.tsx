@@ -179,7 +179,7 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
             <input
               value={nickName || ''}
               onChange={(e) => setNickName(e.target.value)}
-              className="w-full border border-gray4 bg-white p-2.5 rounded-1.25 focus:outline-none"
+              className="w-full border text-maindark border-gray4 bg-white p-2.5 rounded-1.25 focus:outline-none"
             />
           </div>
 
@@ -216,7 +216,7 @@ const UserProfileUpdate = ({ onUpdate }: UserProfileUpdateProps) => {
             <input
               value={introduction || ''}
               onChange={(e) => setIntroduction(e.target.value)}
-              className="w-full border border-gray4 bg-white p-2.5 rounded-1.25 focus:outline-none"
+              className="w-full border text-maindark border-gray4 bg-white p-2.5 rounded-1.25 focus:outline-none"
             />
           </div>
         </>
