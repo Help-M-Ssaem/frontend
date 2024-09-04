@@ -20,7 +20,9 @@ const ChattingProfile = ({
   current,
 }: ChattingProfileProps) => {
   const truncatedMessage =
-    lastMessage.length > 10 ? `${lastMessage.slice(0, 10)}...` : lastMessage
+    lastMessage && lastMessage.length > 10
+      ? `${lastMessage.slice(0, 10)}...`
+      : lastMessage
 
   return (
     <div

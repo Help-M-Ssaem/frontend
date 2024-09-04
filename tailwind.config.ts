@@ -154,6 +154,9 @@ const config: Config = {
         '80': pxToRem(320),
         '160': pxToRem(640),
       },
+      maxHeight: {
+        '100': pxToRem(400),
+      },
       boxShadow: {
         'custom-light': '0 4px 10px rgba(0, 0, 0, 0.10)',
       },
